@@ -1,0 +1,162 @@
+[
+{
+  "question": "How long will the national anthem last?",
+  "left": "1:10 and Under",
+  "right": "Over 1:10",
+  "answer": "right",
+  "_id": "AQfsR9xHIQmyx1jR"
+},
+{
+  "question": "The coin will land on ___.",
+  "left": "Heads",
+  "right": "Tails",
+  "answer": "neither",
+  "_id": "PPrsFdARh5iciwad"
+},
+{
+  "question": "Who will win the coin toss?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "YeLP8gETO2XGGGPO"
+},
+{
+  "question": "Which will come first?",
+  "left": "Fumble",
+  "right": "Interception",
+  "answer": "unknown",
+  "_id": "zDpCE8KInZIVd7JQ"
+},
+{
+  "question": "Which will be the first team to cause a Fumble or Interception?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "P5cOk5iSYpvEUZyh"
+},
+{
+  "question": "Which team will be first to be penalized?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "SjTjIkJwMXCUUwA6"
+},
+{
+  "question": "Which team will score first?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "GYRsM1wqjLlltJOe"
+},
+{
+  "question": "What will the first score will be?",
+  "left": "Touchdown",
+  "right": "Field Goal",
+  "answer": "right",
+  "_id": "kz6jACTyC50nKTwk"
+},
+{
+  "question": "Will the first touchdown be on a passing play?",
+  "left": "Yes",
+  "right": "No",
+  "answer": "right",
+  "_id": "Jf1NUDZOp5TViUqn"
+},
+{
+  "question": "Which team will have the last possession in 1st half?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "FJYdHLpWGKwxdHpb"
+},
+{
+  "question": "Which team will score last?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "GhUTPjQHJq5tjqXu"
+},
+{
+  "question": "Will there be a score in the final 2 minutes of game?",
+  "left": "Yes",
+  "right": "No",
+  "answer": "right",
+  "_id": "VwsEHJ3MjvuvYMnp"
+},
+{
+  "question": "Which team will have the last possession?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "8ShgxcLifZLZsoEw"
+},
+{
+  "question": "Which team will throw more interceptions?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "0g663CWNne8rt4jw"
+},
+{
+  "question": "How long will the game last, from kickoff to game end, with commercials and halftime shows?",
+  "left": "3 hours and 45 minutes or less",
+  "right": "Over 3 hours and 45 minutes",
+  "answer": "right",
+  "_id": "a7SO2mCP8qf56kFi"
+},
+{
+  "question": "During which half of the game will the most points be scored?",
+  "left": "First",
+  "right": "Second",
+  "answer": "right",
+  "_id": "vEayHpH7riRFMTZ8"
+},
+{
+  "question": "How many points will the Panthers score?",
+  "left": "21 and under",
+  "right": "Over 21",
+  "answer": "right",
+  "_id": "6ucWiyzVVIGYFKka"
+},
+{
+  "question": "How many points will the Broncos score?",
+  "left": "21 and under",
+  "right": "Over 21",
+  "answer": "right",
+  "_id": "dlTgUPl1tOU7ComR"
+},
+{
+  "question": "How many points total will be scored by both teams?",
+  "left": "40 and under",
+  "right": "Over 40",
+  "answer": "right",
+  "_id": "eoq48UygOKfpRonP"
+},
+{
+  "question": "What will be the difference of points between the teams at the end of the game?",
+  "left": "7 and under",
+  "right": "Over 7",
+  "answer": "right",
+  "_id": "3f2Gc4dFBF7ALKkZ"
+},
+{
+  "question": "Will the total points scored by the Panthers be an even number or an odd number?",
+  "left": "Even",
+  "right": "Odd",
+  "answer": "right",
+  "_id": "zQHpAGFpf4zPXruF"
+},
+{
+  "question": "Will the total points scored by the Broncos be an even number or an odd number?",
+  "left": "Even",
+  "right": "Odd",
+  "answer": "right",
+  "_id": "XLgSuRbUMo9xuWrD"
+},
+{
+  "question": "Who will win?",
+  "left": "Panthers",
+  "right": "Broncos",
+  "answer": "right",
+  "_id": "6jiT0SkKKnhSk2fF"
+}]

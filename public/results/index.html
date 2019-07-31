@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Quiz Results</title>
+	<link rel="stylesheet" type="text/css" href="../quiz.css">
+	<link rel="stylesheet" type="text/css" href="../navigation.css">
+</head>
+
+<body>
+	<table id="big">
+		<thead>
+				<tr>
+					<td id="navigation" colspan="3">
+						<a href="/index.html">Take Quiz</a>
+						<a href="/scoreboard/">View Scoreboard</a>
+					</td>
+				</tr>
+			  <tr id="nameAndScore">
+				  <td id="nameCell">
+						<label for="name"><strong>Name:</strong></label>
+						<input type="text" name="name" id="name" disabled/>
+					</td>
+					<td id="scoreLabel" colspan="2"></td>
+				</tr>
+		</thead>
+		<tbody id="tableBody"></tbody>
+	</table>
+	<script src="results.js"></script>
+</body>
+
+</html>
