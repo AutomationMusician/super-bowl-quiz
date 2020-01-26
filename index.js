@@ -3,7 +3,8 @@ const datastore = require('nedb');
 const fileSystem = require('fs');
 
 const app = express();
-app.listen(3000, () => console.log('listening on port 3000'));
+const PORT = 4000;
+app.listen(PORT, () => console.log('listening on port ' + PORT));
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
@@ -29,7 +30,7 @@ app.get('/answers', (request, response) => {
     } else {
       response.json(data);
     }
-  })
+  });
 });
 
 app.post('/answer', (request, response) => {
@@ -41,5 +42,5 @@ app.post('/answer', (request, response) => {
     } else {
       response.json(data);
     }
-  })
+  });
 });

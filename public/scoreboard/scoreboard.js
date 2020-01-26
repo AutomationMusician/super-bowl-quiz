@@ -45,8 +45,11 @@ function scorePlayers(questions, players) {
         numIncorrect++;
       }
     }
-
-    player.score = Math.round(100*numCorrect/(numCorrect + numIncorrect));
+    const totalQuestions = numCorrect + numIncorrect;
+    if (totalQuestions == 0)
+      player.score = 0;
+    else
+      player.score = Math.round(100*numCorrect/totalQuestions);
   }
 
   // sort players by score
@@ -86,23 +89,26 @@ function createHtml(players) {
     const data = [];
     for (let i = 0; i < 3; i++)
       data[i] = document.createElement('td');
-    data[0].textContent = String(player.rank);
+    if (player.score != 0)
+      data[0].textContent = String(player.rank);
     data[1].appendChild(anchor);
     data[1].className = "nameCell";
     data[2].textContent = player.score + " %";
     data[2].className = "score";
 
     const tr = document.createElement('tr');
-    switch (player.rank) {
-      case 1:
-        tr.className = "gold";
-        break;
-      case 2:
-        tr.className = "silver";
-        break;
-      case 3:
-        tr.className = "bronze";
-        break;
+    if (player.score != 0) {
+      switch (player.rank) {
+        case 1:
+          tr.className = "gold";
+          break;
+        case 2:
+          tr.className = "silver";
+          break;
+        case 3:
+          tr.className = "bronze";
+          break;
+      }
     }
 
     for (let i = 0; i < data.length; i++)
