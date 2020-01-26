@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
 app.get('/questions', async (request, response) => {
-  let rawdata = fileSystem.readFileSync('questions2020.json');
-  let questions = JSON.parse(rawdata);
+  const rawdata = fileSystem.readFileSync('questions2020.json');
+  const questions = JSON.parse(rawdata);
   response.json(questions);
 });
 
@@ -43,4 +43,9 @@ app.post('/answer', (request, response) => {
       response.json(data);
     }
   });
+});
+
+app.get('/answers2020.db', (request, response) => {
+  const rawdata = fileSystem.readFileSync("answers2020.db");
+  response.send(rawdata);
 });
