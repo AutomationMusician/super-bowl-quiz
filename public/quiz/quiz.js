@@ -1,5 +1,5 @@
-// use to close quiz
-// window.location.replace("/scoreboard");
+
+
 
 const tbody = document.getElementById('tableBody');
 const buttons = [];
@@ -22,6 +22,7 @@ function setToComplete(id) {
   }
   if (allComplete) {
     document.getElementById('done').disabled = false;
+    document.getElementById('form').setAttribute("onsubmit", "return true");
   }
 }
 
@@ -66,4 +67,16 @@ async function getQuestions() {
   }
 }
 
-getQuestions();
+async function main() {
+  const response = await fetch('/quizOpen');
+  const json = await response.json();
+  const quizOpen = json.state;
+  if (quizOpen) {
+    getQuestions();
+  } else {
+    // use to close quiz
+    window.location.replace("/scoreboard");
+  }
+}
+
+main();

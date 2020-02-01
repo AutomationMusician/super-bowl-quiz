@@ -1,7 +1,15 @@
 <script>
-  // use to close quiz
-  // window.location.replace("/scoreboard");
-
-  // use for open quiz
-  window.location.replace("/quiz");
+async function main() {
+    const response = await fetch('/quizOpen');
+    const json = await response.json();
+    const quizOpen = json.state;
+    if (quizOpen) {
+      // use for open quiz
+      window.location.replace("/quiz");
+    } else {
+      // use to close quiz
+      window.location.replace("/scoreboard");
+    }
+}
+main();
 </script>

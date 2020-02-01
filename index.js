@@ -49,3 +49,7 @@ app.get('/answers2020.db', (request, response) => {
   const rawdata = fileSystem.readFileSync("answers2020.db");
   response.send(rawdata);
 });
+
+app.get('/quizOpen', (request, response) => {
+  response.json({ state: true });
+})
