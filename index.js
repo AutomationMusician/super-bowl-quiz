@@ -51,5 +51,5 @@ app.get('/answers2020.db', (request, response) => {
 });
 
 app.get('/quizOpen', (request, response) => {
-  response.json({ state: true });
+  response.json({ state: false });
 })
