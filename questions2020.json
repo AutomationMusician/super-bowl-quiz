@@ -10,14 +10,14 @@
   "question": "The coin will land on ___.",
   "left": "Heads",
   "right": "Tails",
-  "answer": "uknown",
+  "answer": "right",
   "_id": "PPrsFdARh5iciwad"
 },
 {
   "question": "Who will win the coin toss?",
   "left": "Chiefs",
   "right": "49ers",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "YeLP8gETO2XGGGPO"
 },
 {
