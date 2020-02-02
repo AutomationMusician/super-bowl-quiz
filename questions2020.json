@@ -45,14 +45,14 @@
   "question": "Which team will score first?",
   "left": "Chiefs",
   "right": "49ers",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "GYRsM1wqjLlltJOe"
 },
 {
   "question": "What will the first score will be?",
   "left": "Touchdown",
   "right": "Field Goal",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "kz6jACTyC50nKTwk"
 },
 {
