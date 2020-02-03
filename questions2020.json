@@ -21,7 +21,7 @@
   "_id": "YeLP8gETO2XGGGPO"
 },
 {
-  "question": "Which will come first?",
+  "question": "Which turnover will come first?",
   "left": "Fumble",
   "right": "Interception",
   "answer": "unknown",
@@ -59,7 +59,7 @@
   "question": "Will the first touchdown be on a passing play?",
   "left": "Yes",
   "right": "No",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "Jf1NUDZOp5TViUqn"
 },
 {
