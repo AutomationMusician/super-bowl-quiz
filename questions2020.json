@@ -24,14 +24,14 @@
   "question": "Which turnover will come first?",
   "left": "Fumble",
   "right": "Interception",
-  "answer": "unknown",
+  "answer": "left",
   "_id": "zDpCE8KInZIVd7JQ"
 },
 {
   "question": "Which will be the first team to turnover from a Fumble or Interception?",
   "left": "Chiefs",
   "right": "49ers",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "P5cOk5iSYpvEUZyh"
 },
 {
