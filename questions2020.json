@@ -115,7 +115,7 @@
   "question": "How many points will the Chiefs score?",
   "left": "21 and under",
   "right": "Over 21",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "6ucWiyzVVIGYFKka"
 },
 {
@@ -129,7 +129,7 @@
   "question": "How many points total will be scored by both teams?",
   "left": "40 and under",
   "right": "Over 40",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "eoq48UygOKfpRonP"
 },
 {
