@@ -73,7 +73,7 @@
   "question": "Which team will score last?",
   "left": "Chiefs",
   "right": "49ers",
-  "answer": "unknown",
+  "answer": "left",
   "_id": "GhUTPjQHJq5tjqXu"
 },
 {
@@ -87,21 +87,21 @@
   "question": "Which team will have the last possession?",
   "left": "Chiefs",
   "right": "49ers",
-  "answer": "unknown",
+  "answer": "left",
   "_id": "8ShgxcLifZLZsoEw"
 },
 {
   "question": "Which team will throw more interceptions?",
   "left": "Chiefs",
   "right": "49ers",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "0g663CWNne8rt4jw"
 },
 {
   "question": "How long will the game last, from kickoff to game end, with commercials and halftime shows?",
   "left": "3 hours and 45 minutes or less",
   "right": "Over 3 hours and 45 minutes",
-  "answer": "unknown",
+  "answer": "left",
   "_id": "a7SO2mCP8qf56kFi"
 },
 {
@@ -122,7 +122,7 @@
   "question": "How many points will the 49ers score?",
   "left": "21 and under",
   "right": "Over 21",
-  "answer": "unknown",
+  "answer": "left",
   "_id": "dlTgUPl1tOU7ComR"
 },
 {
@@ -136,27 +136,27 @@
   "question": "What will be the difference of points between the teams at the end of the game?",
   "left": "7 and under",
   "right": "Over 7",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "3f2Gc4dFBF7ALKkZ"
 },
 {
   "question": "Will the total points scored by the Chiefs be an even number or an odd number?",
   "left": "Even",
   "right": "Odd",
-  "answer": "unknown",
+  "answer": "right",
   "_id": "zQHpAGFpf4zPXruF"
 },
 {
   "question": "Will the total points scored by the 49ers be an even number or an odd number?",
   "left": "Even",
   "right": "Odd",
-  "answer": "unknown",
+  "answer": "left",
   "_id": "XLgSuRbUMo9xuWrD"
 },
 {
   "question": "Who will win?",
   "left": "Chiefs",
   "right": "49ers",
-  "answer": "unknown",
+  "answer": "left",
   "_id": "6jiT0SkKKnhSk2fF"
 }]
