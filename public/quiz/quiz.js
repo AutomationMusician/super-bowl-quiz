@@ -1,6 +1,3 @@
-
-
-
 const tbody = document.getElementById('tableBody');
 const buttons = [];
 
