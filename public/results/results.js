@@ -89,10 +89,17 @@ function createHTML(questions, answers) {
       row.appendChild(data[i]);
     tbody.appendChild(row);
   }
+  const numQuestions = numCorrect + numIncorrect;
+  let score;
+  if (numQuestions == 0)
+    score = 0;
+  else
+    score = Math.round(100*numCorrect/numQuestions);
 
-  const score = Math.round(100*numCorrect/(numCorrect + numIncorrect));
+  const fractionLabel = document.getElementById("fractionLabel");
   const scoreLabel = document.getElementById("scoreLabel");
   scoreLabel.textContent = "Score: " + score + "%";
+  fractionLabel.textContent = "Number Correct: " + numCorrect + "/" + numQuestions;
 }
 
 main();
