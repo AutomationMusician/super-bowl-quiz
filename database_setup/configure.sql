@@ -12,5 +12,5 @@ CREATE TABLE answers (
   PRIMARY KEY(answer_id),
   CONSTRAINT fk_quiz
     FOREIGN KEY(quiz_id) 
-	  REFERENCES quizzes(quiz_id)
+	    REFERENCES quizzes(quiz_id)
 );

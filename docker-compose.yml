@@ -1,12 +1,12 @@
 version: "3.8"
 services:
-  web:
-    build: .
-    image: superbowlquiz:latest
-    environment:
-      PORT: ${WEB_PORT}
-    ports:
-      - "${WEB_PORT}:${WEB_PORT}"
+  # web:
+  #   build: .
+  #   image: superbowlquiz:latest
+  #   environment:
+  #     PORT: ${WEB_PORT}
+  #   ports:
+  #     - "${WEB_PORT}:${WEB_PORT}"
   postgres:
     image: postgres:13
     environment:
@@ -17,8 +17,11 @@ services:
       - "${PG_PORT}:5432"
   load_database:
     image: postgres:13
-    entrypoint: "/root/load_database.sh" 
+    entrypoint: "/root/database_setup/load_database.sh"
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_HOST: postgres
+      PG_PORT: ${PG_PORT}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - "./database_setup:/root/"
+      - "./database_setup:/mnt"

@@ -1,16 +1,19 @@
 const express = require('express');
-const datastore = require('nedb');
+const pgClient = require('pg');
 const fileSystem = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log('listening on port ' + PORT));
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
+const pg = pgClient();
+pg.connect();
+
 app.get('/questions', async (request, response) => {
-  const rawdata = fileSystem.readFileSync('questions2020.json');
+  const rawdata = fileSystem.readFileSync('questions.json');
   const questions = JSON.parse(rawdata);
   response.json(questions);
 });
@@ -53,3 +56,8 @@ app.get('/answers2020.db', (request, response) => {
 app.get('/quizOpen', (request, response) => {
   response.json({ state: false });
 })
+
+process.on('beforeExit', (code) => {
+  console.log('Process beforeExit event with code: ', code);
+  pg.end();
+});
