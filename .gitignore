@@ -1,3 +1,5 @@
 .DS_Store
-database_url.txt
-node_modules/
+.env
+configs
+data
+node_modules

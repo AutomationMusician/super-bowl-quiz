@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    image: superbowlquiz:latest
+    environment:
+      PORT: ${WEB_PORT}
+    ports:
+      - "${WEB_PORT}:${WEB_PORT}"
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - "./data:/var/lib/postgresql/data"
+    ports:
+      - "${PG_PORT}:5432"
+  load_database:
+    image: postgres:13
+    entrypoint: "/root/load_database.sh" 
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - "./database_setup:/root/"
