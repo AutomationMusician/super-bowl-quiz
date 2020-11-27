@@ -1,33 +1,38 @@
 const express = require('express');
-const pgClient = require('pg');
+const { Client } = require('pg');
 const fileSystem = require('fs');
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.WEB_PORT;
 app.listen(PORT, () => console.log('listening on port ' + PORT));
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
-const pg = pgClient();
-pg.connect();
+const pgClient = new Client({
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT
+});
+pgClient.connect();
 
 app.get('/questions', async (request, response) => {
-  const rawdata = fileSystem.readFileSync('questions.json');
+  const rawdata = fileSystem.readFileSync('configs/questions.json');
   const questions = JSON.parse(rawdata);
   response.json(questions);
 });
 
-const answers = new datastore('answers2020.db');
-answers.loadDatabase();
 app.post('/answers', (request, response) => {
-  answers.insert(request.body);
-  response.send("<script>window.location.replace(\"/scoreboard/?success\");</script>");
+  const result = pgClient.query('INSERT INTO quizzes(quiz_name) VALUES (' + request.body.name + ')');
+  // TODO add stuff for each thing
+  response.redirect("/scoreboard/?success");
 });
 
 app.get('/answers', (request, response) => {
   answers.find({}, (err, data) => {
-    if (err) {
+    if (err) {å
       console.log(err);
       response.send("An error in querying the answer database has occurred");
     } else {
@@ -48,16 +53,11 @@ app.post('/answer', (request, response) => {
   });
 });
 
-app.get('/answers2020.db', (request, response) => {
-  const rawdata = fileSystem.readFileSync("answers2020.db");
-  response.send(rawdata);
-});
-
 app.get('/quizOpen', (request, response) => {
   response.json({ state: false });
 })
 
 process.on('beforeExit', (code) => {
   console.log('Process beforeExit event with code: ', code);
-  pg.end();
+  pgClient.end();
 });

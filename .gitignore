@@ -1,5 +1,5 @@
 .DS_Store
 .env
-configs
-data
-node_modules
+configs/
+data/
+node_modules/

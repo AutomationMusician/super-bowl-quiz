@@ -1,27 +1,36 @@
 version: "3.8"
 services:
-  # web:
-  #   build: .
-  #   image: superbowlquiz:latest
-  #   environment:
-  #     PORT: ${WEB_PORT}
-  #   ports:
-  #     - "${WEB_PORT}:${WEB_PORT}"
+  web:
+    build: .
+    image: superbowlquiz:latest
+    environment:
+      WEB_PORT: ${WEB_PORT}
+      PGHOST: postgres
+      PGUSER: ${PGUSER}
+      PGDATABASE: ${PGDATABASE}
+      PGPORT: ${PGPORT}
+      PGPASSWORD: ${PGPASSWORD}
+    ports:
+      - "${WEB_PORT}:${WEB_PORT}"
   postgres:
     image: postgres:13
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
     volumes:
       - "./data:/var/lib/postgresql/data"
     ports:
-      - "${PG_PORT}:5432"
-  load_database:
+      - "${PGPORT}:5432"
+  initialize_database:
     image: postgres:13
-    entrypoint: "/root/database_setup/load_database.sh"
+    depends_on: 
+      - postgres
+    entrypoint: "/mnt/initialize_database.sh"
     environment:
-      PG_HOST: postgres
-      PG_PORT: ${PG_PORT}
-      PGPASSWORD: ${POSTGRES_PASSWORD}
-      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGHOST: postgres
+      PGUSER: ${PGUSER}
+      PGDATABASE: ${PGDATABASE}
+      PGPORT: ${PGPORT}
+      PGPASSWORD: ${PGPASSWORD}
+      # POSTGRES_PASSWORD: ${PGPASSWORD}
     volumes:
       - "./database_setup:/mnt"
