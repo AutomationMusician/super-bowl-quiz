@@ -1,6 +1,7 @@
 function main() {
   fetchData()
     .then(data => {
+      console.log(data.answers);
       scorePlayers(data.questions, data.answers);
       createHtml(data.answers);
     });
@@ -123,11 +124,17 @@ setInterval(main, 10 * 1000);
 
 // check for successful Quiz
 const url = window.location.href;
-const successMessage = url.slice(url.indexOf("?") + 1);
-if (successMessage == "success") {
+const message = url.slice(url.indexOf("?") + 1);
+if (message == "success") {
   const successElement = document.createElement('div');
   const body = document.getElementsByTagName('body')[0];
   successElement.id = "success";
   successElement.textContent = "Quiz Successfully Submitted!";
   body.prepend(successElement);
+} else if (message == "failure") {
+  const failureElement = document.createElement('div');
+  const body = document.getElementsByTagName('body')[0];
+  failureElement.id = "failure";
+  failureElement.textContent = "Quiz failed to be submitted! Please Notify Josh.";
+  body.prepend(failureElement);
 }

@@ -11,7 +11,6 @@ function setToComplete(id) {
   document.getElementById(id).className = "complete";
   let allComplete = true;
   for (let row of tbody.children) {
-    console.log(row.className);
     if (row.className == "incomplete") {
       allComplete = false;
       break;
