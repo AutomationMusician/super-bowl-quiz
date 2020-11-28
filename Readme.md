@@ -1,5 +1,11 @@
 # Super Bowl Quiz App
 
+## What Is It?
+
+The Super Bowl Quiz App is a web application that allows many players to make predictions about the super bowl, where the player with the most correct predictions wins. Predictions are made before the game starts and points are rewarded in real time during the game as the results of the predictions are known.
+
+In theory, this application can be used to run a prediction competition unrelated to the Super Bowl with some minor modifications.
+
 ## How To Run The App
 
 This app can be run in development mode by running `run_development.sh` or in production mode by running `run_production.sh`. Before running these scripts, check the **Requirements** section for the respective software requirements. If running in development mode, run `npm install` before running `run_development.sh`.
@@ -8,12 +14,15 @@ This app can be run in development mode by running `run_development.sh` or in pr
 
 ### Development Mode
 
+* bash
 * docker
 * docker-compose
 * npm
 * node.js
 
 ## Proudction mode
+
+* bash
 * docker
 * docker-compose
 
