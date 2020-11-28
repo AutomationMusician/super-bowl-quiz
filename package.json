@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Super Bowl Quiz for the 2020 Super Bowl",
   "main": "index.js",
-  "scripts":
-  {
+  "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,10 +14,9 @@
   ],
   "author": "Joshua Fishman",
   "license": "MIT",
-  "dependencies":
-  {
+  "dependencies": {
     "express": "^4.17.1",
     "fs": "0.0.1-security",
-    "nedb": "^1.8.0"
+    "pg": "^8.5.1"
   }
 }

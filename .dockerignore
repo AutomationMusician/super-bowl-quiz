@@ -1,0 +1,7 @@
+.*
+.env
+data
+config
+node_modules
+database_setup
+docker-compose.yml
