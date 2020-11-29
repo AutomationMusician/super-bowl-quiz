@@ -31,24 +31,27 @@ app.get('/questions', async (request, response) => {
 
 // Add quiz to the database
 app.post('/answers', async (request, response) => {
-  console.log(request.body);
-
   // Insert into quiz table
   let query =  "INSERT INTO quizzes(quiz_name) \
-                VALUES ('" + request.body.name + "') \
+                VALUES ($1) \
                 RETURNING quiz_id";
-  console.log(query);
-  let result = await pgClient.query(query);
+  let params = [request.body.name];
+  let result = await pgClient.query(query, params);
   const quiz_id = result.rows[0].quiz_id;
-  console.log(quiz_id);
 
   // Insert into answers table
   const values = [];
+  params = [];
+  let paramIndex = 1;
   const questions = getQuestions();
   questions.forEach((question) => {
     if (request.body[question._id]) {
-      const valueStr = "('" + question._id + "', '" + quiz_id + "', '" + request.body[question._id] + "')";
+      params.push(question._id);
+      params.push(quiz_id);
+      params.push(request.body[question._id]);
+      const valueStr = "($" + paramIndex + ", $" + (paramIndex+1) + ", $" + (paramIndex+2) + ")";
       values.push(valueStr);
+      paramIndex += 3;
     } else {
       console.error("Question id '" + question._id + "' does not exist");
     }
@@ -66,8 +69,8 @@ app.post('/answers', async (request, response) => {
       }
     });
     query = queryArray.join('');
-    console.log(query);
-    await pgClient.query(query);
+    await pgClient.query(query, params);
+    console.log("'" + request.body.name + "' submitted a quiz");
     response.redirect("/scoreboard/?success");
   } else {
     console.error("There were no question answers for quiz_id: '" + quiz_id + "'");
@@ -110,8 +113,9 @@ app.post('/answer', async (request, response) => {
   // Get name
   let query =  "SELECT quiz_name \
                 FROM quizzes \
-                WHERE quiz_id = '" + quiz_id + "'";
-  let result = await pgClient.query(query);
+                WHERE quiz_id = $1";
+  let params = [quiz_id];
+  let result = await pgClient.query(query, params);
   const data = { name: result.rows[0].quiz_name };
 
   // get answers
@@ -119,8 +123,9 @@ app.post('/answer', async (request, response) => {
             FROM quizzes \
             INNER JOIN answers \
             ON quizzes.quiz_id = answers.quiz_id \
-            WHERE quizzes.quiz_id = '" + quiz_id + "'";
-  result = await pgClient.query(query);
+            WHERE quizzes.quiz_id = $1";
+  params = [quiz_id];
+  result = await pgClient.query(query, params);
   result.rows.forEach((row) => {
     data[row.question_id] = row.response;
   });

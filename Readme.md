@@ -62,6 +62,7 @@ This app can be run in development mode by running `run_development.sh` or in pr
 
 There are three services in the `docker-compose.yml` file:
 1. `web`: The node js express application that hosts the static files in the `public` folder, and handles GET and POST requests as defined in `index.js`.
+1. `admin-console`: A console application to edit and delete quizzes after they have been entered.
 1. `postgres`: The database server container that persists it's data to the `data` folder.
 1. `initialize_database`: A container that waits for postgres to start and initializes the database by creating the database and the tables inside of it if they don't already exist.
 
@@ -76,3 +77,7 @@ The `run_production.sh` does the following things:
 1. Using docker-compse, run the postgres service in the background.
 1. Using docker-compose, run the initialize_database service in the foreground. Wait until the docker container exits.
 1. Using docker-compose, run the dockerized web service in the background.
+
+## Admin Console
+
+The Admin Console is a console application to edit and delete quizzes after they have been entered. Run in development mod with the command `npm run admin-console` and run in production mode with `docker-compose run admin-console`.
