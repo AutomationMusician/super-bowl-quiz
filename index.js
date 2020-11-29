@@ -23,6 +23,11 @@ function getQuestions() {
   return JSON.parse(jsonString);
 }
 
+function getState() {
+  const jsonString = fileSystem.readFileSync('configs/state.json');
+  return JSON.parse(jsonString);
+}
+
 // Get questions from server
 app.get('/questions', async (request, response) => {
   const questions = getQuestions();
@@ -31,6 +36,14 @@ app.get('/questions', async (request, response) => {
 
 // Add quiz to the database
 app.post('/answers', async (request, response) => {
+  // Check if quiz is open
+  const open = getState().open;
+  if (!open) {
+    console.error("The submitted quiz with the name '" + request.body.name + "' was rejected because the quiz is closed.");
+    response.redirect("/scoreboard/?failure");
+    return;
+  }
+
   // Insert into quiz table
   let query =  "INSERT INTO quizzes(quiz_name) \
                 VALUES ($1) \
@@ -82,6 +95,7 @@ app.post('/answers', async (request, response) => {
 app.get('/answers', async (request, response) => {
   const quizzes = {};
   const quiz_ids = [];
+
   // Get names
   let query =  "SELECT quiz_id, quiz_name FROM quizzes";
   let result = await pgClient.query(query);
@@ -100,7 +114,7 @@ app.get('/answers', async (request, response) => {
     quizzes[row.quiz_id][row.question_id] = row.response;
   });
 
-  // convert quizes object to array
+  // convert quizzes object to an array
   const data = [];
   quiz_ids.forEach(quiz_id => {
     data.push(quizzes[quiz_id]);
@@ -133,6 +147,7 @@ app.post('/answer', async (request, response) => {
 });
 
 // Ask the server if the quiz is open
-app.get('/quizOpen', (request, response) => {
-  response.json({ state: true });
+app.get('/quizState', (request, response) => {
+  const state = getState();
+  response.json(state);
 })

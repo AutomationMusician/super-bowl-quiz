@@ -64,9 +64,9 @@ async function getQuestions() {
 }
 
 async function main() {
-  const response = await fetch('/quizOpen');
+  const response = await fetch('/quizState');
   const json = await response.json();
-  const quizOpen = json.state;
+  const quizOpen = json.open;
   if (quizOpen) {
     getQuestions();
   } else {

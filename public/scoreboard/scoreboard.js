@@ -1,7 +1,6 @@
 function main() {
   fetchData()
     .then(data => {
-      console.log(data.answers);
       scorePlayers(data.questions, data.answers);
       createHtml(data.answers);
     });

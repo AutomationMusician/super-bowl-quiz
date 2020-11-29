@@ -27,36 +27,48 @@ This app can be run in development mode by running `run_development.sh` or in pr
 * docker-compose
 
 ## Config files
-* `.env`
-    * Create a copy of `.env_example` and name it `.env`.
-    * Change any of the variables under "Changeable Variables". Make sure that you pick a secure password for `PGPASSWORD`.
-* `configs/questions.json`
-    * Create a file called `configs/questions.json`. This should be a json representation of an array of "question" objects.
-    * question objects should have the following attributes:
-        * `question`: The question to ask the user.
-        * `left`: The left answer
-        * `right`: The right answer
-        * `answer`: Which answer is correct ("left", "right", or "unknown")
-        * `_id`: A string that is unique to the question
-    * Follow this example:
-        ```json
-        [
-            {
-                "question": "Who will win?",
-                "left": "Chiefs",
-                "right": "49ers",
-                "answer": "left",
-                "_id": "q84XY70Fk55BZxrr"
-            },
-            {
-                "question": "Who will win?",
-                "left": "Chiefs",
-                "right": "49ers",
-                "answer": "right",
-                "_id": "XLgSuRbUMo9xuWrD"
-            }
-        ]
-        ```
+
+### .env
+* Create a copy of `.env_example` and name it `.env`.
+* Change any of the variables under "Changeable Variables". Make sure that you pick a secure password for `PGPASSWORD`.
+
+### configs/questions.json
+* Create a file called `configs/questions.json`. This should be a json representation of an array of "question" objects.
+* question objects should have the following attributes:
+    * `question`: The question to ask the user.
+    * `left`: The left answer
+    * `right`: The right answer
+    * `answer`: Which answer is correct ("left", "right", or "unknown")
+    * `_id`: A string that is unique to the question
+* Follow this example:
+    ```json
+    [
+        {
+            "question": "Who will win?",
+            "left": "Chiefs",
+            "right": "49ers",
+            "answer": "left",
+            "_id": "q84XY70Fk55BZxrr"
+        },
+        {
+            "question": "Who will win?",
+            "left": "Chiefs",
+            "right": "49ers",
+            "answer": "right",
+            "_id": "XLgSuRbUMo9xuWrD"
+        }
+    ]
+    ```
+### configs/state.json
+* The `configs/state.json` file is a json object that specifies the state of the application. Create the `configs/state.json` file based on this example:
+    ```json
+    {
+        "open": true
+    }
+    ```
+* The `configs/state.json` object has the following attributes:
+    * `open`: a boolean value determining whether the quiz is open (`true`) or closed (`false`). When the quzi is open, users will be able to take and submit quizzes. When the quiz is closed, users will not be redirected away from the quiz page and any quizzes that are submitted are not accpeted.
+
 
 ## Services
 
