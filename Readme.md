@@ -67,7 +67,7 @@ This app can be run in development mode by running `run_development.sh` or in pr
     }
     ```
 * The `configs/state.json` object has the following attributes:
-    * `open`: a boolean value determining whether the quiz is open (`true`) or closed (`false`). When the quzi is open, users will be able to take and submit quizzes. When the quiz is closed, users will not be redirected away from the quiz page and any quizzes that are submitted are not accpeted.
+    * `open`: a boolean value determining whether the quiz is open (`true`) or closed (`false`). When the quiz is open, users will be able to take and submit quizzes. When the quiz is closed, users will not be redirected away from the quiz page and any quizzes that are submitted are not accpeted.
 
 
 ## Services
