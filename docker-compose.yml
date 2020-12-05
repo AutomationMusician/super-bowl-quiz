@@ -44,4 +44,3 @@ services:
       # POSTGRES_PASSWORD: ${PGPASSWORD}
     volumes:
       - "./database_setup:/mnt"
-
