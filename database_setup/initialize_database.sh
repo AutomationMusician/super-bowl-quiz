@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### Wait for postgres to be ready ###
-timeout_limit=15
+timeout_limit=30
 timeout_counter=0
 until pg_isready -h ${PGHOST} -p ${PGPORT}
 do
@@ -9,7 +9,7 @@ do
     echo "Waiting for Postgres: ${timeout_counter}/${timeout_limit}"
     if [ ${timeout_counter} -ge ${timeout_limit} ]
     then
-        echo "Waiting for postgres timed out"
+        echo "initialize_database script timed out waiting for postgres"
         exit 1
     fi
     sleep 5s
@@ -24,6 +24,6 @@ then
 else
     set -e
     echo "${PGDATABASE} database does not exist. Initializating the database"
-    psql -h ${PGHOST} -p ${PGPORT} -U postgres -d postgres -c "CREATE DATABASE ${PGDATABASE}";
+    psql -h ${PGHOST} -p ${PGPORT} -U postgres -d postgres -c "CREATE DATABASE ${PGDATABASE}"
     psql -h ${PGHOST} -p ${PGPORT} -U postgres -d ${PGDATABASE} -f ${script_dir}/initialize.sql
 fi

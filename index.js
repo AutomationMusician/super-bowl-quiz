@@ -23,6 +23,11 @@ function getQuestions() {
   return JSON.parse(jsonString);
 }
 
+function getState() {
+  const jsonString = fileSystem.readFileSync('configs/state.json');
+  return JSON.parse(jsonString);
+}
+
 // Get questions from server
 app.get('/questions', async (request, response) => {
   const questions = getQuestions();
@@ -31,24 +36,35 @@ app.get('/questions', async (request, response) => {
 
 // Add quiz to the database
 app.post('/answers', async (request, response) => {
-  console.log(request.body);
+  // Check if quiz is open
+  const open = getState().open;
+  if (!open) {
+    console.error("The submitted quiz with the name '" + request.body.name + "' was rejected because the quiz is closed.");
+    response.redirect("/scoreboard/?failure");
+    return;
+  }
 
   // Insert into quiz table
   let query =  "INSERT INTO quizzes(quiz_name) \
-                VALUES ('" + request.body.name + "') \
+                VALUES ($1) \
                 RETURNING quiz_id";
-  console.log(query);
-  let result = await pgClient.query(query);
+  let params = [request.body.name];
+  let result = await pgClient.query(query, params);
   const quiz_id = result.rows[0].quiz_id;
-  console.log(quiz_id);
 
   // Insert into answers table
   const values = [];
+  params = [];
+  let paramIndex = 1;
   const questions = getQuestions();
   questions.forEach((question) => {
     if (request.body[question._id]) {
-      const valueStr = "('" + question._id + "', '" + quiz_id + "', '" + request.body[question._id] + "')";
+      params.push(question._id);
+      params.push(quiz_id);
+      params.push(request.body[question._id]);
+      const valueStr = "($" + paramIndex + ", $" + (paramIndex+1) + ", $" + (paramIndex+2) + ")";
       values.push(valueStr);
+      paramIndex += 3;
     } else {
       console.error("Question id '" + question._id + "' does not exist");
     }
@@ -66,8 +82,8 @@ app.post('/answers', async (request, response) => {
       }
     });
     query = queryArray.join('');
-    console.log(query);
-    await pgClient.query(query);
+    await pgClient.query(query, params);
+    console.log("'" + request.body.name + "' submitted a quiz");
     response.redirect("/scoreboard/?success");
   } else {
     console.error("There were no question answers for quiz_id: '" + quiz_id + "'");
@@ -79,6 +95,7 @@ app.post('/answers', async (request, response) => {
 app.get('/answers', async (request, response) => {
   const quizzes = {};
   const quiz_ids = [];
+
   // Get names
   let query =  "SELECT quiz_id, quiz_name FROM quizzes";
   let result = await pgClient.query(query);
@@ -97,7 +114,7 @@ app.get('/answers', async (request, response) => {
     quizzes[row.quiz_id][row.question_id] = row.response;
   });
 
-  // convert quizes object to array
+  // convert quizzes object to an array
   const data = [];
   quiz_ids.forEach(quiz_id => {
     data.push(quizzes[quiz_id]);
@@ -110,8 +127,9 @@ app.post('/answer', async (request, response) => {
   // Get name
   let query =  "SELECT quiz_name \
                 FROM quizzes \
-                WHERE quiz_id = '" + quiz_id + "'";
-  let result = await pgClient.query(query);
+                WHERE quiz_id = $1";
+  let params = [quiz_id];
+  let result = await pgClient.query(query, params);
   const data = { name: result.rows[0].quiz_name };
 
   // get answers
@@ -119,8 +137,9 @@ app.post('/answer', async (request, response) => {
             FROM quizzes \
             INNER JOIN answers \
             ON quizzes.quiz_id = answers.quiz_id \
-            WHERE quizzes.quiz_id = '" + quiz_id + "'";
-  result = await pgClient.query(query);
+            WHERE quizzes.quiz_id = $1";
+  params = [quiz_id];
+  result = await pgClient.query(query, params);
   result.rows.forEach((row) => {
     data[row.question_id] = row.response;
   });
@@ -128,6 +147,7 @@ app.post('/answer', async (request, response) => {
 });
 
 // Ask the server if the quiz is open
-app.get('/quizOpen', (request, response) => {
-  response.json({ state: true });
+app.get('/quizState', (request, response) => {
+  const state = getState();
+  response.json(state);
 })

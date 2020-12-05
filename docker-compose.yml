@@ -12,6 +12,16 @@ services:
       PGPASSWORD: ${PGPASSWORD}
     ports:
       - "${WEB_PORT}:${WEB_PORT}"
+  admin-console:
+    build: .
+    image: superbowlquiz:latest
+    entrypoint: "npm run admin-console"
+    environment:
+      PGHOST: postgres
+      PGUSER: ${PGUSER}
+      PGDATABASE: ${PGDATABASE}
+      PGPORT: ${PGPORT}
+      PGPASSWORD: ${PGPASSWORD}
   postgres:
     image: postgres:13
     environment:
