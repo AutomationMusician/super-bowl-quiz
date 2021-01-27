@@ -12,6 +12,8 @@ services:
       PGPASSWORD: ${PGPASSWORD}
     ports:
       - "${WEB_PORT}:${WEB_PORT}"
+    volumes:
+      - "./configs:/opt/superbowlquiz/configs"
   admin-console:
     build: .
     image: superbowlquiz:latest
@@ -23,7 +25,7 @@ services:
       PGPORT: ${PGPORT}
       PGPASSWORD: ${PGPASSWORD}
   postgres:
-    image: postgres:13
+    image: postgres:latest
     environment:
       POSTGRES_PASSWORD: ${PGPASSWORD}
     volumes:
@@ -31,7 +33,7 @@ services:
     ports:
       - "${PGPORT}:5432"
   initialize_database:
-    image: postgres:13
+    image: postgres:latest
     depends_on: 
       - postgres
     entrypoint: "/mnt/initialize_database.sh"
