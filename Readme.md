@@ -92,4 +92,4 @@ The `run_production.sh` does the following things:
 
 ## Admin Console
 
-The Admin Console is a console application to edit and delete quizzes after they have been entered. Run in development mod with the command `npm run admin-console` and run in production mode with `docker-compose run admin-console`.
+The Admin Console is a console application to edit and delete quizzes after they have been entered. Run in development mode with the command `npm run admin-console` and run in production mode with `docker-compose run admin-console`.
