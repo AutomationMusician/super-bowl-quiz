@@ -3,4 +3,5 @@
 .env_aws
 configs/
 data/
+data.tar.gz
 node_modules/
