@@ -4,7 +4,8 @@ import { QuizComponent } from './quiz/quiz.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 
 const routes: Routes = [
-  { path: '', component: QuizComponent },
+  { path: '', redirectTo: 'quiz' },
+  { path: 'quiz', component: QuizComponent },
   { path: 'scoreboard', component: ScoreboardComponent }
 ];
 

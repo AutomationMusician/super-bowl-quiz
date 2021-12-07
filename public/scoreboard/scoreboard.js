@@ -16,12 +16,12 @@ async function fetchData() {
 }
 
 async function getAnswers() {
-    const response = await fetch('/answers');
+    const response = await fetch('/api/answers');
     return await response.json();
 }
 
 async function getQuestions() {
-  const response = await fetch('/questions');
+  const response = await fetch('/api/questions');
   return await response.json();
 }
 

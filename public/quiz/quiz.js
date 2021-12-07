@@ -64,14 +64,14 @@ async function getQuestions() {
 }
 
 async function main() {
-  const response = await fetch('/quizState');
+  const response = await fetch('/api/quizState');
   const json = await response.json();
   const quizOpen = json.open;
   if (quizOpen) {
     getQuestions();
   } else {
     // use to close quiz
-    window.location.replace("/scoreboard");
+    window.location.replace("/public/scoreboard");
   }
 }
 

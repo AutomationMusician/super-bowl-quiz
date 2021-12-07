@@ -153,6 +153,6 @@ app.get('/api/quizState', (request, response) => {
 })
 
 // Default 404 response
-app.use((req, res, next) => {
-  res.status(404).send("Sorry can't find that!");
+app.use((req, res) => {
+  res.redirect('/');
 })
