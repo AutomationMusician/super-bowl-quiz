@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "start:dev": "source .env && nodemon index.js",
     "admin-console": "node admin-console.js",
     "ng": "ng",
     "build": "ng build",

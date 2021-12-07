@@ -40,6 +40,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.angular/cache
 
 # System Files
 .DS_Store
@@ -51,3 +52,4 @@ Thumbs.db
 configs/
 data/
 node_modules/
+dist/

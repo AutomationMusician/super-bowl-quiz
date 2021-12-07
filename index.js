@@ -1,11 +1,11 @@
 const express = require('express');
 const { Client } = require('pg');
-const fileSystem = require('fs');
+const fs = require('fs');
 
 const app = express();
-const PORT = process.env.WEB_PORT;
+const PORT = process.env.WEB_PORT || 3000;
 app.listen(PORT, () => console.log('listening on port ' + PORT));
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/dist'));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
@@ -19,23 +19,23 @@ const pgClient = new Client({
 pgClient.connect();
 
 function getQuestions() {
-  const jsonString = fileSystem.readFileSync('configs/questions.json');
+  const jsonString = fs.readFileSync('configs/questions.json');
   return JSON.parse(jsonString);
 }
 
 function getState() {
-  const jsonString = fileSystem.readFileSync('configs/state.json');
+  const jsonString = fs.readFileSync('configs/state.json');
   return JSON.parse(jsonString);
 }
 
 // Get questions from server
-app.get('/questions', async (request, response) => {
+app.get('/api/questions', async (request, response) => {
   const questions = getQuestions();
   response.json(questions);
 });
 
 // Add quiz to the database
-app.post('/answers', async (request, response) => {
+app.post('/api/answers', async (request, response) => {
   // Check if quiz is open
   const open = getState().open;
   if (!open) {
@@ -92,7 +92,7 @@ app.post('/answers', async (request, response) => {
 });
 
 // Get answers from database
-app.get('/answers', async (request, response) => {
+app.get('/api/answers', async (request, response) => {
   const quizzes = {};
   const quiz_ids = [];
 
@@ -122,7 +122,7 @@ app.get('/answers', async (request, response) => {
   response.json(data);
 });
 
-app.post('/answer', async (request, response) => {
+app.post('/api/answer', async (request, response) => {
   const quiz_id = request.body._id;
   // Get name
   let query =  "SELECT quiz_name \
@@ -147,7 +147,12 @@ app.post('/answer', async (request, response) => {
 });
 
 // Ask the server if the quiz is open
-app.get('/quizState', (request, response) => {
+app.get('/api/quizState', (request, response) => {
   const state = getState();
   response.json(state);
+})
+
+// Default 404 response
+app.use((req, res, next) => {
+  res.status(404).send("Sorry can't find that!");
 })
