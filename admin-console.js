@@ -6,13 +6,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-const pgClient = new Client({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  password: process.env.PGPASSWORD,
-  port: process.env.PGPORT
-});
+const pgClient = new Client();
 pgClient.connect();
 
 async function main() {

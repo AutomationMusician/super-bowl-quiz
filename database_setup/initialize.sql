@@ -1,7 +1,7 @@
 CREATE TABLE quizzes (
-  quiz_id INT GENERATED ALWAYS AS IDENTITY,
-  quiz_name VARCHAR(255) NOT NULL,
-  PRIMARY KEY(quiz_id)
+  id INT GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
 );
 
 CREATE TABLE answers (
@@ -12,5 +12,5 @@ CREATE TABLE answers (
   PRIMARY KEY(answer_id),
   CONSTRAINT fk_quiz
     FOREIGN KEY(quiz_id) 
-	    REFERENCES quizzes(quiz_id)
+	    REFERENCES quizzes(id)
 );

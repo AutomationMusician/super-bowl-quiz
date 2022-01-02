@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Question } from '../../../interfaces/question';
+import { Question } from '../../../interfaces';
 
 @Component({
   selector: 'app-quiz',
