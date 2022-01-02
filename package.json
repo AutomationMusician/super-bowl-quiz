@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/server/index.js",
     "client:build": "ng build",
-    "cleint:dev": "ng build --watch",
+    "client:dev": "ng build --watch",
     "server:build": "tsc",
     "server:dev": "nodemon index.ts",
     "docker:dev": "docker-compose up -d postgres && docker-compose up initialize_database",

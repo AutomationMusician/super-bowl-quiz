@@ -9,7 +9,7 @@ require('dotenv').config();
 const app : express_core.Express = express();
 const PORT : number = parseInt(process.env['WEB_PORT'] || '3000');
 app.listen(PORT, () => console.log('listening on port ' + PORT));
-app.use(express.static(__dirname + '/dist/client'));
+app.use(express.static('dist/client'));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
