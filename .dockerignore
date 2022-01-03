@@ -1,7 +1,13 @@
 .*
 .env
-data
+
+# Folders
 configs
-node_modules
+data
 database_setup
+dist
+e2e
+node_modules
+public
 docker-compose.yml
+Dockerfile

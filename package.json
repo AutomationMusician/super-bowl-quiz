@@ -26,6 +26,9 @@
   "author": "Joshua Fishman",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">=14"
+  },
   "dependencies": {
     "@angular/animations": "~13.0.0",
     "@angular/common": "~13.0.0",
