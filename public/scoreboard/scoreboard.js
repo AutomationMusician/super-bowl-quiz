@@ -1,13 +1,38 @@
-function main() {
-  fetchData()
-    .then(data => {
-      scorePlayers(data.questions, data.answers);
-      createHtml(data.answers);
-    });
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+
+async function main() {
+  const game = await getGame();
+  if (game) {
+    fetchData(game)
+      .then(data => {
+        scorePlayers(data.questions, data.answers);
+        createHtml(data.answers);
+      });
+  }
 }
 
-async function fetchData() {
-  const promises = [getQuestions(), getAnswers()];
+async function getGame() {
+  const game = urlParams.get('game');
+
+  // validate game
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ game })
+  }
+  const response = await fetch('/isValidGame', options);
+  const responseJsonObj = await response.json();
+  if (responseJsonObj.status)
+    return game;
+  else
+    return undefined;
+}
+
+async function fetchData(game) {
+  const promises = [getQuestions(), getAnswers(game)];
   const results = await Promise.all(promises);
   return {
     questions: results[0],
@@ -15,14 +40,21 @@ async function fetchData() {
   };
 }
 
-async function getAnswers() {
-    const response = await fetch('/answers');
+async function getAnswers(game) {
+    const response = await fetch(`/answers/${game}`);
     return await response.json();
 }
 
 async function getQuestions() {
   const response = await fetch('/questions');
   return await response.json();
+}
+
+function setLinks(game) {
+  const quiz = document.getElementById('quiz_anchor');
+  quiz.href = `/index.html?game=${game}`;
+  const scoreboard = document.getElementById('scoreboard_anchor');
+  scoreboard = `/scoreboard/index.html?game=${game}`;
 }
 
 function scorePlayers(questions, players) {
@@ -83,7 +115,7 @@ function createHtml(players) {
 
   for (let player of players) {
     const anchor = document.createElement('a');
-    anchor.href = "/results/?" + player.id;
+    anchor.href = "/results/index.html?player=" + player.id;
     anchor.textContent = player.name;
 
     const data = [];
@@ -122,15 +154,14 @@ main();
 setInterval(main, 10 * 1000);
 
 // check for successful Quiz
-const url = window.location.href;
-const message = url.slice(url.indexOf("?") + 1);
-if (message == "success") {
+const status = urlParams.get(status);
+if (status == "success") {
   const successElement = document.createElement('div');
   const body = document.getElementsByTagName('body')[0];
   successElement.id = "success";
   successElement.textContent = "Quiz Successfully Submitted!";
   body.prepend(successElement);
-} else if (message == "failure") {
+} else if (status == "failure") {
   const failureElement = document.createElement('div');
   const body = document.getElementsByTagName('body')[0];
   failureElement.id = "failure";

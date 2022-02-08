@@ -28,6 +28,12 @@ function getState() {
   return JSON.parse(jsonString);
 }
 
+function validateGame(game) {
+  const jsonString = fileSystem.readFileSync('configs/games.json');
+  const validGames = JSON.parse(jsonString);
+  return validGames.includes(game);
+}
+
 // Get questions from server
 app.get('/questions', async (request, response) => {
   const questions = getQuestions();
@@ -35,12 +41,20 @@ app.get('/questions', async (request, response) => {
 });
 
 // Add quiz to the database
-app.post('/answers', async (request, response) => {
+app.post('/answers/:game', async (request, response) => {
+  const game = request.params.game;
+  const isValid = validateGame(game);
+  if (!isValid) {
+    console.error(`Invalide game '${game}'`)
+    response.status(400);
+    return;
+  }
+
   // Check if quiz is open
   const open = getState().open;
   if (!open) {
     console.error("The submitted quiz with the name '" + request.body.name + "' was rejected because the quiz is closed.");
-    response.redirect("/scoreboard/?failure");
+    response.redirect("/scoreboard/index.html?status=failure");
     return;
   }
 
@@ -89,15 +103,23 @@ app.post('/answers', async (request, response) => {
     query = queryArray.join('');
     await pgClient.query(query, params);
     console.log("'" + request.body.name + "' submitted a quiz");
-    response.redirect("/scoreboard/?success");
+    response.redirect("/scoreboard/index.html?status=success");
   } else {
     console.error("There were no question answers for quiz_id: '" + quiz_id + "'");
-    response.redirect("/scoreboard/?failure");
+    response.redirect("/scoreboard/index.html?status=failure");
   }
 });
 
 // Get answers from database
-app.get('/answers', async (request, response) => {
+app.get('/answers/:game', async (request, response) => {
+  const game = request.params.game;
+  const isValid = validateGame(game);
+  if (!isValid) {
+    console.error(`Invalide game '${game}'`)
+    response.status(400);
+    return;
+  }
+
   const quizzes = {};
   const quiz_ids = [];
 
@@ -161,3 +183,8 @@ app.get('/quizState', (request, response) => {
   const state = getState();
   response.json(state);
 })
+
+app.post('/isValidGame', async (request, response) => {
+  const status = validateGame(request.body.game);
+  response.json({ status });
+});

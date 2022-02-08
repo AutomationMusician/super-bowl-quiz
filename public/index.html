@@ -1,15 +1,19 @@
 <script>
-async function main() {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const game = urlParams.get('game');
+
+  async function main() {
     const response = await fetch('/quizState');
     const json = await response.json();
     const quizOpen = json.open;
     if (quizOpen) {
       // use for open quiz
-      window.location.replace("/quiz");
+      window.location.replace(`/quiz/index.html?game=${game}`);
     } else {
       // use to close quiz
-      window.location.replace("/scoreboard");
+      window.location.replace(`/scoreboard/index.html?game=${game}`);
     }
-}
-main();
+  }
+  main();
 </script>
