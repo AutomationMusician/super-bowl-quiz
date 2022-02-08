@@ -24,7 +24,7 @@ async function getAnswers() {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ _id: uid })
+    body: JSON.stringify({ id: uid })
   }
   const response = await fetch('/answer', options);
   return await response.json();
@@ -44,7 +44,7 @@ function createHTML(questions, answers) {
   let numIncorrect = 0;
 
   for (let question of questions) {
-    const qid = question._id;
+    const qid = question.id;
     const correctAnswer = question.answer;
     const givenAnswer = answers[qid];
     //console.log("correct: " + correctAnswer + "\tGiven: " + givenAnswer);
@@ -72,8 +72,8 @@ function createHTML(questions, answers) {
           const currentCell = (i == 1) ? "left" : "right";
 
           input.type = "radio";
-          input.name = question._id;
-          input.id = question._id + currentCell;
+          input.name = question.id;
+          input.id = question.id + currentCell;
           input.disabled = true;
           input.checked = (givenAnswer == currentCell);
 

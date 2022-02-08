@@ -32,7 +32,7 @@ function scorePlayers(questions, players) {
     let numIncorrect = 0;
 
     for (let question of questions) {
-      const qid = question._id;
+      const qid = question.id;
       const correctAnswer = question.answer;
       const givenAnswer = player[qid];
 
@@ -83,7 +83,7 @@ function createHtml(players) {
 
   for (let player of players) {
     const anchor = document.createElement('a');
-    anchor.href = "/results/?" + player._id;
+    anchor.href = "/results/?" + player.id;
     anchor.textContent = player.name;
 
     const data = [];

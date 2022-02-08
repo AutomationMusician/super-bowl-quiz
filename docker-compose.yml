@@ -43,6 +43,5 @@ services:
       PGDATABASE: ${PGDATABASE}
       PGPORT: ${PGPORT}
       PGPASSWORD: ${PGPASSWORD}
-      # POSTGRES_PASSWORD: ${PGPASSWORD}
     volumes:
       - "./database_setup:/mnt"

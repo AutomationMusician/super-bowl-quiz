@@ -25,9 +25,10 @@ function setToComplete(id) {
 async function getQuestions() {
   const response = await fetch('/questions');
   const questions = await response.json();
+  console.log(questions);
   for (let question of questions) {
     const row = document.createElement('tr');
-    const id = question._id + "row";
+    const id = question.id + "row";
     row.id = id;
     row.className = "incomplete";
     tbody.appendChild(row);
@@ -43,8 +44,8 @@ async function getQuestions() {
         const currentCell = (i == 1) ? "left" : "right";
 
         input.type = "radio";
-        input.name = question._id;
-        input.id = question._id + currentCell;
+        input.name = question.id;
+        input.id = question.id + currentCell;
         input.value = currentCell;
         input.disabled = true;
         input.setAttribute("onClick", "setToComplete('" + id + "')");

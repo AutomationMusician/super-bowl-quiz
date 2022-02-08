@@ -50,6 +50,11 @@ app.post('/answers', async (request, response) => {
                 RETURNING quiz_id";
   let params = [request.body.name];
   let result = await pgClient.query(query, params);
+  if (result.rows.length != 1) {
+    console.error(`There was not exactly one result with quiz_id ${result.rows.length}`);
+    response.status(400);
+    return;
+  }
   const quiz_id = result.rows[0].quiz_id;
 
   // Insert into answers table
@@ -58,15 +63,15 @@ app.post('/answers', async (request, response) => {
   let paramIndex = 1;
   const questions = getQuestions();
   questions.forEach((question) => {
-    if (request.body[question._id]) {
-      params.push(question._id);
+    if (request.body[question.id]) {
+      params.push(question.id);
       params.push(quiz_id);
-      params.push(request.body[question._id]);
+      params.push(request.body[question.id]);
       const valueStr = "($" + paramIndex + ", $" + (paramIndex+1) + ", $" + (paramIndex+2) + ")";
       values.push(valueStr);
       paramIndex += 3;
     } else {
-      console.error("Question id '" + question._id + "' does not exist");
+      console.error("Question id '" + question.id + "' does not exist");
     }
   });
 
@@ -100,7 +105,7 @@ app.get('/answers', async (request, response) => {
   let query =  "SELECT quiz_id, quiz_name FROM quizzes";
   let result = await pgClient.query(query);
   result.rows.forEach((row) => {
-    quizzes[row.quiz_id] = { _id: row.quiz_id, name: row.quiz_name };
+    quizzes[row.quiz_id] = { id: row.quiz_id, name: row.quiz_name };
     quiz_ids.push(row.quiz_id);
   });
 
@@ -123,13 +128,18 @@ app.get('/answers', async (request, response) => {
 });
 
 app.post('/answer', async (request, response) => {
-  const quiz_id = request.body._id;
+  const quiz_id = request.body.id;
   // Get name
   let query =  "SELECT quiz_name \
                 FROM quizzes \
                 WHERE quiz_id = $1";
   let params = [quiz_id];
   let result = await pgClient.query(query, params);
+  if (result.rows.length != 1) {
+    console.error(`There was not exactly one result with quiz_id ${result.rows.length}`);
+    response.status(400);
+    return;
+  }
   const data = { name: result.rows[0].quiz_name };
 
   // get answers
