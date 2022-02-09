@@ -4,10 +4,11 @@ const urlParams = new URLSearchParams(queryString);
 async function main() {
   const game = await getGame();
   if (game) {
+    setLinks(game);
     fetchData(game)
       .then(data => {
         scorePlayers(data.questions, data.answers);
-        createHtml(data.answers);
+        createHtml(data.answers, game);
       });
   }
 }
@@ -54,7 +55,7 @@ function setLinks(game) {
   const quiz = document.getElementById('quiz_anchor');
   quiz.href = `/index.html?game=${game}`;
   const scoreboard = document.getElementById('scoreboard_anchor');
-  scoreboard = `/scoreboard/index.html?game=${game}`;
+  scoreboard.href = `/scoreboard/index.html?game=${game}`;
 }
 
 function scorePlayers(questions, players) {
@@ -104,7 +105,7 @@ function scorePlayers(questions, players) {
   }
 }
 
-function createHtml(players) {
+function createHtml(players, game) {
   const tbody = document.getElementById("tableBody");
   // delete children of tbody
   let first = tbody.firstElementChild;
@@ -115,7 +116,7 @@ function createHtml(players) {
 
   for (let player of players) {
     const anchor = document.createElement('a');
-    anchor.href = "/results/index.html?player=" + player.id;
+    anchor.href = `/results/index.html?player=${player.id}&game=${game}`;
     anchor.textContent = player.name;
 
     const data = [];

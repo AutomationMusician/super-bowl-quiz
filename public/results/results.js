@@ -1,5 +1,10 @@
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const player = urlParams.get('player');
+const game = urlParams.get('game');
+
 function main() {
-  const promises = [getQuestions(), getAnswers()];
+  const promises = [getQuestions(), getAnswers(player)];
   Promise.all(promises)
     .then(results => {
       const questions = results[0];
@@ -16,18 +21,23 @@ async function getQuestions() {
   return await response.json();
 }
 
-async function getAnswers() {
-  const url = window.location.href;
-  const uid = url.slice(url.indexOf("?") + 1);
+async function getAnswers(player) {
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ id: uid })
+    body: JSON.stringify({ id: player })
   }
   const response = await fetch('/answer', options);
   return await response.json();
+}
+
+function setLinks(game) {
+  const quiz = document.getElementById('quiz_anchor');
+  quiz.href = `/index.html?game=${game}`;
+  const scoreboard = document.getElementById('scoreboard_anchor');
+  scoreboard.href = `/scoreboard/index.html?game=${game}`;
 }
 
 function createHTML(questions, answers) {
@@ -101,6 +111,9 @@ function createHTML(questions, answers) {
   scoreLabel.textContent = "Score: " + score + "%";
   fractionLabel.textContent = "Number Correct: " + numCorrect + "/" + numQuestions;
 }
+
+
+setLinks(game);
 
 main();
 
