@@ -1,16 +1,170 @@
 [
   {
-    "question": "Q1",
-    "left": "left",
-    "right": "right",
+    "question": "How long will the national anthem last?",
+    "left": "1:10 and Under",
+    "right": "Over 1:10",
     "answer": "right",
-    "id": "Q1"
+    "id": "AQfsR9xHIQmyx1jR"
   },
   {
-    "question": "Q2",
-    "left": "left",
-    "right": "right",
+    "question": "The coin will land on:",
+    "left": "Heads",
+    "right": "Tails",
     "answer": "left",
-    "id": "Q2"
+    "id": "PPrsFdARh5iciwad"
+  },
+  {
+    "question": "Who will win the coin toss?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "left",
+    "id": "YeLP8gETO2XGGGPO"
+  },
+  {
+    "question": "Which turnover will come first?",
+    "left": "Fumble",
+    "right": "Interception",
+    "answer": "right",
+    "id": "zDpCE8KInZIVd7JQ"
+  },
+  {
+    "question": "Which will be the first team to lose the ball (turnover) from a Fumble or Interception?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "left",
+    "id": "P5cOk5iSYpvEUZyh"
+  },
+  {
+    "question": "Which team will be first to be penalized?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "right",
+    "id": "SjTjIkJwMXCUUwA6"
+  },
+  {
+    "question": "Which team will score first?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "left",
+    "id": "GYRsM1wqjLlltJOe"
+  },
+  {
+    "question": "What will the first score will be?",
+    "left": "Touchdown",
+    "right": "Field Goal",
+    "answer": "right",
+    "id": "kz6jACTyC50nKTwk"
+  },
+  {
+    "question": "Will the first touchdown be on a passing play?",
+    "left": "Yes",
+    "right": "No",
+    "answer": "left",
+    "id": "Jf1NUDZOp5TViUqn"
+  },
+  {
+    "question": "Which team will have the last possession in 1st half?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "left",
+    "id": "FJYdHLpWGKwxdHpb"
+  },
+  {
+    "question": "Which team will throw the first challenge flag?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "right",
+    "id": "6jiT0SkKKnhSk2fF"
+  },
+  {
+    "question": "Which team will score last?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "right",
+    "id": "GhUTPjQHJq5tjqXu"
+  },
+  {
+    "question": "Will there be a score in the final 2 minutes of game?",
+    "left": "Yes",
+    "right": "No",
+    "answer": "left",
+    "id": "VwsEHJ3MjvuvYMnp"
+  },
+  {
+    "question": "Which team will have the last possession?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "right",
+    "id": "8ShgxcLifZLZsoEw"
+  },
+  {
+    "question": "Which team will throw more interceptions?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "left",
+    "id": "0g663CWNne8rt4jw"
+  },
+  {
+    "question": "How long will the game last, from kickoff to game end, with commercials and halftime shows?",
+    "left": "3 hours and 45 minutes or less",
+    "right": "Over 3 hours and 45 minutes",
+    "answer": "left",
+    "id": "a7SO2mCP8qf56kFi"
+  },
+  {
+    "question": "During which half of the game will the most points be scored?",
+    "left": "First",
+    "right": "Second",
+    "answer": "left",
+    "id": "vEayHpH7riRFMTZ8"
+  },
+  {
+    "question": "How many points will the Bengals score?",
+    "left": "21 and under",
+    "right": "Over 21",
+    "answer": "left",
+    "id": "6ucWiyzVVIGYFKka"
+  },
+  {
+    "question": "How many points will the Rams score?",
+    "left": "21 and under",
+    "right": "Over 21",
+    "answer": "right",
+    "id": "dlTgUPl1tOU7ComR"
+  },
+  {
+    "question": "How many points total will be scored by both teams?",
+    "left": "40 and under",
+    "right": "Over 40",
+    "answer": "left",
+    "id": "eoq48UygOKfpRonP"
+  },
+  {
+    "question": "What will be the difference of points between the teams at the end of the game?",
+    "left": "7 and under",
+    "right": "Over 7",
+    "answer": "right",
+    "id": "3f2Gc4dFBF7ALKkZ"
+  },
+  {
+    "question": "Will the total points scored by the Bengals be an even number or an odd number?",
+    "left": "Even",
+    "right": "Odd",
+    "answer": "right",
+    "id": "zQHpAGFpf4zPXruF"
+  },
+  {
+    "question": "Will the total points scored by the Rams be an even number or an odd number?",
+    "left": "Even",
+    "right": "Odd",
+    "answer": "right",
+    "id": "XLgSuRbUMo9xuWrD"
+  },
+  {
+    "question": "Who will win?",
+    "left": "Bengals",
+    "right": "Rams",
+    "answer": "right",
+    "id": "q84XY70Fk55BZxrr"
   }
 ]
