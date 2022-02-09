@@ -45,7 +45,7 @@ app.post('/answers/:game', async (request, response) => {
   const game = request.params.game;
   const isValid = validateGame(game);
   if (!isValid) {
-    console.error(`Invalide game '${game}'`)
+    console.error(`Invalid game '${game}'`)
     response.status(400);
     return;
   }
@@ -54,15 +54,15 @@ app.post('/answers/:game', async (request, response) => {
   const open = getState().open;
   if (!open) {
     console.error("The submitted quiz with the name '" + request.body.name + "' was rejected because the quiz is closed.");
-    response.redirect("/scoreboard/index.html?status=failure");
+    response.redirect(`/scoreboard/index.html?game=${game}&status=failure`);
     return;
   }
 
   // Insert into quiz table
-  let query =  "INSERT INTO quizzes(quiz_name) \
-                VALUES ($1) \
+  let query =  "INSERT INTO quizzes(name, game) \
+                VALUES ($1, $2) \
                 RETURNING quiz_id";
-  let params = [request.body.name];
+  let params = [request.body.name, game];
   let result = await pgClient.query(query, params);
   if (result.rows.length != 1) {
     console.error(`There was not exactly one result with quiz_id ${result.rows.length}`);
@@ -103,10 +103,10 @@ app.post('/answers/:game', async (request, response) => {
     query = queryArray.join('');
     await pgClient.query(query, params);
     console.log("'" + request.body.name + "' submitted a quiz");
-    response.redirect("/scoreboard/index.html?status=success");
+    response.redirect(`/scoreboard/index.html?game=${game}&status=success`);
   } else {
     console.error("There were no question answers for quiz_id: '" + quiz_id + "'");
-    response.redirect("/scoreboard/index.html?status=failure");
+    response.redirect(`/scoreboard/index.html?game=${game}&status=failure`);
   }
 });
 
@@ -124,10 +124,11 @@ app.get('/answers/:game', async (request, response) => {
   const quiz_ids = [];
 
   // Get names
-  let query =  "SELECT quiz_id, quiz_name FROM quizzes";
-  let result = await pgClient.query(query);
+  let query =  "SELECT quiz_id, name FROM quizzes WHERE game = $1";
+  let params = [game];
+  let result = await pgClient.query(query, params);
   result.rows.forEach((row) => {
-    quizzes[row.quiz_id] = { id: row.quiz_id, name: row.quiz_name };
+    quizzes[row.quiz_id] = { id: row.quiz_id, name: row.name };
     quiz_ids.push(row.quiz_id);
   });
 
@@ -135,8 +136,10 @@ app.get('/answers/:game', async (request, response) => {
   query =  "SELECT quizzes.quiz_id, question_id, response \
             FROM quizzes \
             INNER JOIN answers \
-            ON quizzes.quiz_id = answers.quiz_id";
-  result = await pgClient.query(query);
+            ON quizzes.quiz_id = answers.quiz_id \
+            WHERE game = $1";
+  params = [game];
+  result = await pgClient.query(query, params);
   result.rows.forEach((row) => {
     quizzes[row.quiz_id][row.question_id] = row.response;
   });
@@ -152,7 +155,7 @@ app.get('/answers/:game', async (request, response) => {
 app.post('/answer', async (request, response) => {
   const quiz_id = request.body.id;
   // Get name
-  let query =  "SELECT quiz_name \
+  let query =  "SELECT name, game \
                 FROM quizzes \
                 WHERE quiz_id = $1";
   let params = [quiz_id];
@@ -162,7 +165,7 @@ app.post('/answer', async (request, response) => {
     response.status(400);
     return;
   }
-  const data = { name: result.rows[0].quiz_name };
+  const data = { name: result.rows[0].name };
 
   // get answers
   query =  "SELECT question_id, response \

@@ -5,12 +5,18 @@ async function main() {
   const game = await getGame();
   if (game) {
     setLinks(game);
-    fetchData(game)
-      .then(data => {
-        scorePlayers(data.questions, data.answers);
-        createHtml(data.answers, game);
-      });
+    fetchAndCreate(game);
+    setInterval(() => fetchAndCreate(game), 10 * 1000);
   }
+}
+
+function fetchAndCreate(game)
+{
+  fetchData(game)
+  .then(data => {
+    scorePlayers(data.questions, data.answers);
+    createHtml(data.answers, game);
+  });
 }
 
 async function getGame() {
@@ -151,8 +157,6 @@ function createHtml(players, game) {
 }
 
 main();
-
-setInterval(main, 10 * 1000);
 
 // check for successful Quiz
 const status = urlParams.get(status);

@@ -1,6 +1,7 @@
 CREATE TABLE quizzes (
   quiz_id INT GENERATED ALWAYS AS IDENTITY,
-  quiz_name VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  game VARCHAR(255) NOT NULL,
   PRIMARY KEY(quiz_id)
 );
 
