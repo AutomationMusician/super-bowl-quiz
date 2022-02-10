@@ -159,7 +159,7 @@ function createHtml(players, game) {
 main();
 
 // check for successful Quiz
-const status = urlParams.get(status);
+const status = urlParams.get("status");
 if (status == "success") {
   const successElement = document.createElement('div');
   const body = document.getElementsByTagName('body')[0];
