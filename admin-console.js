@@ -18,7 +18,7 @@ pgClient.connect();
 async function main() {
   let _continue;
   let quiz_id;
-  const main_menu = ["Exit", "Edit Name", "Delete Entry"];
+  const main_menu = ["Exit", "List Quizzes", "Edit Name", "Edit Game", "Delete Quiz"];
   do {
     _continue = true;
     const option = await choose_option(main_menu);
@@ -27,11 +27,19 @@ async function main() {
         _continue = false;
         break;
       case 1:
+        await list_quizzes();
+        break;
+      case 2:
         quiz_id = await prompt_quiz_id();
         if (quiz_id !== "x")
           await edit_name(quiz_id);
         break;
-      case 2:
+      case 3:
+        quiz_id = await prompt_quiz_id();
+        if (quiz_id !== "x")
+          await edit_game(quiz_id);
+        break;
+      case 4:
         quiz_id = await prompt_quiz_id();
         if (quiz_id !== "x")
           await delete_entry(quiz_id);
@@ -70,13 +78,12 @@ rl.on("close", function() {
 
 async function prompt_quiz_id() {
   const quiz_id_set = new Set();
-  let query =  "SELECT quiz_id, quiz_name \
-                FROM quizzes";
+  let query =  "SELECT * FROM quizzes";
   let result = await pgClient.query(query);
   console.log("\nHere is the list of quizzes:");
   result.rows.forEach((row) => {
     quiz_id_set.add(parseInt(row.quiz_id));
-    console.log("  " + row.quiz_id + " => '" + row.quiz_name + "'");
+    console.log(`${row.quiz_id}. name=\"${row.name}\", game=\"${row.game}\"`);
   });
 
   while (true) {
@@ -92,14 +99,32 @@ async function prompt_quiz_id() {
   }
 }
 
+async function list_quizzes() {
+  let query =  "SELECT * FROM quizzes";
+  const result = await pgClient.query(query);
+  result.rows.forEach(row => {
+    console.log(`${row.quiz_id}. name=\"${row.name}\", game=\"${row.game}\"`);
+  });
+}
+
 async function edit_name(quiz_id) {
   const name = await prompt("Input the name you want to use for this quiz: ");
   let query =  "UPDATE quizzes \
-                SET quiz_name = $1 \
+                SET name = $1 \
                 WHERE quiz_id = $2";
   let params = [name, quiz_id];
   await pgClient.query(query, params);
 }
+
+async function edit_game(quiz_id) {
+  const game = await prompt("Input the game you want to use for this quiz: ");
+  let query =  "UPDATE quizzes \
+                SET game = $1 \
+                WHERE quiz_id = $2";
+  let params = [game, quiz_id];
+  await pgClient.query(query, params);
+}
+
 
 async function delete_entry(quiz_id) {
   // delete answers
