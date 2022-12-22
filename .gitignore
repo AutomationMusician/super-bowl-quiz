@@ -1,6 +1,9 @@
 .DS_Store
-.env
-.env_aws
+Thumbs.db
+
+# repo specific stuff
+*.env
+configs/
 data/
 data.tar.gz
 node_modules/
