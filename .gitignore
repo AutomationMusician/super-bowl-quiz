@@ -47,8 +47,7 @@ testem.log
 Thumbs.db
 
 # repo specific stuff
-.env
-.env_aws
+*.env
 configs/
 data/
 node_modules/
