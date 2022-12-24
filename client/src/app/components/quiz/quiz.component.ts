@@ -32,9 +32,11 @@ export class QuizComponent implements OnInit {
   }
 
   enableQuestions() : void {
-    console.log("Questions enabled!");
-    // this.questions.forEach(question => question)
     this.questionsEnabled = true;
+  }
+
+  isQuizComplete() : boolean {
+    return this.questions.every(question => question.complete);
   }
 
 }

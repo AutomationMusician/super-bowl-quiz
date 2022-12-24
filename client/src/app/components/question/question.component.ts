@@ -13,4 +13,8 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  setComplete() : void {
+    this.question.complete = true;
+  }
+
 }
