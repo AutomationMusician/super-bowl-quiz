@@ -6,6 +6,11 @@ export interface IQuestion {
     id: string;
 }
 
+export interface IQuizSubmission {
+    name: string;
+    responses: Map<string, string>;
+}
+
 export interface IState {
     open: boolean
 }

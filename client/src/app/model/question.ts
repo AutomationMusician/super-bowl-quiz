@@ -6,7 +6,7 @@ export class Question implements IQuestion {
     right: string;
     answer: string;
     id: string;
-    complete: boolean;
+    selection: 'left' | 'right' | undefined;
     
     constructor(iQuestion : IQuestion) {
         this.question = iQuestion.question;
@@ -14,6 +14,5 @@ export class Question implements IQuestion {
         this.right = iQuestion.right;
         this.answer = iQuestion.answer;
         this.id = iQuestion.id;
-        this.complete = false;
     }
 }

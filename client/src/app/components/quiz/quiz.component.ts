@@ -36,7 +36,7 @@ export class QuizComponent implements OnInit {
   }
 
   isQuizComplete() : boolean {
-    return this.questions.every(question => question.complete);
+    return this.questions.every(question => question.selection !== undefined);
   }
 
 }

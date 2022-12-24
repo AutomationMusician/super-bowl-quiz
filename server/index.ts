@@ -1,6 +1,6 @@
-const express = require('express');
-const { Client } = require('pg');
-const fileSystem = require('fs');
+import express from 'express';
+import { Client } from 'pg';
+import fs from 'fs';
 
 const app = express();
 const PORT = process.env.WEB_PORT;
@@ -14,34 +14,34 @@ const pgClient = new Client({
   host: process.env.PGHOST,
   database: process.env.PGDATABASE,
   password: process.env.PGPASSWORD,
-  port: process.env.PGPORT
+  port: Number(process.env.PGPORT)
 });
 pgClient.connect();
 
 function getQuestions() {
-  const jsonString = fileSystem.readFileSync('configs/questions.json');
+  const jsonString = fs.readFileSync('configs/questions.json', { encoding: 'utf-8'});
   return JSON.parse(jsonString);
 }
 
 function getState() {
-  const jsonString = fileSystem.readFileSync('configs/state.json');
+  const jsonString = fs.readFileSync('configs/state.json', { encoding: 'utf-8'});
   return JSON.parse(jsonString);
 }
 
-function validateGame(game) {
-  const jsonString = fileSystem.readFileSync('configs/games.json');
+function validateGame(game : any) {
+  const jsonString = fs.readFileSync('configs/games.json', { encoding: 'utf-8'});
   const validGames = JSON.parse(jsonString);
   return validGames.includes(game);
 }
 
 // Get questions from server
-app.get('/api/questions', async (request, response) => {
+app.get('/api/questions', async (request : any, response : any) => {
   const questions = getQuestions();
   response.json(questions);
 });
 
 // Add quiz to the database
-app.post('/api/answers/:game', async (request, response) => {
+app.post('/api/answers/:game', async (request : any, response : any) => {
   const game = request.params.game;
   const isValid = validateGame(game);
   if (!isValid) {
@@ -72,11 +72,11 @@ app.post('/api/answers/:game', async (request, response) => {
   const quiz_id = result.rows[0].quiz_id;
 
   // Insert into answers table
-  const values = [];
+  const values : any[] = [];
   params = [];
   let paramIndex = 1;
   const questions = getQuestions();
-  questions.forEach((question) => {
+  questions.forEach((question : any) => {
     if (request.body[question.id]) {
       params.push(question.id);
       params.push(quiz_id);
@@ -111,23 +111,23 @@ app.post('/api/answers/:game', async (request, response) => {
 });
 
 // Get answers from database
-app.get('/api/answers/:game', async (request, response) => {
+app.get('/api/answers/:game', async (request : any, response : any) => {
   const game = request.params.game;
   const isValid = validateGame(game);
   if (!isValid) {
-    console.error(`Invalide game '${game}'`)
+    console.error(`Invalid game '${game}'`)
     response.status(400);
     return;
   }
 
-  const quizzes = {};
-  const quiz_ids = [];
+  const quizzes : any = {};
+  const quiz_ids : any[] = [];
 
   // Get names
   let query =  "SELECT quiz_id, name FROM quizzes WHERE game = $1";
   let params = [game];
   let result = await pgClient.query(query, params);
-  result.rows.forEach((row) => {
+  result.rows.forEach((row : any) => {
     quizzes[row.quiz_id] = { id: row.quiz_id, name: row.name };
     quiz_ids.push(row.quiz_id);
   });
@@ -140,19 +140,19 @@ app.get('/api/answers/:game', async (request, response) => {
             WHERE game = $1";
   params = [game];
   result = await pgClient.query(query, params);
-  result.rows.forEach((row) => {
+  result.rows.forEach((row : any) => {
     quizzes[row.quiz_id][row.question_id] = row.response;
   });
 
   // convert quizzes object to an array
-  const data = [];
+  const data : any[] = [];
   quiz_ids.forEach(quiz_id => {
     data.push(quizzes[quiz_id]);
   });
   response.json(data);
 });
 
-app.post('/api/answer', async (request, response) => {
+app.post('/api/answer', async (request : any, response : any) : Promise<void> => {
   const quiz_id = request.body.id;
   // Get name
   let query =  "SELECT name, game \
@@ -165,7 +165,7 @@ app.post('/api/answer', async (request, response) => {
     response.status(400);
     return;
   }
-  const data = { name: result.rows[0].name };
+  const data : any = { name: result.rows[0].name };
 
   // get answers
   query =  "SELECT question_id, response \
@@ -175,19 +175,19 @@ app.post('/api/answer', async (request, response) => {
             WHERE quizzes.quiz_id = $1";
   params = [quiz_id];
   result = await pgClient.query(query, params);
-  result.rows.forEach((row) => {
+  result.rows.forEach((row : any) => {
     data[row.question_id] = row.response;
   });
   response.json(data);
 });
 
 // Ask the server if the quiz is open
-app.get('/api/quiz-state', (request, response) => {
+app.get('/api/quiz-state', (request : any, response : any) => {
   const state = getState();
   response.json(state);
 })
 
-app.post('/api/is-valid-game', async (request, response) => {
+app.post('/api/is-valid-game', async (request : any, response : any) => {
   const status = validateGame(request.body.game);
   response.json({ status });
 });

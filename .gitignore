@@ -3,7 +3,10 @@ Thumbs.db
 
 # repo specific stuff
 *.env
-configs/
-data/
-data.tar.gz
+/configs/
+/data/
+/data.tar.gz
 node_modules/
+
+# server stuff
+/server/dist

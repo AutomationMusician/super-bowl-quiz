@@ -6,7 +6,7 @@
                 id="{{question.id}}left"
                 value="left"
                 [disabled]="!enabled"
-                (change)="setComplete()" 
+                (change)="setSelection('left')" 
         >
         <label for="{{question.id}}left">{{question.left}}</label>
 </td>
@@ -17,7 +17,7 @@
                 id="{{question.id}}right"
                 value="right"
                 [disabled]="!enabled"
-                (change)="setComplete()"
+                (change)="setSelection('right')"
         >
         <label for="{{question.id}}right">{{question.right}}</label>
 </td>

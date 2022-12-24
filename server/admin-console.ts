@@ -1,5 +1,5 @@
-const { Client } = require('pg');
-const readline = require('readline');
+import { Client } from 'pg';
+import * as readline from 'readline';
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -11,7 +11,7 @@ const pgClient = new Client({
   host: process.env.PGHOST,
   database: process.env.PGDATABASE,
   password: process.env.PGPASSWORD,
-  port: process.env.PGPORT
+  port: Number(process.env.PGPORT)
 });
 pgClient.connect();
 
@@ -32,17 +32,17 @@ async function main() {
       case 2:
         quiz_id = await prompt_quiz_id();
         if (quiz_id !== "x")
-          await edit_name(quiz_id);
+          await edit_name(Number(quiz_id));
         break;
       case 3:
         quiz_id = await prompt_quiz_id();
         if (quiz_id !== "x")
-          await edit_game(quiz_id);
+          await edit_game(Number(quiz_id));
         break;
       case 4:
         quiz_id = await prompt_quiz_id();
         if (quiz_id !== "x")
-          await delete_entry(quiz_id);
+          await delete_entry(Number(quiz_id));
         break;
       default:
         _continue = true;
@@ -51,11 +51,11 @@ async function main() {
   rl.close();
 }
 
-function prompt(prompt) {
+function prompt(prompt : string) : Promise<string> {
   return new Promise( resolve => rl.question( prompt, ans => { resolve(ans); } ) );
 }
 
-async function choose_option(options) {
+async function choose_option(options : any[]) {
   do {
     console.log("\nChoose one of the following options:");
     options.forEach((option, index) => {
@@ -107,7 +107,7 @@ async function list_quizzes() {
   });
 }
 
-async function edit_name(quiz_id) {
+async function edit_name(quiz_id : number) {
   const name = await prompt("Input the name you want to use for this quiz: ");
   let query =  "UPDATE quizzes \
                 SET name = $1 \
@@ -116,7 +116,7 @@ async function edit_name(quiz_id) {
   await pgClient.query(query, params);
 }
 
-async function edit_game(quiz_id) {
+async function edit_game(quiz_id : number) {
   const game = await prompt("Input the game you want to use for this quiz: ");
   let query =  "UPDATE quizzes \
                 SET game = $1 \
@@ -126,7 +126,7 @@ async function edit_game(quiz_id) {
 }
 
 
-async function delete_entry(quiz_id) {
+async function delete_entry(quiz_id: number) {
   // delete answers
   let query =  "DELETE FROM answers \
                 WHERE quiz_id = $1";

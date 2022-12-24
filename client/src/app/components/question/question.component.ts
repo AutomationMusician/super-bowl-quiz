@@ -13,8 +13,8 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  setComplete() : void {
-    this.question.complete = true;
+  setSelection(selection : 'left' | 'right') : void {
+    this.question.selection = selection;
   }
 
 }

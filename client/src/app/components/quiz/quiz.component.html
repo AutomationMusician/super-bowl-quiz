@@ -20,7 +20,7 @@
                 [question]="question"
                 [enabled]="questionsEnabled"
                 id="{{question.id}}" 
-                [ngClass]="question.complete ? 'complete' : 'incomplete'" 
+                [ngClass]="question.selection !== undefined ? 'complete' : 'incomplete'" 
                 app-question>
             </tr>
             <tr>
