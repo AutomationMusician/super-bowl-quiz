@@ -1,4 +1,4 @@
-export interface Question {
+export interface IQuestion {
     question: string;
     left: string;
     right: string;
@@ -6,11 +6,11 @@ export interface Question {
     id: string;
 }
 
-export interface State {
+export interface IState {
     open: boolean
 }
 
-export interface Quiz {
+export interface IQuiz {
     id: number;
     name: string;
     responses: Map<string, string>; // question_id to response

@@ -1,0 +1,9 @@
+<td>{{question.question}}</td>
+<td>
+        <input type="radio" name="{{question.id}}" id="{{question.id}}left" value="left" [disabled]="!enabled">
+        <label for="{{question.id}}left">{{question.left}}</label>
+</td>
+<td>
+        <input type="radio" name="{{question.id}}" id="{{question.id}}right" value="right" [disabled]="!enabled">
+        <label for="{{question.id}}right">{{question.right}}</label>
+</td>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Question, State } from 'common/interfaces';
+import { IQuestion, IState } from 'common/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +8,13 @@ export class ServerService {
 
   constructor() { }
 
-  async getState() : Promise<State> {
+  async getState() : Promise<IState> {
     const response : Response = await fetch('/api/quiz-state');
-    const state : State = await response.json();
+    const state : IState = await response.json();
     return state;
   }
 
-  async getQuestions() : Promise<Question[]> {
+  async getQuestions() : Promise<IQuestion[]> {
     const response = await fetch('/api/questions');
     return await response.json();
   }

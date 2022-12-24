@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Question, State } from 'common/interfaces';
+import { IQuestion, IState } from 'common/interfaces';
+import { Question } from '../../model/question';
 import { ServerService } from 'src/app/services/server.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { ServerService } from 'src/app/services/server.service';
 })
 export class QuizComponent implements OnInit {
   questions: Question[] = [];
+  questionsEnabled : boolean = false;
 
   constructor(
     private route: Router,
@@ -17,14 +19,22 @@ export class QuizComponent implements OnInit {
     ) {}
 
   async ngOnInit(): Promise<void> {
-    const quizState : State = await this.server.getState();
-    const quizOpen = quizState.open;
+    const quizState : IState = await this.server.getState();
+    const quizOpen : boolean = quizState.open;
     if (quizOpen) {
-      this.questions = await this.server.getQuestions();
+      const iQuestions : IQuestion[] = await this.server.getQuestions();
+      this.questions = [];
+      iQuestions.forEach(q => this.questions.push(new Question(q)));
     } else {
       // use to close quiz
       this.route.navigate(['/scoreboard']);
     }
+  }
+
+  enableQuestions() : void {
+    console.log("Questions enabled!");
+    // this.questions.forEach(question => question)
+    this.questionsEnabled = true;
   }
 
 }

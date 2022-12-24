@@ -9,13 +9,20 @@
             <tr id="nameAndScore">
                 <td id="nameCell">
                     <label for="name"><strong>Name:</strong></label>
-                    <input type="text" name="name" id="name" onChange="enableButtons()" />
+                    <input type="text" name="name" id="name" (change)="enableQuestions()" />
                 </td>
                 <td id="scoreLabel" colspan="2"></td>
             </tr>
         </thead>
         <tbody class="quiz-body">
-            <tr *ngFor="let question of questions" [question]="question" id="AQfsR9xHIQmyx1jRrow" class="incomplete" app-question></tr>
+            <tr 
+                *ngFor="let question of questions" 
+                [question]="question"
+                [enabled]="questionsEnabled"
+                id="{{question.id}}" 
+                class="{{question.completionClass}}" 
+                app-question>
+            </tr>
             <tr>
                 <td colspan="3">
                     <input type="submit" id="done" value="Done" disabled />

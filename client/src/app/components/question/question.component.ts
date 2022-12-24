@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Question } from '../../../../../../common/interfaces';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Question } from '../../model/question';
 
 @Component({
   selector: '[app-question]',
@@ -8,9 +8,9 @@ import { Question } from '../../../../../../common/interfaces';
 })
 export class QuestionComponent implements OnInit {
   @Input() question!: Question;
+  @Input() enabled! : boolean;
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }
