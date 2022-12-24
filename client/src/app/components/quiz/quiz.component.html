@@ -1,4 +1,4 @@
-<form method="POST" action="/answers" onsubmit="return false" id="form">
+<form #form="ngForm" (ngSubmit)="onFormSubmit(form)" id="form">
     <table id="big">
         <thead>
             <tr>
@@ -9,7 +9,7 @@
             <tr id="nameAndScore">
                 <td id="nameCell">
                     <label for="name"><strong>Name:</strong></label>
-                    <input type="text" name="name" id="name" (change)="enableQuestions()" />
+                    <input type="text" name="name" id="name" (change)="enableQuestions()" ngModel/>
                 </td>
                 <td id="scoreLabel" colspan="2"></td>
             </tr>

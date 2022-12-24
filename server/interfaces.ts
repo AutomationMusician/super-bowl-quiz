@@ -1,3 +1,5 @@
+export type GuessSelection = 'left' | 'right';
+
 export interface IQuestion {
     question: string;
     left: string;
@@ -6,9 +8,10 @@ export interface IQuestion {
     id: string;
 }
 
-export interface IQuizSubmission {
+export interface ISubmission {
+    game: string;
     name: string;
-    responses: Map<string, string>;
+    guesses: IGuessDict;
 }
 
 export interface IState {
@@ -18,5 +21,10 @@ export interface IState {
 export interface IQuiz {
     id: number;
     name: string;
-    responses: Map<string, string>; // question_id to response
+    guesses: IGuessDict; 
+}
+
+export interface IGuessDict {
+    // question_id to response
+    [index: string]: GuessSelection;
 }

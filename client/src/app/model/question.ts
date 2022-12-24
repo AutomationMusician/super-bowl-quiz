@@ -1,4 +1,4 @@
-import { IQuestion } from 'server/interfaces';
+import { GuessSelection, IQuestion } from 'server/interfaces';
 
 export class Question implements IQuestion {
     question: string;
@@ -6,7 +6,7 @@ export class Question implements IQuestion {
     right: string;
     answer: string;
     id: string;
-    selection: 'left' | 'right' | undefined;
+    selection: GuessSelection | undefined;
     
     constructor(iQuestion : IQuestion) {
         this.question = iQuestion.question;

@@ -127,8 +127,8 @@ async function edit_game(quiz_id : number) {
 
 
 async function delete_entry(quiz_id: number) {
-  // delete answers
-  let query =  "DELETE FROM answers \
+  // delete guess
+  let query =  "DELETE FROM guesses \
                 WHERE quiz_id = $1";
   let params = [quiz_id];
   await pgClient.query(query, params);

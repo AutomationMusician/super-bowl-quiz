@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { QuizComponent } from './components/quiz/quiz.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'quiz', pathMatch: "prefix" },
-  { path: 'quiz', component: QuizComponent },
+  { path: '', redirectTo: '/quiz/Personal/', pathMatch: "prefix" },
+  { path: 'quiz/:game/', component: QuizComponent },
 ];
 
 @NgModule({

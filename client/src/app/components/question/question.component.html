@@ -1,9 +1,8 @@
 <td>{{question.question}}</td>
 <td>
-        <input 
+        <input
                 type="radio"
                 name="{{question.id}}"
-                id="{{question.id}}left"
                 value="left"
                 [disabled]="!enabled"
                 (change)="setSelection('left')" 
@@ -14,7 +13,6 @@
         <input
                 type="radio"
                 name="{{question.id}}"
-                id="{{question.id}}right"
                 value="right"
                 [disabled]="!enabled"
                 (change)="setSelection('right')"

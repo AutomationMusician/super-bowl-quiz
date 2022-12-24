@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
-import { Client as PgClient } from 'pg';
+import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
+import { IQuestion, ISubmission as ISubmission, IState } from 'interfaces';
 
 dotenv.config();
 const app = express();
@@ -20,19 +21,19 @@ const pgClient = new PgClient({
 });
 pgClient.connect();
 
-function getQuestions() {
-  const jsonString = fs.readFileSync('../configs/questions.json', { encoding: 'utf-8'});
+function getQuestions() : IQuestion[] {
+  const jsonString : string = fs.readFileSync('../configs/questions.json', { encoding: 'utf-8'});
   return JSON.parse(jsonString);
 }
 
-function getState() {
-  const jsonString = fs.readFileSync('../configs/state.json', { encoding: 'utf-8'});
+function getState() : IState {
+  const jsonString : string = fs.readFileSync('../configs/state.json', { encoding: 'utf-8'});
   return JSON.parse(jsonString);
 }
 
-function validateGame(game : any) {
-  const jsonString = fs.readFileSync('../configs/games.json', { encoding: 'utf-8'});
-  const validGames = JSON.parse(jsonString);
+function validateGame(game : string) : boolean {
+  const jsonString : string = fs.readFileSync('../configs/games.json', { encoding: 'utf-8'});
+  const validGames : string[] = JSON.parse(jsonString);
   return validGames.includes(game);
 }
 
@@ -43,8 +44,9 @@ app.get('/api/questions', async (request : Request, response : Response) => {
 });
 
 // Add quiz to the database
-app.post('/api/answers/:game', async (request : Request, response : Response) => {
-  const game = request.params.game;
+app.post('/api/submission', async (request : Request, response : Response) => {
+  const body : ISubmission = request.body;
+  const game = body.game;
   const isValid = validateGame(game);
   if (!isValid) {
     console.error(`Invalid game '${game}'`)
@@ -53,10 +55,12 @@ app.post('/api/answers/:game', async (request : Request, response : Response) =>
   }
 
   // Check if quiz is open
-  const open = getState().open;
+  const state : IState = getState();
+  const open = state.open;
   if (!open) {
-    console.error("The submitted quiz with the name '" + request.body.name + "' was rejected because the quiz is closed.");
-    response.redirect(`/scoreboard/index.html?game=${game}&status=failure`);
+    console.error("The submitted quiz with the name '" + body.name + "' was rejected because the quiz is closed.");
+    // TODO: change this redirect
+    // response.redirect(`/scoreboard/index.html?game=${game}&status=failure`);
     return;
   }
 
@@ -65,7 +69,7 @@ app.post('/api/answers/:game', async (request : Request, response : Response) =>
                 VALUES ($1, $2) \
                 RETURNING quiz_id";
   let params = [request.body.name, game];
-  let result = await pgClient.query(query, params);
+  let result: QueryResult<any> = await pgClient.query(query, params);
   if (result.rows.length != 1) {
     console.error(`There was not exactly one result with quiz_id ${result.rows.length}`);
     response.status(400);
@@ -73,16 +77,16 @@ app.post('/api/answers/:game', async (request : Request, response : Response) =>
   }
   const quiz_id = result.rows[0].quiz_id;
 
-  // Insert into answers table
+  // Insert into guesses table
   const values : any[] = [];
   params = [];
   let paramIndex = 1;
   const questions = getQuestions();
-  questions.forEach((question : any) => {
-    if (request.body[question.id]) {
+  questions.forEach((question) => {
+    if (body.guesses[question.id]) {
       params.push(question.id);
       params.push(quiz_id);
-      params.push(request.body[question.id]);
+      params.push(body.guesses[question.id]);
       const valueStr = "($" + paramIndex + ", $" + (paramIndex+1) + ", $" + (paramIndex+2) + ")";
       values.push(valueStr);
       paramIndex += 3;
@@ -92,7 +96,7 @@ app.post('/api/answers/:game', async (request : Request, response : Response) =>
   });
 
   if (values.length > 0) {
-    const queryArray = ["INSERT INTO answers(question_id, quiz_id, response) VALUES"];
+    const queryArray = ["INSERT INTO guesses(question_id, quiz_id, guess_value) VALUES"];
     values.forEach((valueStr, index) => {
       queryArray.push(" \n");
       queryArray.push(valueStr);
@@ -104,16 +108,16 @@ app.post('/api/answers/:game', async (request : Request, response : Response) =>
     });
     query = queryArray.join('');
     await pgClient.query(query, params);
-    console.log("'" + request.body.name + "' submitted a quiz");
+    console.log("'" + body.name + "' submitted a quiz");
     response.redirect(`/scoreboard/index.html?game=${game}&status=success`);
   } else {
-    console.error("There were no question answers for quiz_id: '" + quiz_id + "'");
+    console.error("There were no question guesses for quiz_id: '" + quiz_id + "'");
     response.redirect(`/scoreboard/index.html?game=${game}&status=failure`);
   }
 });
 
-// Get answers from database
-app.get('/api/answers/:game', async (request : Request, response : Response) => {
+// Get guesses from database
+app.get('/api/guesses/:game', async (request : Request, response : Response) => {
   const game = request.params.game;
   const isValid = validateGame(game);
   if (!isValid) {
@@ -134,16 +138,16 @@ app.get('/api/answers/:game', async (request : Request, response : Response) => 
     quiz_ids.push(row.quiz_id);
   });
 
-  // get answers
-  query =  "SELECT quizzes.quiz_id, question_id, response \
+  // get guesses
+  query =  "SELECT quizzes.quiz_id, question_id, guess_value \
             FROM quizzes \
-            INNER JOIN answers \
-            ON quizzes.quiz_id = answers.quiz_id \
+            INNER JOIN guesses \
+            ON quizzes.quiz_id = guesses.quiz_id \
             WHERE game = $1";
   params = [game];
   result = await pgClient.query(query, params);
   result.rows.forEach((row : any) => {
-    quizzes[row.quiz_id][row.question_id] = row.response;
+    quizzes[row.quiz_id][row.question_id] = row.guess_value;
   });
 
   // convert quizzes object to an array
@@ -169,16 +173,16 @@ app.post('/api/answer', async (request : Request, response : Response) : Promise
   }
   const data : any = { name: result.rows[0].name };
 
-  // get answers
-  query =  "SELECT question_id, response \
+  // get guesses
+  query =  "SELECT question_id, guess_value \
             FROM quizzes \
-            INNER JOIN answers \
-            ON quizzes.quiz_id = answers.quiz_id \
+            INNER JOIN guesses \
+            ON quizzes.quiz_id = guesses.quiz_id \
             WHERE quizzes.quiz_id = $1";
   params = [quiz_id];
   result = await pgClient.query(query, params);
   result.rows.forEach((row : any) => {
-    data[row.question_id] = row.response;
+    data[row.question_id] = row.guess_value;
   });
   response.json(data);
 });
@@ -186,7 +190,7 @@ app.post('/api/answer', async (request : Request, response : Response) : Promise
 // Ask the server if the quiz is open
 app.get('/api/quiz-state', (request : Request, response : Response) => {
   const state = getState();
-  response.json(state);
+  response.json(state as IState);
 })
 
 app.post('/api/is-valid-game', async (request : Request, response : Response) => {

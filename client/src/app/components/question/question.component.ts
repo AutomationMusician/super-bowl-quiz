@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Question } from '../../model/question';
+import { GuessSelection } from 'server/interfaces'
 
 @Component({
   selector: '[app-question]',
@@ -13,7 +14,7 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  setSelection(selection : 'left' | 'right') : void {
+  setSelection(selection : GuessSelection) : void {
     this.question.selection = selection;
   }
 
