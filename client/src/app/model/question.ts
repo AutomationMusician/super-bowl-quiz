@@ -1,4 +1,4 @@
-import { IQuestion } from 'common/interfaces';
+import { IQuestion } from 'server/interfaces';
 
 export class Question implements IQuestion {
     question: string;

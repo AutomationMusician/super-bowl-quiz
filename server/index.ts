@@ -1,7 +1,9 @@
-import express from 'express';
-import { Client } from 'pg';
-import fs from 'fs';
+import express, { Request, Response } from 'express';
+import { Client as PgClient } from 'pg';
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 
+dotenv.config();
 const app = express();
 const PORT = process.env.WEB_PORT;
 app.listen(PORT, () => console.log('listening on port ' + PORT));
@@ -9,7 +11,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
-const pgClient = new Client({
+const pgClient = new PgClient({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
   database: process.env.PGDATABASE,
@@ -19,29 +21,29 @@ const pgClient = new Client({
 pgClient.connect();
 
 function getQuestions() {
-  const jsonString = fs.readFileSync('configs/questions.json', { encoding: 'utf-8'});
+  const jsonString = fs.readFileSync('../configs/questions.json', { encoding: 'utf-8'});
   return JSON.parse(jsonString);
 }
 
 function getState() {
-  const jsonString = fs.readFileSync('configs/state.json', { encoding: 'utf-8'});
+  const jsonString = fs.readFileSync('../configs/state.json', { encoding: 'utf-8'});
   return JSON.parse(jsonString);
 }
 
 function validateGame(game : any) {
-  const jsonString = fs.readFileSync('configs/games.json', { encoding: 'utf-8'});
+  const jsonString = fs.readFileSync('../configs/games.json', { encoding: 'utf-8'});
   const validGames = JSON.parse(jsonString);
   return validGames.includes(game);
 }
 
 // Get questions from server
-app.get('/api/questions', async (request : any, response : any) => {
+app.get('/api/questions', async (request : Request, response : Response) => {
   const questions = getQuestions();
   response.json(questions);
 });
 
 // Add quiz to the database
-app.post('/api/answers/:game', async (request : any, response : any) => {
+app.post('/api/answers/:game', async (request : Request, response : Response) => {
   const game = request.params.game;
   const isValid = validateGame(game);
   if (!isValid) {
@@ -111,7 +113,7 @@ app.post('/api/answers/:game', async (request : any, response : any) => {
 });
 
 // Get answers from database
-app.get('/api/answers/:game', async (request : any, response : any) => {
+app.get('/api/answers/:game', async (request : Request, response : Response) => {
   const game = request.params.game;
   const isValid = validateGame(game);
   if (!isValid) {
@@ -152,7 +154,7 @@ app.get('/api/answers/:game', async (request : any, response : any) => {
   response.json(data);
 });
 
-app.post('/api/answer', async (request : any, response : any) : Promise<void> => {
+app.post('/api/answer', async (request : Request, response : Response) : Promise<void> => {
   const quiz_id = request.body.id;
   // Get name
   let query =  "SELECT name, game \
@@ -182,12 +184,12 @@ app.post('/api/answer', async (request : any, response : any) : Promise<void> =>
 });
 
 // Ask the server if the quiz is open
-app.get('/api/quiz-state', (request : any, response : any) => {
+app.get('/api/quiz-state', (request : Request, response : Response) => {
   const state = getState();
   response.json(state);
 })
 
-app.post('/api/is-valid-game', async (request : any, response : any) => {
+app.post('/api/is-valid-game', async (request : Request, response : Response) => {
   const status = validateGame(request.body.game);
   response.json({ status });
 });

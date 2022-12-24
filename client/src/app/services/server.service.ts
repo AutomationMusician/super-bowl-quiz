@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IQuestion, IState } from 'common/interfaces';
+import { IQuestion, IState } from 'server/interfaces';
 
 @Injectable({
   providedIn: 'root'

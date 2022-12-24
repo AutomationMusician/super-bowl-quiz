@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IQuestion, IState } from 'common/interfaces';
+import { IQuestion, IState } from 'server/interfaces';
 import { Question } from '../../model/question';
 import { ServerService } from 'src/app/services/server.service';
 
