@@ -30,7 +30,7 @@ async function getGame() {
     },
     body: JSON.stringify({ game })
   }
-  const response = await fetch('/isValidGame', options);
+  const response = await fetch('/api/is-valid-game', options);
   const responseJsonObj = await response.json();
   if (responseJsonObj.status)
     return game;
@@ -53,7 +53,7 @@ async function getAnswers(game) {
 }
 
 async function getQuestions() {
-  const response = await fetch('/questions');
+  const response = await fetch('/api/questions');
   return await response.json();
 }
 

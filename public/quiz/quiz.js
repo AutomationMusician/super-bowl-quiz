@@ -14,7 +14,7 @@ async function getGame() {
     },
     body: JSON.stringify({ game })
   }
-  const response = await fetch('/isValidGame', options);
+  const response = await fetch('/api/is-valid-game', options);
   const responseJsonObj = await response.json();
   if (responseJsonObj.status)
     return game;
@@ -53,7 +53,7 @@ function setToComplete(id) {
 }
 
 async function getQuestions() {
-  const response = await fetch('/questions');
+  const response = await fetch('/api/questions');
   const questions = await response.json();
   console.log(questions);
   for (let question of questions) {
@@ -98,7 +98,7 @@ async function main() {
   const game = await getGame();
   if (game) {
     setLinks(game);
-    const response = await fetch('/quizState');
+    const response = await fetch('/api/quiz-state');
     const json = await response.json();
     const quizOpen = json.open;
     if (quizOpen) {

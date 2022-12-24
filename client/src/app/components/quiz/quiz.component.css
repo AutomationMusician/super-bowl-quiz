@@ -21,11 +21,11 @@ table {
   margin: 0px auto;
 }
 
-#tableBody tr {
+.quiz-body tr {
   border: 1px solid black;
 }
 
-#tableBody td, #nameAndScore td{
+#nameAndScore td {
   padding: 20px 5px;
   margin: 0px;
 }

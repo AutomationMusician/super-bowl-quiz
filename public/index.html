@@ -4,7 +4,7 @@
   const game = urlParams.get('game');
 
   async function main() {
-    const response = await fetch('/quizState');
+    const response = await fetch('/api/quiz-state');
     const json = await response.json();
     const quizOpen = json.open;
     if (quizOpen) {

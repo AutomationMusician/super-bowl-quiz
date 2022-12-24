@@ -17,7 +17,7 @@ function main() {
 }
 
 async function getQuestions() {
-  const response = await fetch('/questions');
+  const response = await fetch('/api/questions');
   return await response.json();
 }
 
@@ -29,7 +29,7 @@ async function getAnswers(player) {
     },
     body: JSON.stringify({ id: player })
   }
-  const response = await fetch('/answer', options);
+  const response = await fetch('/api/answer', options);
   return await response.json();
 }
 

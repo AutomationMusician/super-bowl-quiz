@@ -187,7 +187,7 @@ app.get('/api/quiz-state', (request, response) => {
   response.json(state);
 })
 
-app.post('/api/isValidGame', async (request, response) => {
+app.post('/api/is-valid-game', async (request, response) => {
   const status = validateGame(request.body.game);
   response.json({ status });
 });
