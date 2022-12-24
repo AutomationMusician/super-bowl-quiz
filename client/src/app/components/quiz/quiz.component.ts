@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Question } from '../../../../common/interfaces';
+import { Question, State } from 'common/interfaces';
+import { ServerService } from 'src/app/services/server.service';
 
 @Component({
   selector: 'app-quiz',
@@ -10,15 +11,16 @@ import { Question } from '../../../../common/interfaces';
 export class QuizComponent implements OnInit {
   questions: Question[] = [];
 
-  constructor(private route:Router) {}
+  constructor(
+    private route: Router,
+    private server: ServerService
+    ) {}
 
   async ngOnInit(): Promise<void> {
-    const response = await fetch('/api/quizState');
-    const json = await response.json();
-    const quizOpen = json.open;
+    const quizState : State = await this.server.getState();
+    const quizOpen = quizState.open;
     if (quizOpen) {
-      const response = await fetch('/api/questions');
-      this.questions = await response.json();
+      this.questions = await this.server.getQuestions();
     } else {
       // use to close quiz
       this.route.navigate(['/scoreboard']);

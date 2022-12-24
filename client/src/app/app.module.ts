@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { QuizComponent } from './quiz/quiz.component';
-import { QuestionComponent } from './quiz/question/question.component';
+import { QuizComponent } from './components/quiz/quiz.component';
+import { QuestionComponent } from './components/quiz/question/question.component';
 import { AppRoutingModule } from './app-routing.module';
-import { RootComponent } from './root/root.component';
+import { RootComponent } from './components/root/root.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
     RootComponent,
     QuizComponent,
-    QuestionComponent
+    QuestionComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,

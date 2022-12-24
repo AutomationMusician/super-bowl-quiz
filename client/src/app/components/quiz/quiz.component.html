@@ -3,8 +3,7 @@
         <thead>
             <tr>
                 <td id="navigation" colspan="3">
-                    <a [routerLink]="['/quiz']" class="active">Take Quiz</a>
-                    <a [routerLink]="['/scoreboard']">View Scoreboard</a>
+                    <app-nav-bar></app-nav-bar>
                 </td>
             </tr>
             <tr id="nameAndScore">
@@ -15,9 +14,8 @@
                 <td id="scoreLabel" colspan="2"></td>
             </tr>
         </thead>
-        <tbody id="tableBody"></tbody>
         <tbody>
-            <app-question *ngFor="let question of questions" [question]="question"></app-question>
+            <tr *ngFor="let question of questions" [question]="question" app-question></tr>
             <tr>
                 <td colspan="3">
                     <input type="submit" id="done" value="Done" disabled />

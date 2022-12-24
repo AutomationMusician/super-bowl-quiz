@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Question } from '../../../../../common/interfaces';
+import { Question } from '../../../../../../common/interfaces';
 
 @Component({
-  selector: 'app-question',
+  selector: '[app-question]',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css']
 })

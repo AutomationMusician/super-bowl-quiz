@@ -35,13 +35,13 @@ function validateGame(game) {
 }
 
 // Get questions from server
-app.get('/questions', async (request, response) => {
+app.get('/api/questions', async (request, response) => {
   const questions = getQuestions();
   response.json(questions);
 });
 
 // Add quiz to the database
-app.post('/answers/:game', async (request, response) => {
+app.post('/api/answers/:game', async (request, response) => {
   const game = request.params.game;
   const isValid = validateGame(game);
   if (!isValid) {
@@ -111,7 +111,7 @@ app.post('/answers/:game', async (request, response) => {
 });
 
 // Get answers from database
-app.get('/answers/:game', async (request, response) => {
+app.get('/api/answers/:game', async (request, response) => {
   const game = request.params.game;
   const isValid = validateGame(game);
   if (!isValid) {
@@ -152,7 +152,7 @@ app.get('/answers/:game', async (request, response) => {
   response.json(data);
 });
 
-app.post('/answer', async (request, response) => {
+app.post('/api/answer', async (request, response) => {
   const quiz_id = request.body.id;
   // Get name
   let query =  "SELECT name, game \
@@ -182,12 +182,12 @@ app.post('/answer', async (request, response) => {
 });
 
 // Ask the server if the quiz is open
-app.get('/quizState', (request, response) => {
+app.get('/api/quiz-state', (request, response) => {
   const state = getState();
   response.json(state);
 })
 
-app.post('/isValidGame', async (request, response) => {
+app.post('/api/isValidGame', async (request, response) => {
   const status = validateGame(request.body.game);
   response.json({ status });
 });
