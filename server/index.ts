@@ -2,13 +2,19 @@ import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
-import { IQuestion, ISubmission as ISubmission, IState } from 'interfaces';
+import * as path from 'path';
+import { IQuestion, ISubmission as ISubmission, IState } from './interfaces';
+import { request } from 'http';
 
-dotenv.config();
+dotenv.config({path: path.join(__dirname, '../.env')});
 const app = express();
 const PORT = process.env.WEB_PORT;
 app.listen(PORT, () => console.log('listening on port ' + PORT));
-app.use(express.static('public'));
+
+app.use(express.static(path.join(__dirname, '../client/dist')));
+app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../client/dist/index.html')));
+
+
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
@@ -22,17 +28,17 @@ const pgClient = new PgClient({
 pgClient.connect();
 
 function getQuestions() : IQuestion[] {
-  const jsonString : string = fs.readFileSync('../configs/questions.json', { encoding: 'utf-8'});
+  const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/questions.json'), { encoding: 'utf-8'});
   return JSON.parse(jsonString);
 }
 
 function getState() : IState {
-  const jsonString : string = fs.readFileSync('../configs/state.json', { encoding: 'utf-8'});
+  const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/state.json'), { encoding: 'utf-8'});
   return JSON.parse(jsonString);
 }
 
 function validateGame(game : string) : boolean {
-  const jsonString : string = fs.readFileSync('../configs/games.json', { encoding: 'utf-8'});
+  const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/games.json'), { encoding: 'utf-8'});
   const validGames : string[] = JSON.parse(jsonString);
   return validGames.includes(game);
 }
