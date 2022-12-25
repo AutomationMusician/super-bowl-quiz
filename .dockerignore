@@ -3,10 +3,13 @@
 /configs
 /database_setup
 /docker-compose.yml
-node_modules
+/node_modules
 
 # client
-client/.angular/cache
+/client/.angular/cache
+/client/node_modules
+/client/dist
 
 # server
-server/**.js
+/server/*.js
+/server/node_modules
