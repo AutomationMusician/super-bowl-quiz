@@ -4,12 +4,10 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
 import { IQuestion, ISubmission as ISubmission, IState } from './interfaces';
-import { request } from 'http';
 
 dotenv.config({path: path.join(__dirname, '../.env')});
 const app = express();
 const PORT = process.env.WEB_PORT;
-app.listen(PORT, () => console.log('listening on port ' + PORT));
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../client/dist/index.html')));
@@ -203,3 +201,10 @@ app.post('/api/is-valid-game', async (request : Request, response : Response) =>
   const status = validateGame(request.body.game);
   response.json({ status });
 });
+
+app.get('*', function(req, res){
+  res.status(404).send('<p>Page not found</p>');
+});
+
+app.listen(PORT, () => console.log('listening on port ' + PORT));
+
