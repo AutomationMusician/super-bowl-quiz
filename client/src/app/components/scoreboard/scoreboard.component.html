@@ -11,17 +11,13 @@
             </td>
         </tr>
         <tr>
-            <td><strong>Rank</strong></td>
+            <td class="rankCell"><strong>Rank</strong></td>
             <td class="nameCell"><strong>Name</strong></td>
-            <td><strong>Score</strong></td>
+            <td class="scoreCell"><strong>Score</strong></td>
         </tr>
     </thead>
     <tbody class="quiz-body">
-   
-        <tr>
-            <td colspan="3">
-                <p>Table works</p>
-            </td>
-        </tr>
+        <tr [playerData]="mockPlayerData" app-scoreboard-row></tr>
+        <tr [playerData]="mockPlayerData" app-scoreboard-row></tr>
     </tbody>
 </table>

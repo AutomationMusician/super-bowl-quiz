@@ -8,6 +8,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { FormsModule } from '@angular/forms';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
+import { ScoreboardRowComponent } from './components/scoreboard-row/scoreboard-row.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,9 @@ import { ScoreboardComponent } from './components/scoreboard/scoreboard.componen
     QuestionComponent,
     NavBarComponent,
     ScoreboardComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ScoreboardComponent,
+    ScoreboardRowComponent
   ],
   imports: [
     BrowserModule,

@@ -21,10 +21,6 @@ table {
   margin: 0px auto;
 }
 
-.quiz-body tr {
-  border: 1px solid black;
-}
-
 #nameAndScore td {
   padding: 20px 5px;
   margin: 0px;
