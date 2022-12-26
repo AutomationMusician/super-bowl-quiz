@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IGuessDict, IQuestion, IState, ISubmission } from 'server/interfaces';
-import { Question } from '../../model/question';
+import { Question } from 'src/app/model/question';
 import { ServerService } from 'src/app/services/server.service';
 import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.css']
+  styleUrls: ['./quiz.component.css', '../shared/quiz.css'] // last css file has highest precedence
 })
 export class QuizComponent implements OnInit {
   questions: Question[] = [];

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { Question } from '../../model/question';
+import { Question } from 'src/app/model/question';
 import { GuessSelection } from 'server/interfaces'
 
 @Component({

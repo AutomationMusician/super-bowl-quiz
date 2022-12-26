@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { QuizComponent } from './components/quiz/quiz.component';
+import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 
 const routes: Routes = [
   { path: 'quiz/:game', component: QuizComponent },
-  { path: '', redirectTo: 'quiz/Personal', pathMatch: "full" },
+  { path: 'scoreboard/:game', component: ScoreboardComponent },
+  { path: '', redirectTo: 'scoreboard/Personal', pathMatch: "full" },
   { path: '**', component: PageNotFoundComponent }
 ];
 

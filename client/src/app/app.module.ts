@@ -7,6 +7,7 @@ import { RootComponent } from './components/root/root.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { FormsModule } from '@angular/forms';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     QuizComponent,
     QuestionComponent,
     NavBarComponent,
+    ScoreboardComponent,
     PageNotFoundComponent
   ],
   imports: [
