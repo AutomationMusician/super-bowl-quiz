@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Type } from '@angular/core';
+
+export type NavBarPage = "quiz" | "scoreboard";
 
 @Component({
   selector: 'app-nav-bar',
@@ -6,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent implements OnInit {
+  @Input() currentPage! : NavBarPage;
 
   constructor() { }
 

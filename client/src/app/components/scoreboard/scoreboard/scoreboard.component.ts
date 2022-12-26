@@ -6,7 +6,7 @@ import { ServerService } from 'src/app/services/server.service';
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
-  styleUrls: ['../shared/quiz.css', '../shared/scoreboard-row.css', './scoreboard.component.css'] // last css file has highest precedence
+  styleUrls: ['../scoreboard-row.css', './scoreboard.component.css'] // last css file has highest precedence
 })
 export class ScoreboardComponent implements OnInit {
   game : string | undefined;

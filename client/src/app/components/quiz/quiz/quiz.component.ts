@@ -8,7 +8,7 @@ import { NgForm } from '@angular/forms';
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
-  styleUrls: ['../shared/quiz.css', './quiz.component.css'] // last css file has highest precedence
+  styleUrls: ['./quiz.component.css']
 })
 export class QuizComponent implements OnInit {
   questions: Question[] = [];
