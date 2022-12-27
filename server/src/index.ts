@@ -3,14 +3,14 @@ import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import { GetAllQuizzes, GetQuestions, GetState, RankAllPlayers, ValidateGame} from './helpers';
-import { IQuestion, ISubmission as ISubmission, IState, IQuiz } from './interfaces';
+import { IQuestion, ISubmission as ISubmission, IState, IQuiz } from 'interfaces';
 
-dotenv.config({path: path.join(__dirname, '../.env')});
+dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
 const PORT = process.env.WEB_PORT;
 
-app.use(express.static(path.join(__dirname, '../client/dist')));
-app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../client/dist/index.html')));
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/index.html')));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 

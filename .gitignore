@@ -9,4 +9,4 @@ Thumbs.db
 node_modules/
 
 # server stuff
-/server/**.js
+/server/**/*.js

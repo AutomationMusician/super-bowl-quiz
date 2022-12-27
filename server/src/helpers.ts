@@ -1,20 +1,20 @@
 import { Client as PgClient, QueryResult } from 'pg';
-import { IPlayerData, IQuestion, IQuiz, IState } from "./interfaces";
+import { IPlayerData, IQuestion, IQuiz, IState } from "interfaces";
 import * as fs from 'fs';
 import * as path from 'path';
 
 export function GetQuestions() : IQuestion[] {
-    const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/questions.json'), { encoding: 'utf-8'});
+    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../configs/questions.json'), { encoding: 'utf-8'});
     return JSON.parse(jsonString);
 }
 
 export function GetState() : IState {
-    const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/state.json'), { encoding: 'utf-8'});
+    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../configs/state.json'), { encoding: 'utf-8'});
     return JSON.parse(jsonString);
 }
 
 export function ValidateGame(game : string) : boolean {
-    const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/games.json'), { encoding: 'utf-8'});
+    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../configs/games.json'), { encoding: 'utf-8'});
     const validGames : string[] = JSON.parse(jsonString);
     return validGames.includes(game);
 }

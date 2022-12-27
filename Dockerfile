@@ -11,12 +11,11 @@ WORKDIR /opt/superbowlquiz/server
 RUN npm install && \
     npm run build
 RUN npm ci --production && \
-    rm -f *.ts tsconfig.json
+    rm -f *.ts test tsconfig.json
 
 FROM node:16 as production
 COPY --from=client-builder /opt/superbowlquiz/client/dist /opt/superbowlquiz/client/dist
 COPY --from=server-builder /opt/superbowlquiz/server /opt/superbowlquiz/server
-
 USER node
 WORKDIR /opt/superbowlquiz/server
 ENTRYPOINT npm start

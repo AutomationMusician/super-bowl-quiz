@@ -1,15 +1,15 @@
 {
   "name": "super-bowl-quiz-server",
   "version": "0.0.0",
-  "description": "Super Bowl Quiz for the 2020 Super Bowl",
-  "main": "index.ts",
+  "description": "Super Bowl Quiz Express Server",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "ts-node index.ts",
+    "start": "node src/index.js",
+    "start:dev": "ts-node src/index.ts",
     "build": "tsc",
-    "dev": "nodemon index.ts",
-    "admin-console": "node admin-console.js",
-    "admin-console:dev": "ts-node admin-console.ts"
+    "dev": "nodemon src/index.ts",
+    "admin-console": "node src/admin-console.js",
+    "admin-console:dev": "ts-node src/admin-console.ts"
   },
   "keywords": [
     "quiz",

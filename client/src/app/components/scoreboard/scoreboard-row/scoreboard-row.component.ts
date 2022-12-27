@@ -8,6 +8,7 @@ import { IPlayerData } from 'server/interfaces';
 })
 export class ScoreboardRowComponent implements OnInit {
   @Input() playerData! : IPlayerData;
+  @Input() game! : string | undefined;
   constructor() { }
 
   ngOnInit(): void {

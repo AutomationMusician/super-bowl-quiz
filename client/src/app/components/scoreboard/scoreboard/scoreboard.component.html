@@ -17,7 +17,14 @@
         </tr>
     </thead>
     <tbody class="quiz-body">
-        <tr [playerData]="mockPlayerData" app-scoreboard-row></tr>
-        <tr [playerData]="mockPlayerData" app-scoreboard-row></tr>
+        <tr 
+            *ngFor="let playerData of playerDataList" 
+            [playerData]="playerData"
+            [game]="game"
+            [class]="this.getRankClass(playerData.rank)"
+            app-scoreboard-row
+        >
+        </tr>
+        
     </tbody>
 </table>
