@@ -4,7 +4,7 @@ export class Question implements IQuestion {
     question: string;
     left: string;
     right: string;
-    answer: string;
+    answer: GuessSelection | undefined;
     id: string;
     selection: GuessSelection | undefined;
     

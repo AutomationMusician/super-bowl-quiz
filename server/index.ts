@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
-import * as fs from 'fs';
 import * as path from 'path';
-import { IQuestion, ISubmission as ISubmission, IState } from './interfaces';
+import { GetAllQuizzes, GetQuestions, GetState, RankAllPlayers, ValidateGame} from './helpers';
+import { IQuestion, ISubmission as ISubmission, IState, IQuiz } from './interfaces';
 
 dotenv.config({path: path.join(__dirname, '../.env')});
 const app = express();
@@ -11,8 +11,6 @@ const PORT = process.env.WEB_PORT;
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../client/dist/index.html')));
-
-
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
@@ -25,33 +23,17 @@ const pgClient = new PgClient({
 });
 pgClient.connect();
 
-function getQuestions() : IQuestion[] {
-  const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/questions.json'), { encoding: 'utf-8'});
-  return JSON.parse(jsonString);
-}
-
-function getState() : IState {
-  const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/state.json'), { encoding: 'utf-8'});
-  return JSON.parse(jsonString);
-}
-
-function validateGame(game : string) : boolean {
-  const jsonString : string = fs.readFileSync(path.join(__dirname, '../configs/games.json'), { encoding: 'utf-8'});
-  const validGames : string[] = JSON.parse(jsonString);
-  return validGames.includes(game);
-}
-
-// Get questions from server
+// Get questions from server - returns IQuestion[]
 app.get('/api/questions', async (request : Request, response : Response) => {
-  const questions = getQuestions();
+  const questions = GetQuestions();
   response.json(questions);
 });
 
-// Add quiz to the database
+// Add quiz to the database - returns nothing
 app.post('/api/submission', async (request : Request, response : Response) => {
   const body : ISubmission = request.body;
   const game = body.game;
-  const isValid = validateGame(game);
+  const isValid = ValidateGame(game);
   if (!isValid) {
     console.error(`Invalid game '${game}'`)
     response.status(400);
@@ -59,11 +41,11 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
 
   // Check if quiz is open
-  const state : IState = getState();
+  const state : IState = GetState();
   const open = state.open;
   if (!open) {
     console.error("The submitted quiz with the name '" + body.name + "' was rejected because the quiz is closed.");
-    // TODO: change this redirect
+    // TODO: change this redirect - possibly to a 400 bad request and have the client redirect
     // response.redirect(`/scoreboard/index.html?game=${game}&status=failure`);
     return;
   }
@@ -85,7 +67,7 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   const values : any[] = [];
   params = [];
   let paramIndex = 1;
-  const questions = getQuestions();
+  const questions = GetQuestions();
   questions.forEach((question) => {
     if (body.guesses[question.id]) {
       params.push(question.id);
@@ -120,50 +102,37 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
 });
 
-// Get guesses from database
-app.get('/api/guesses/:game', async (request : Request, response : Response) => {
+// TODO: get rid of this (is it used?)
+// Get guesses from database - returns IQuiz[]
+app.get('/api/quizzes/:game', async (request : Request, response : Response) => {
   const game = request.params.game;
-  const isValid = validateGame(game);
+  const isValid = ValidateGame(game);
   if (!isValid) {
-    console.error(`Invalid game '${game}'`)
+    console.error(`Invalid game '${game}'`);
     response.status(400);
     return;
   }
-
-  const quizzes : any = {};
-  const quiz_ids : any[] = [];
-
-  // Get names
-  let query =  "SELECT quiz_id, name FROM quizzes WHERE game = $1";
-  let params = [game];
-  let result = await pgClient.query(query, params);
-  result.rows.forEach((row : any) => {
-    quizzes[row.quiz_id] = { id: row.quiz_id, name: row.name };
-    quiz_ids.push(row.quiz_id);
-  });
-
-  // get guesses
-  query =  "SELECT quizzes.quiz_id, question_id, guess_value \
-            FROM quizzes \
-            INNER JOIN guesses \
-            ON quizzes.quiz_id = guesses.quiz_id \
-            WHERE game = $1";
-  params = [game];
-  result = await pgClient.query(query, params);
-  result.rows.forEach((row : any) => {
-    quizzes[row.quiz_id][row.question_id] = row.guess_value;
-  });
-
-  // convert quizzes object to an array
-  const data : any[] = [];
-  quiz_ids.forEach(quiz_id => {
-    data.push(quizzes[quiz_id]);
-  });
+  const data = GetAllQuizzes(pgClient, game);
   response.json(data);
 });
 
-app.post('/api/answer', async (request : Request, response : Response) : Promise<void> => {
-  const quiz_id = request.body.id;
+// Get guesses from database - returns IPlayerData[]
+app.get('/api/ranking/:game', async (request : Request, response : Response) => {
+  const game = request.params.game;
+  const isValid = ValidateGame(game);
+  if (!isValid) {
+    console.error(`Invalid game '${game}'`);
+    response.status(400);
+    return;
+  }
+  const quizzes = await GetAllQuizzes(pgClient, game);
+  const questions = await GetQuestions();
+  const rankedPlayerData = RankAllPlayers(questions, quizzes);
+  response.json(rankedPlayerData);
+});
+
+app.get('/api/quiz/:id', async (request : Request, response : Response) : Promise<void> => {
+  const quiz_id = request.params.id;
   // Get name
   let query =  "SELECT name, game \
                 FROM quizzes \
@@ -193,12 +162,12 @@ app.post('/api/answer', async (request : Request, response : Response) : Promise
 
 // Ask the server if the quiz is open
 app.get('/api/quiz-state', (request : Request, response : Response) => {
-  const state = getState();
+  const state = GetState();
   response.json(state as IState);
 })
 
 app.post('/api/is-valid-game', async (request : Request, response : Response) => {
-  const status = validateGame(request.body.game);
+  const status = ValidateGame(request.body.game);
   response.json({ status });
 });
 

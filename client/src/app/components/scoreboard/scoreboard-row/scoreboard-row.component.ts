@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PlayerData } from 'src/app/model/player-data';
+import { IPlayerData } from 'server/interfaces';
 
 @Component({
   selector: '[app-scoreboard-row]',
@@ -7,7 +7,7 @@ import { PlayerData } from 'src/app/model/player-data';
   styleUrls: ['../scoreboard-row.css', './scoreboard-row.component.css']
 })
 export class ScoreboardRowComponent implements OnInit {
-  @Input() playerData! : PlayerData;
+  @Input() playerData! : IPlayerData;
   constructor() { }
 
   ngOnInit(): void {

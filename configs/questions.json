@@ -3,14 +3,13 @@
     "question": "How long will the national anthem last?",
     "left": "1:10 and Under",
     "right": "Over 1:10",
-    "answer": "unknown",
     "id": "AQfsR9xHIQmyx1jR"
   },
   {
     "question": "The coin will land on:",
     "left": "Heads",
     "right": "Tails",
-    "answer": "unknown",
+    "answer": "left",
     "id": "PPrsFdARh5iciwad"
   }
 ]

@@ -4,7 +4,7 @@ export interface IQuestion {
     question: string;
     left: string;
     right: string;
-    answer: string;
+    answer: GuessSelection | undefined;
     id: string;
 }
 
@@ -27,4 +27,11 @@ export interface IQuiz {
 export interface IGuessDict {
     // question_id to response
     [index: string]: GuessSelection;
+}
+
+export interface IPlayerData {
+    id: number;
+    name: string;
+    score: number;
+    rank: number | undefined;
 }

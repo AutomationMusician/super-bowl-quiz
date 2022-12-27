@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PlayerData } from 'src/app/model/player-data';
+import { IPlayerData, IQuestion, IQuiz } from 'server/interfaces';
 import { ServerService } from 'src/app/services/server.service';
 
 @Component({
@@ -10,23 +10,27 @@ import { ServerService } from 'src/app/services/server.service';
 })
 export class ScoreboardComponent implements OnInit {
   game : string | undefined;
-  mockPlayerData : PlayerData;
+  mockPlayerData : IPlayerData = {
+    id: 1,
+    name: "firstname lastname",
+    rank: undefined,
+    score: 50
+  };
 
   constructor(
     private route: Router,
     private activatedRouter: ActivatedRoute,
     private server: ServerService
   ) { 
-    this.mockPlayerData = new PlayerData();
-    this.mockPlayerData.name = "firstname lastname";
-    this.mockPlayerData.rank = 1;
-    this.mockPlayerData.score = 50;
-  }
-
-  ngOnInit(): void {
     this.activatedRouter.paramMap.subscribe(params => {
       this.game = params.get('game') as string;
     });
+    
+
+  }
+
+  ngOnInit(): void {
+
   }
 
 }
