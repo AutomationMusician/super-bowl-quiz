@@ -2,3 +2,7 @@ td {
     padding: 20px 5px;
     margin: 0px;
 }
+
+label {
+    padding: 5px;
+}
