@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { GetAllQuizzes, GetQuestions, GetState, RankAllPlayers, ValidateGame} from './helpers';
-import { IQuestion, ISubmission as ISubmission, IState, IQuiz } from 'interfaces';
+import { GetAllQuizzes, GetQuestions, GetState, QuizToScoredQuiz, RankAllPlayers, ValidateGame} from './helpers';
+import { IQuestion, ISubmission as ISubmission, IState, IQuiz, IScoredQuiz } from 'interfaces';
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
@@ -131,8 +131,8 @@ app.get('/api/ranking/:game', async (request : Request, response : Response) => 
   response.json(rankedPlayerData);
 });
 
-// returns IQuiz
-app.get('/api/quiz/:id', async (request : Request, response : Response) : Promise<void> => {
+// returns IScoredQuiz
+app.get('/api/scored-quiz/:id', async (request : Request, response : Response) : Promise<void> => {
   const quiz_id = Number(request.params.id);
   // Get name
   let query =  "SELECT name, game \
@@ -146,7 +146,7 @@ app.get('/api/quiz/:id', async (request : Request, response : Response) : Promis
     return;
   }
 
-  const data : IQuiz = { 
+  const quiz : IQuiz = { 
     name: result.rows[0].name,
     id: quiz_id,
     guesses: {}
@@ -161,9 +161,12 @@ app.get('/api/quiz/:id', async (request : Request, response : Response) : Promis
   params = [quiz_id];
   result = await pgClient.query(query, params);
   result.rows.forEach((row : any) => {
-    data.guesses[row.question_id] = row.guess_value;
+    quiz.guesses[row.question_id] = row.guess_value;
   });
-  response.json(data);
+  
+  const questions : IQuestion[] = GetQuestions();
+  const scoredQuiz : IScoredQuiz = QuizToScoredQuiz(questions, quiz); // why is this not working
+  response.json(scoredQuiz);
 });
 
 // Ask the server if the quiz is open

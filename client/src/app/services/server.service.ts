@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IQuestion, ISubmission, IState, IQuiz, IPlayerData } from 'server/interfaces';
+import { IQuestion, ISubmission, IState, IScoredQuiz, IPlayerData } from 'server/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +34,8 @@ export class ServerService {
     return await response.json();
   }
 
-  async getQuiz(id : number) : Promise<IQuiz> {
-    const response = await fetch(`/api/quiz/${id}`);
+  async getQuiz(id : number) : Promise<IScoredQuiz> {
+    const response = await fetch(`/api/scored-quiz/${id}`);
     return await response.json();
   }
 }

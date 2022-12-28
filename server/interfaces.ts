@@ -24,6 +24,10 @@ export interface IQuiz {
     guesses: IGuessDict; 
 }
 
+export interface IScoredQuiz extends IQuiz {
+    score: number;
+}
+
 export interface IGuessDict {
     // question_id to response
     [index: string]: GuessSelection;

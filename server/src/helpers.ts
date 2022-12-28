@@ -1,5 +1,5 @@
 import { Client as PgClient, QueryResult } from 'pg';
-import { IPlayerData, IQuestion, IQuiz, IState } from "interfaces";
+import { IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "interfaces";
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -54,32 +54,44 @@ export async function GetAllQuizzes(pgClient : PgClient, game : string) : Promis
     return data;
 }
 
-export function RankAllPlayers(questions : IQuestion[], quizzes : IQuiz[]) {
+export function ScoreQuiz(questions : IQuestion[], quiz : IQuiz) : number {
+    let numCorrect : number = 0;
+    let numIncorrect : number = 0;
+
+    for (let question of questions) {
+        const qid = question.id;
+        const correctAnswer = question.answer;
+        const givenAnswer = quiz.guesses[qid];
+
+        if (givenAnswer === correctAnswer) {
+            numCorrect++;
+        } else if (correctAnswer) {
+            numIncorrect++;
+        }
+    }
+    const totalQuestions = numCorrect + numIncorrect;
+    if (totalQuestions !== 0)
+        return Math.round(100*numCorrect/totalQuestions);
+    return 0;
+}
+
+export function QuizToScoredQuiz(questions : IQuestion[], quiz : IQuiz) : IScoredQuiz {
+    return {
+        id: quiz.id,
+        name: quiz.name,
+        guesses: quiz.guesses,
+        score: ScoreQuiz(questions, quiz)
+    } as IScoredQuiz;
+}
+
+export function RankAllPlayers(questions : IQuestion[], quizzes : IQuiz[]) : IPlayerData[] {
     const playerDataList : IPlayerData[] = [];
     for (let quiz of quizzes) {
-        let score : number = 0;
-        let numCorrect : number = 0;
-        let numIncorrect : number = 0;
-
-        for (let question of questions) {
-            const qid = question.id;
-            const correctAnswer = question.answer;
-            const givenAnswer = quiz.guesses[qid];
-
-            if (givenAnswer === correctAnswer) {
-                numCorrect++;
-            } else if (correctAnswer) {
-                numIncorrect++;
-            }
-        }
-        const totalQuestions = numCorrect + numIncorrect;
-        if (totalQuestions !== 0)
-            score = Math.round(100*numCorrect/totalQuestions);
 
         const playerData : IPlayerData = {
             id: quiz.id,
             name: quiz.name,
-            score: score,
+            score: ScoreQuiz(questions, quiz),
             rank: undefined
         };
         playerDataList.push(playerData);

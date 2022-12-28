@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPlayerData, IQuestion, IQuiz } from 'server/interfaces';
+import { IPlayerData } from 'server/interfaces';
 import { ServerService } from 'src/app/services/server.service';
 
 const refreshIntervalMs : number = 10000;

@@ -6,7 +6,8 @@
                 name="{{question.id}}"
                 value="left"
                 [disabled]="!enabled"
-                (change)="setSelection('left')" 
+                [checked]="question.selection === 'left'"
+                (change)="setSelection('left')"
         >
         <label for="{{question.id}}left">{{question.left}}</label>
 </td>
@@ -17,6 +18,7 @@
                 name="{{question.id}}"
                 value="right"
                 [disabled]="!enabled"
+                [checked]="question.selection === 'right'"
                 (change)="setSelection('right')"
         >
         <label for="{{question.id}}right">{{question.right}}</label>
