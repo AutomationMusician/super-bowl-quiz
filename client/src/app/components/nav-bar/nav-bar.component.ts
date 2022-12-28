@@ -8,7 +8,7 @@ export type NavBarPage = "quiz" | "scoreboard";
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent implements OnInit {
-  @Input() currentPage! : NavBarPage;
+  @Input() currentPage! : NavBarPage | undefined;
   @Input() game! : string | undefined;
 
   constructor() { }

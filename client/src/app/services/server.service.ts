@@ -29,8 +29,13 @@ export class ServerService {
     return response;
   }
 
-  async getPlayerData(game : string) : Promise<IPlayerData[]> {
+  async getPlayerDataList(game : string) : Promise<IPlayerData[]> {
     const response = await fetch(`/api/ranking/${game}`);
+    return await response.json();
+  }
+
+  async getQuiz(id : number) : Promise<IQuiz> {
+    const response = await fetch(`/api/quiz/${id}`);
     return await response.json();
   }
 }

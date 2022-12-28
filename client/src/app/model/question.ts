@@ -15,4 +15,13 @@ export class Question implements IQuestion {
         this.answer = iQuestion.answer;
         this.id = iQuestion.id;
     }
+
+    public isCorrect() : 'correct' | 'incorrect' | 'unknown' {
+        if (this.answer === undefined || this.selection === undefined)
+            return 'unknown';
+        else if (this.answer === this.selection)
+            return 'correct';
+        else
+            return 'incorrect';
+    }
 }

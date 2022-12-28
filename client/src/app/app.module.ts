@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard/scoreboard.component';
 import { ScoreboardRowComponent } from './components/scoreboard/scoreboard-row/scoreboard-row.component';
+import { ResultsComponent } from './components/quiz/results/results.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ScoreboardRowComponent } from './components/scoreboard/scoreboard-row/s
     ScoreboardComponent,
     PageNotFoundComponent,
     ScoreboardComponent,
-    ScoreboardRowComponent
+    ScoreboardRowComponent,
+    ResultsComponent
   ],
   imports: [
     BrowserModule,

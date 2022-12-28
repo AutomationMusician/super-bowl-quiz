@@ -1,5 +1,5 @@
 <td class="rankCell">{{playerData.rank}}</td>
 <td class="nameCell">
-    <a href="/results/index.html?player={{playerData.id}}&amp;game={{game}}">{{playerData.name}}</a>
+    <a [routerLink]="['/results', game, playerData.id]">{{playerData.name}}</a>
 </td>
 <td class="scoreCell">{{playerData.score}} %</td>

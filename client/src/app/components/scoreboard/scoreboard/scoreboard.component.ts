@@ -28,7 +28,7 @@ export class ScoreboardComponent implements OnInit {
 
   private async renderPlayerData() : Promise<void> {
     if (this.game) {
-      this.playerDataList = await this.server.getPlayerData(this.game);
+      this.playerDataList = await this.server.getPlayerDataList(this.game);
     }
   }
 

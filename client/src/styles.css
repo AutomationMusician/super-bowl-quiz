@@ -50,3 +50,7 @@ td:first-child {
 .incorrect, .incomplete {
   background-color: #faa;
 }
+
+.quiz-body tr {
+  border: 1px solid black;
+}

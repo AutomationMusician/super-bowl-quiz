@@ -1,0 +1,29 @@
+<table id="big">
+    <thead>
+        <tr>
+            <td id="navigation" colspan="3">
+                <app-nav-bar 
+                    [currentPage]="undefined"
+                    [game]="game"
+                ></app-nav-bar>
+            </td>
+        </tr>
+        <tr id="nameAndScore">
+            <td id="nameCell">
+                <label for="name"><strong>Name:</strong></label>
+                <input type="text" name="name" id="name" value="{{name}}" disabled/>
+            </td>
+            <td id="scoreLabel" colspan="2"></td>
+        </tr>
+    </thead>
+    <tbody class="quiz-body">
+        <tr
+            *ngFor="let question of questions"
+            [question]="question"
+            [enabled]="false"
+            id="{{question.id}}" 
+            [ngClass]="question.isCorrect()" 
+            app-question>
+        </tr>
+    </tbody>
+</table>

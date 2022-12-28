@@ -131,20 +131,26 @@ app.get('/api/ranking/:game', async (request : Request, response : Response) => 
   response.json(rankedPlayerData);
 });
 
+// returns IQuiz
 app.get('/api/quiz/:id', async (request : Request, response : Response) : Promise<void> => {
-  const quiz_id = request.params.id;
+  const quiz_id = Number(request.params.id);
   // Get name
   let query =  "SELECT name, game \
                 FROM quizzes \
                 WHERE quiz_id = $1";
-  let params = [quiz_id];
+  let params : any[] = [quiz_id];
   let result = await pgClient.query(query, params);
   if (result.rows.length != 1) {
     console.error(`There was not exactly one result with quiz_id ${result.rows.length}`);
     response.status(400);
     return;
   }
-  const data : any = { name: result.rows[0].name };
+
+  const data : IQuiz = { 
+    name: result.rows[0].name,
+    id: quiz_id,
+    guesses: {}
+  };
 
   // get guesses
   query =  "SELECT question_id, guess_value \
@@ -155,7 +161,7 @@ app.get('/api/quiz/:id', async (request : Request, response : Response) : Promis
   params = [quiz_id];
   result = await pgClient.query(query, params);
   result.rows.forEach((row : any) => {
-    data[row.question_id] = row.guess_value;
+    data.guesses[row.question_id] = row.guess_value;
   });
   response.json(data);
 });
