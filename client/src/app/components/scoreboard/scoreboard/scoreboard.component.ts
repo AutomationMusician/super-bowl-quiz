@@ -40,7 +40,6 @@ export class ScoreboardComponent implements OnInit {
   }
 
   public getRankClass(rank: number | undefined) : string {
-    console.log(rank);
     if (rank === 1)
       return 'gold';
     else if (rank === 2)
