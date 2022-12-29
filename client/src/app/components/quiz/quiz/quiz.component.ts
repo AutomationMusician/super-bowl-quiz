@@ -24,6 +24,10 @@ export class QuizComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRouter.paramMap.subscribe(async params => {
       this.game = params.get('game') as string;
+      if (!(await this.server.isValidGame(this.game))) {
+        this.route.navigate(['/']);
+        return;
+      }
       
       const quizState : IState = await this.server.getState();
       const quizOpen : boolean = quizState.open;

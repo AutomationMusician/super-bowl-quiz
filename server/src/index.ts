@@ -175,9 +175,20 @@ app.get('/api/quiz-state', (request : Request, response : Response) => {
   response.json(state as IState);
 })
 
-app.post('/api/is-valid-game', async (request : Request, response : Response) => {
-  const status = ValidateGame(request.body.game);
+app.get('/api/is-valid-game/:game', async (request : Request, response : Response) => {
+  const game : string = request.params.game;
+  const status = ValidateGame(game);
   response.json({ status });
+});
+
+app.get('/:game', async (request : Request, response : Response) => {
+  const game : string = request.params.game;
+  if (ValidateGame(game)) {
+    response.redirect(`/client/quiz/${game}`)
+  }
+  else {
+    response.status(404).send('<p>Page not found</p>');
+  }
 });
 
 app.get('*', function(req, res){

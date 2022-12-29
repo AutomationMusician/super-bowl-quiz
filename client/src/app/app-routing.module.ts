@@ -7,10 +7,10 @@ import { ResultsComponent } from './components/quiz/results/results.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard/scoreboard.component';
 
 const routes: Routes = [
+  { path: ':game', redirectTo: 'quiz/:game', pathMatch: "full" },
   { path: 'quiz/:game', component: QuizComponent },
   { path: 'scoreboard/:game', component: ScoreboardComponent },
   { path: 'results/:game/:id', component: ResultsComponent },
-  { path: '', redirectTo: 'results/Personal/1', pathMatch: "full" },
   { path: '**', component: PageNotFoundComponent }
 ];
 

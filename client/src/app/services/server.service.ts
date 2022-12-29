@@ -8,6 +8,12 @@ export class ServerService {
 
   constructor() { }
 
+  async isValidGame(game : string) : Promise<boolean> {
+    const response : Response = await fetch(`/api/is-valid-game/${game}`);
+    const jsonObject : any = await response.json();
+    return jsonObject.status;
+  }
+
   async getState() : Promise<IState> {
     const response : Response = await fetch('/api/quiz-state');
     return await response.json();

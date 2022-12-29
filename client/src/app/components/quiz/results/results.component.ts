@@ -22,8 +22,12 @@ export class ResultsComponent implements OnInit {
     private server: ServerService
   ) { 
     this.activatedRouter.paramMap.subscribe(async params => {
-      this.game = params.get('game') as string;
       this.id = Number(params.get('id'));
+      this.game = params.get('game') as string;
+      if (!(await this.server.isValidGame(this.game))) {
+        this.route.navigate(['/']);
+        return;
+      }
 
       const iQuestions : IQuestion[] = await this.server.getQuestions();
       const scoredQuiz : IScoredQuiz = await this.server.getQuiz(this.id);

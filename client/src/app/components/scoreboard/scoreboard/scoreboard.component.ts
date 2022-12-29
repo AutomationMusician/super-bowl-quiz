@@ -19,23 +19,23 @@ export class ScoreboardComponent implements OnInit {
     private activatedRouter: ActivatedRoute,
     private server: ServerService
   ) { 
-    this.activatedRouter.paramMap.subscribe(params => {
+    this.activatedRouter.paramMap.subscribe(async params => {
       this.game = params.get('game') as string;
-      this.renderPlayerData();
+      if (!(await this.server.isValidGame(this.game))) {
+        this.route.navigate(['/']);
+        return;
+      }
+      this.renderPlayerDataLoop();
     });
-    this.renderPlayerDataSetTimeout();
   }
 
-  private async renderPlayerData() : Promise<void> {
+  private renderPlayerDataLoop() {
     if (this.game) {
-      this.playerDataList = await this.server.getPlayerDataList(this.game);
+      this.server.getPlayerDataList(this.game)
+        .then(playerDataList => this.playerDataList = playerDataList);
     }
-  }
-
-  private renderPlayerDataSetTimeout() {
     setTimeout(() => {
-      this.renderPlayerData();
-      this.renderPlayerDataSetTimeout();
+      this.renderPlayerDataLoop();
     }, refreshIntervalMs);
   }
 
