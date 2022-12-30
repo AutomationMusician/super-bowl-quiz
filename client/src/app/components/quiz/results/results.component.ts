@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IQuestion, IQuiz, IScoredQuiz } from 'server/interfaces';
 import { Question } from 'src/app/model/question';
@@ -11,12 +11,13 @@ const refreshIntervalMs : number = 10000;
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.css']
 })
-export class ResultsComponent implements OnInit {
+export class ResultsComponent implements OnInit, OnDestroy {
   game : string | undefined;
   id : number | undefined;
   name : string | undefined;
   score: number | undefined;
   questions: Question[] = [];
+  private timeoutId : NodeJS.Timeout | undefined;
 
   constructor(
     private route: Router,
@@ -52,12 +53,15 @@ export class ResultsComponent implements OnInit {
           });
         });
     }
-    setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       this.updateQuestionsLoop();
     }, refreshIntervalMs);
   }
 
-
   ngOnInit() : void {}
+  
+  ngOnDestroy() : void {
+    clearTimeout(this.timeoutId);
+  }
 
 }

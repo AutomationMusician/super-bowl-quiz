@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPlayerData } from 'server/interfaces';
 import { ServerService } from 'src/app/services/server.service';
@@ -11,11 +11,12 @@ const refreshIntervalMs : number = 10000;
   templateUrl: './scoreboard.component.html',
   styleUrls: ['../scoreboard-row.css', './scoreboard.component.css'] // last css file has highest precedence
 })
-export class ScoreboardComponent implements OnInit {
+export class ScoreboardComponent implements OnInit, OnDestroy {
   game : string | undefined;
   bannerType : BannerType;
   bannerMessage : string | undefined;
   playerDataList : IPlayerData[] = [];
+  private timeoutId : NodeJS.Timeout | undefined;
 
   constructor(
     private route: Router,
@@ -44,7 +45,7 @@ export class ScoreboardComponent implements OnInit {
       this.server.getPlayerDataList(this.game)
         .then(playerDataList => this.playerDataList = playerDataList);
     }
-    setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       this.updatePlayerDataLoop();
     }, refreshIntervalMs);
   }
@@ -60,6 +61,10 @@ export class ScoreboardComponent implements OnInit {
       return '';
   }
 
-  ngOnInit(): void { }
+  ngOnInit() : void { }
+
+  ngOnDestroy() : void {
+    clearTimeout(this.timeoutId);
+  }
 
 }
