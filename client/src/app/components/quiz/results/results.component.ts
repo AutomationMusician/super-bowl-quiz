@@ -35,7 +35,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // TODO: figure out how to turn this off when we are no longer on the page
   private updateQuestionsLoop() : void {
     if (this.id) {
       Promise.all([this.server.getQuestions(), this.server.getQuiz(this.id)])

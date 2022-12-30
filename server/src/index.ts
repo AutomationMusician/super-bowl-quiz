@@ -107,19 +107,19 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
 });
 
-// TODO: get rid of this (is it used?)
-// Get guesses from database - returns IQuiz[]
-app.get('/api/quizzes/:game', async (request : Request, response : Response) => {
-  const game = request.params.game;
-  const isValid = ValidateGame(game);
-  if (!isValid) {
-    console.error(`Invalid game '${game}'`);
-    response.status(400);
-    return;
-  }
-  const data = GetAllQuizzes(pgClient, game);
-  response.json(data);
-});
+// // TODO: get rid of this (is it used?)
+// // Get guesses from database - returns IQuiz[]
+// app.get('/api/quizzes/:game', async (request : Request, response : Response) => {
+//   const game = request.params.game;
+//   const isValid = ValidateGame(game);
+//   if (!isValid) {
+//     console.error(`Invalid game '${game}'`);
+//     response.status(400);
+//     return;
+//   }
+//   const data = GetAllQuizzes(pgClient, game);
+//   response.json(data);
+// });
 
 // Get guesses from database - returns IPlayerData[]
 app.get('/api/ranking/:game', async (request : Request, response : Response) => {

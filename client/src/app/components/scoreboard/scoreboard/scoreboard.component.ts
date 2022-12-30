@@ -39,7 +39,6 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     })
   }
 
-  // TODO: figure out how to turn this off when we are no longer on the page
   private updatePlayerDataLoop() : void {
     if (this.game) {
       this.server.getPlayerDataList(this.game)
