@@ -1,4 +1,5 @@
 import { Client as PgClient, QueryResult } from 'pg';
+import { Response } from 'express';
 import { IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "interfaces";
 import * as fs from 'fs';
 import * as path from 'path';
@@ -16,11 +17,14 @@ export function GetState() : IState {
 export function ValidateGame(game : string) : boolean {
     const jsonString : string = fs.readFileSync(path.join(__dirname, '../../configs/games.json'), { encoding: 'utf-8'});
     const validGames : string[] = JSON.parse(jsonString);
-    return validGames.includes(game);
+    for (let i=0; i<validGames.length; i++)
+        validGames[i] = validGames[i].toLowerCase();
+    return validGames.includes(game.toLowerCase());
 }
 
 export async function GetAllQuizzes(pgClient : PgClient, game : string) : Promise<IQuiz[]> {
     const quizzes : Map<number,IQuiz> = new Map<number,IQuiz>();
+    game = game.toLowerCase();
   
     // Get names
     let query =  "SELECT quiz_id, name FROM quizzes WHERE game = $1";
@@ -76,12 +80,13 @@ export function ScoreQuiz(questions : IQuestion[], quiz : IQuiz) : number {
 }
 
 export function QuizToScoredQuiz(questions : IQuestion[], quiz : IQuiz) : IScoredQuiz {
-    return {
+    const scoredQuiz : IScoredQuiz = {
         id: quiz.id,
         name: quiz.name,
         guesses: quiz.guesses,
         score: ScoreQuiz(questions, quiz)
-    } as IScoredQuiz;
+    };
+    return scoredQuiz;
 }
 
 export function RankAllPlayers(questions : IQuestion[], quizzes : IQuiz[]) : IPlayerData[] {
@@ -116,4 +121,8 @@ export function RankAllPlayers(questions : IQuestion[], quizzes : IQuiz[]) : IPl
         }
     }
     return playerDataList;
+}
+
+export function Send404Error(response : Response) {
+    response.status(404).send('<p>Page not found</p>');
 }

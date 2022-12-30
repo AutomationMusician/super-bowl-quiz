@@ -2,12 +2,12 @@ import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { GetAllQuizzes, GetQuestions, GetState, QuizToScoredQuiz, RankAllPlayers, ValidateGame} from './helpers';
+import { GetAllQuizzes, GetQuestions, GetState, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGame} from './helpers';
 import { IQuestion, ISubmission as ISubmission, IState, IQuiz, IScoredQuiz } from 'interfaces';
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
-const PORT = process.env.WEB_PORT;
+const PORT = Number(process.env.WEB_PORT);
 
 app.use(express.static(path.join(__dirname, '../../client/dist')));
 app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/index.html')));
@@ -55,7 +55,7 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   let query =  "INSERT INTO quizzes(name, game) \
                 VALUES ($1, $2) \
                 RETURNING quiz_id";
-  let params = [request.body.name, game];
+  let params = [request.body.name, game.toLowerCase()];
   let result: QueryResult<any> = await pgClient.query(query, params);
   if (result.rows.length != 1) {
     const errorMessage = `There was not exactly one result with quiz_id ${result.rows.length}`;
@@ -140,7 +140,7 @@ app.get('/api/ranking/:game', async (request : Request, response : Response) => 
 app.get('/api/scored-quiz/:id', async (request : Request, response : Response) : Promise<void> => {
   const quiz_id = Number(request.params.id);
   // Get name
-  let query =  "SELECT name, game \
+  let query =  "SELECT name \
                 FROM quizzes \
                 WHERE quiz_id = $1";
   let params : any[] = [quiz_id];
@@ -192,13 +192,12 @@ app.get('/:game', async (request : Request, response : Response) => {
     response.redirect(`/client/quiz/${game}`)
   }
   else {
-    response.status(404).send('<p>Page not found</p>');
+    Send404Error(response);
   }
 });
 
-app.get('*', function(req, res){
-  res.status(404).send('<p>Page not found</p>');
+app.get('*', (request : Request, response : Response) => {
+  Send404Error(response);
 });
 
 app.listen(PORT, () => console.log('listening on port ' + PORT));
-
