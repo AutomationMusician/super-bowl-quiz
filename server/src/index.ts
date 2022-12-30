@@ -146,8 +146,9 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
   let params : any[] = [quiz_id];
   let result = await pgClient.query(query, params);
   if (result.rows.length != 1) {
-    console.error(`There was not exactly one result with quiz_id ${result.rows.length}`);
-    response.status(400);
+    const errorMessage = `There was ${result.rows.length} results for a quiz with quiz id ${quiz_id} instead of exactly 1 result`;
+    console.error(errorMessage);
+    response.status(400).send(errorMessage);
     return;
   }
 
@@ -170,7 +171,7 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
   });
   
   const questions : IQuestion[] = GetQuestions();
-  const scoredQuiz : IScoredQuiz = QuizToScoredQuiz(questions, quiz); // why is this not working
+  const scoredQuiz : IScoredQuiz = QuizToScoredQuiz(questions, quiz);
   response.json(scoredQuiz);
 });
 

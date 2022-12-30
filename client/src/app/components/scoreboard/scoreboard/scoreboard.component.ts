@@ -28,7 +28,7 @@ export class ScoreboardComponent implements OnInit {
         this.route.navigate(['/']);
         return;
       }
-      this.renderPlayerDataLoop();
+      this.updatePlayerDataLoop();
     });
     this.activatedRouter.queryParams.subscribe(params => {
       this.bannerType = params['status'];
@@ -38,13 +38,14 @@ export class ScoreboardComponent implements OnInit {
     })
   }
 
-  private renderPlayerDataLoop() {
+  // TODO: figure out how to turn this off when we are no longer on the page
+  private updatePlayerDataLoop() : void {
     if (this.game) {
       this.server.getPlayerDataList(this.game)
         .then(playerDataList => this.playerDataList = playerDataList);
     }
     setTimeout(() => {
-      this.renderPlayerDataLoop();
+      this.updatePlayerDataLoop();
     }, refreshIntervalMs);
   }
 

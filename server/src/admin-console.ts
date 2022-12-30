@@ -1,5 +1,8 @@
 import { Client } from 'pg';
 import * as readline from 'readline';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+dotenv.config({path: path.join(__dirname, '../../.env')});
 
 const rl = readline.createInterface({
   input: process.stdin,

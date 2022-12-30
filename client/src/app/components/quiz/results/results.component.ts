@@ -4,6 +4,8 @@ import { IQuestion, IQuiz, IScoredQuiz } from 'server/interfaces';
 import { Question } from 'src/app/model/question';
 import { ServerService } from 'src/app/services/server.service';
 
+const refreshIntervalMs : number = 10000;
+
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
@@ -28,22 +30,34 @@ export class ResultsComponent implements OnInit {
         this.route.navigate(['/']);
         return;
       }
-
-      const iQuestions : IQuestion[] = await this.server.getQuestions();
-      const scoredQuiz : IScoredQuiz = await this.server.getQuiz(this.id);
-
-      this.name = scoredQuiz.name;
-      this.score = scoredQuiz.score;
-      this.questions = [];
-      iQuestions.forEach(q => {
-        const question = new Question(q);
-        question.selection = scoredQuiz.guesses[question.id];
-        this.questions.push(question);
-      });
+      this.updateQuestionsLoop();
     });
   }
 
-  ngOnInit(): void {
+  // TODO: figure out how to turn this off when we are no longer on the page
+  private updateQuestionsLoop() : void {
+    if (this.id) {
+      Promise.all([this.server.getQuestions(), this.server.getQuiz(this.id)])
+        .then(promiseArray => {
+          const iQuestions : IQuestion[] = promiseArray[0];
+          const scoredQuiz : IScoredQuiz = promiseArray[1];
+
+          this.name = scoredQuiz.name;
+          this.score = scoredQuiz.score;
+          this.questions = [];
+          iQuestions.forEach(q => {
+            const question = new Question(q);
+            question.selection = scoredQuiz.guesses[question.id];
+            this.questions.push(question);
+          });
+        });
+    }
+    setTimeout(() => {
+      this.updateQuestionsLoop();
+    }, refreshIntervalMs);
   }
+
+
+  ngOnInit() : void {}
 
 }
