@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPlayerData } from 'server/interfaces';
 import { ServerService } from 'src/app/services/server.service';
+import { BannerType } from '../../banner/banner.component';
 
 const refreshIntervalMs : number = 10000;
 
@@ -12,6 +13,8 @@ const refreshIntervalMs : number = 10000;
 })
 export class ScoreboardComponent implements OnInit {
   game : string | undefined;
+  bannerType : BannerType;
+  bannerMessage : string | undefined;
   playerDataList : IPlayerData[] = [];
 
   constructor(
@@ -27,6 +30,12 @@ export class ScoreboardComponent implements OnInit {
       }
       this.renderPlayerDataLoop();
     });
+    this.activatedRouter.queryParams.subscribe(params => {
+      this.bannerType = params['status'];
+      if (this.bannerType === 'success') {
+        this.bannerMessage = "Quiz Successfully Submitted!";
+      }
+    })
   }
 
   private renderPlayerDataLoop() {

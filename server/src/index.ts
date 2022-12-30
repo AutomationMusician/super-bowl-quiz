@@ -35,8 +35,9 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   const game = body.game;
   const isValid = ValidateGame(game);
   if (!isValid) {
-    console.error(`Invalid game '${game}'`)
-    response.status(400);
+    const errorMessage = `Invalid game '${game}'`;
+    console.error(errorMessage);
+    response.status(400).send(errorMessage);
     return;
   }
 
@@ -44,9 +45,9 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   const state : IState = GetState();
   const open = state.open;
   if (!open) {
-    console.error("The submitted quiz with the name '" + body.name + "' was rejected because the quiz is closed.");
-    // TODO: change this redirect - possibly to a 400 bad request and have the client redirect
-    // response.redirect(`/scoreboard/index.html?game=${game}&status=failure`);
+    const errorMessage = "The submitted quiz with the name '" + body.name + "' was rejected because the quiz is closed.";
+    console.error(errorMessage);
+    response.status(400).send(errorMessage);
     return;
   }
 
@@ -57,14 +58,15 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   let params = [request.body.name, game];
   let result: QueryResult<any> = await pgClient.query(query, params);
   if (result.rows.length != 1) {
-    console.error(`There was not exactly one result with quiz_id ${result.rows.length}`);
-    response.status(400);
+    const errorMessage = `There was not exactly one result with quiz_id ${result.rows.length}`;
+    console.error(errorMessage);
+    response.status(400).send(errorMessage);
     return;
   }
   const quiz_id = result.rows[0].quiz_id;
 
   // Insert into guesses table
-  const values : any[] = [];
+  const values : string[] = [];
   params = [];
   let paramIndex = 1;
   const questions = GetQuestions();
@@ -81,6 +83,8 @@ app.post('/api/submission', async (request : Request, response : Response) => {
     }
   });
 
+  // TODO: throw errors if questions don't exist and/or if questions aren't accounted for
+
   if (values.length > 0) {
     const queryArray = ["INSERT INTO guesses(question_id, quiz_id, guess_value) VALUES"];
     values.forEach((valueStr, index) => {
@@ -95,10 +99,11 @@ app.post('/api/submission', async (request : Request, response : Response) => {
     query = queryArray.join('');
     await pgClient.query(query, params);
     console.log("'" + body.name + "' submitted a quiz");
-    response.redirect(`/scoreboard/index.html?game=${game}&status=success`);
+    response.status(200).send('OK');
   } else {
-    console.error("There were no question guesses for quiz_id: '" + quiz_id + "'");
-    response.redirect(`/scoreboard/index.html?game=${game}&status=failure`);
+    const errorMessage = "There were no question answered for quiz_id: '" + quiz_id + "'";
+    console.error(errorMessage);
+    response.status(400).send(errorMessage);
   }
 });
 

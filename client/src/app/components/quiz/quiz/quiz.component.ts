@@ -4,6 +4,9 @@ import { IGuessDict, IQuestion, IState, ISubmission } from 'server/interfaces';
 import { Question } from 'src/app/model/question';
 import { ServerService } from 'src/app/services/server.service';
 import { NgForm } from '@angular/forms';
+import { BannerType } from '../../banner/banner.component';
+
+const bannerChangeDelayMs : number = 200;
 
 @Component({
   selector: 'app-quiz',
@@ -14,6 +17,8 @@ export class QuizComponent implements OnInit {
   questions: Question[] = [];
   questionsEnabled : boolean = false;
   game : string | undefined;
+  bannerType : BannerType;
+  bannerMessage : string | undefined;
 
   constructor(
     private route: Router,
@@ -51,13 +56,22 @@ export class QuizComponent implements OnInit {
     return this.questions.every(question => question.selection !== undefined);
   }
 
-  onFormSubmit(form: NgForm) : void {
+  async onFormSubmit(form: NgForm) : Promise<void> {
+    this.bannerType = undefined;
+    this.bannerMessage = undefined;
     if (!this.game) {
-      alert('The game id was not found, so the quiz could not be submitted.');
+      setTimeout(() => {
+        this.bannerType = 'failure';
+        this.bannerMessage = 'The game id was not found, so the quiz could not be submitted.';
+      }, bannerChangeDelayMs);
       return;
     }
+    console.log(form.value.name);
     if (!form.value.name) {
-      alert('The quiz name was not found, so the quiz could not be submitted.');
+      setTimeout(() => {
+        this.bannerType = 'failure';
+        this.bannerMessage = 'The quiz name was not found, so the quiz could not be submitted.';
+      }, bannerChangeDelayMs);
       return;
     }
     const name : string = form.value.name;
@@ -71,9 +85,20 @@ export class QuizComponent implements OnInit {
       name: name,
       guesses: guessDict
     }
-    console.log(submission);
-    this.server.submitQuiz(submission);
-    this.route.navigate(['/scoreboard', this.game]);
+    const submissionResponse = await this.server.submitQuiz(submission);
+    if (submissionResponse.ok) {
+      this.route.navigate(
+        ['/scoreboard', this.game],
+        { queryParams: { status: 'success' } }
+      );
+    }
+    else {
+      const tempBannerMessage = `Error. Http status: ${submissionResponse.status}, Message: ${await submissionResponse.text()}`;
+      setTimeout(() => {
+        this.bannerType = 'failure';
+        this.bannerMessage = tempBannerMessage;
+      }, bannerChangeDelayMs);
+    }
   }
 
 }

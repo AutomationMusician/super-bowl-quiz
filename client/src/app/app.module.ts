@@ -10,6 +10,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { ScoreboardComponent } from './components/scoreboard/scoreboard/scoreboard.component';
 import { ScoreboardRowComponent } from './components/scoreboard/scoreboard-row/scoreboard-row.component';
 import { ResultsComponent } from './components/quiz/results/results.component';
+import { BannerComponent } from './components/banner/banner.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ResultsComponent } from './components/quiz/results/results.component';
     PageNotFoundComponent,
     ScoreboardComponent,
     ScoreboardRowComponent,
-    ResultsComponent
+    ResultsComponent,
+    BannerComponent
   ],
   imports: [
     BrowserModule,
