@@ -8,7 +8,24 @@ In theory, this application can be used to run a prediction competition unrelate
 
 ## How To Run The App
 
-This app can be run in development mode by running `run_development.sh` or in production mode by running `run_production.sh`. Before running these scripts, check the **Requirements** section for the respective software requirements. If running in development mode, run `npm install` before running `run_development.sh`.
+Before following these steps, check the **Requirements** section for the respective software requirements.
+
+This app can be run in development mode using the following these steps:
+1. Run `run_db.sh`
+1. Start server
+    1. `cd` into the server directory
+    1. Run `npm install` if you haven't already
+    1. Run `npm run dev`
+1. Start client
+    1. `cd` into the client directory
+    1. Run `npm install` if you haven't already
+    1. Run `npm run start`
+1. Connect to the site at the URL `localhost:4200/<game>`
+
+This app can be run in production mode using the following steps:
+1. Run `run_production.sh`
+1. Connect to the site at the URL `localhost:<WEB_PORT>/<game>`, where `WEB_PORT` is defined by the value in `.env`.
+
 
 ## Requirements
 
@@ -20,7 +37,7 @@ This app can be run in development mode by running `run_development.sh` or in pr
 * npm
 * node.js
 
-## Proudction mode
+## Production mode
 
 * bash
 * docker
@@ -35,11 +52,11 @@ This app can be run in development mode by running `run_development.sh` or in pr
 ### configs/questions.json
 * Create a file called `configs/questions.json`. This should be a json representation of an array of "question" objects.
 * question objects should have the following attributes:
+    * `id`: A string that is unique to the question
     * `question`: The question to ask the user.
     * `left`: The left answer
     * `right`: The right answer
-    * `answer`: Which answer is correct ("left", "right", or "unknown")
-    * `_id`: A string that is unique to the question
+    * `answer`: Which answer is correct ("left", "right", or remove from the json object if not known yet)
 * Follow this example:
     ```json
     [
@@ -48,14 +65,13 @@ This app can be run in development mode by running `run_development.sh` or in pr
             "left": "Chiefs",
             "right": "49ers",
             "answer": "left",
-            "_id": "q84XY70Fk55BZxrr"
+            "id": "q84XY70Fk55BZxrr"
         },
         {
             "question": "Who will win?",
             "left": "Chiefs",
             "right": "49ers",
-            "answer": "right",
-            "_id": "XLgSuRbUMo9xuWrD"
+            "id": "XLgSuRbUMo9xuWrD"
         }
     ]
     ```
@@ -67,8 +83,17 @@ This app can be run in development mode by running `run_development.sh` or in pr
     }
     ```
 * The `configs/state.json` object has the following attributes:
-    * `open`: a boolean value determining whether the quiz is open (`true`) or closed (`false`). When the quiz is open, users will be able to take and submit quizzes. When the quiz is closed, users will not be redirected away from the quiz page and any quizzes that are submitted are not accpeted.
+    * `open`: a boolean value determining whether the quiz is open (`true`) or closed (`false`). When the quiz is open, users will be able to take and submit quizzes. When the quiz is closed, users will not be redirected away from the quiz page and any quizzes that are submitted are not accepted.
 
+## configs/games.json
+Create a file called `configs/games.json`. This should be a json array of simultaneous games hosted by this site.
+
+    ```json
+    [
+        "game1",
+        "game2"
+    ]
+    ```
 
 ## Services
 
@@ -80,14 +105,14 @@ There are three services in the `docker-compose.yml` file:
 
 ## "run" scripts
 
-The `run_development.sh` does the following things:
-1. Using docker-compse, run the postgres service in the background.
+The `run_db.sh` does the following things:
+1. Using docker-compose, run the postgres service in the background.
 1. Using docker-compose, run the initialize_database service in the foreground. Wait until the docker container exits.
-1. Run `npm start` to start the non-dockerized web service in the foreground.
 
 The `run_production.sh` does the following things:
-1. Using docker-compse, run the postgres service in the background.
+1. Using docker-compose, run the postgres service in the background.
 1. Using docker-compose, run the initialize_database service in the foreground. Wait until the docker container exits.
+1. If not already built, this will build the web service container.
 1. Using docker-compose, run the dockerized web service in the background.
 
 ## Admin Console

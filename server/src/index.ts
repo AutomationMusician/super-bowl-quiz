@@ -70,7 +70,7 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   params = [];
   let paramIndex = 1;
   const questions = GetQuestions();
-  questions.forEach((question) => {
+  for (let question of questions) {
     if (body.guesses[question.id]) {
       params.push(question.id);
       params.push(quiz_id);
@@ -79,11 +79,12 @@ app.post('/api/submission', async (request : Request, response : Response) => {
       values.push(valueStr);
       paramIndex += 3;
     } else {
-      console.error("Question id '" + question.id + "' does not exist");
+      const errorMessage = "Question id '" + question.id + "' does not exist in the list of guesses";
+      console.error(errorMessage);
+      response.status(400).send(errorMessage);
+      return;
     }
-  });
-
-  // TODO: throw errors if questions don't exist and/or if questions aren't accounted for
+  }
 
   if (values.length > 0) {
     const queryArray = ["INSERT INTO guesses(question_id, quiz_id, guess_value) VALUES"];
@@ -101,25 +102,11 @@ app.post('/api/submission', async (request : Request, response : Response) => {
     console.log("'" + body.name + "' submitted a quiz");
     response.status(200).send('OK');
   } else {
-    const errorMessage = "There were no question answered for quiz_id: '" + quiz_id + "'";
+    const errorMessage = "There were no questions answered for quiz_id: '" + quiz_id + "'";
     console.error(errorMessage);
     response.status(400).send(errorMessage);
   }
 });
-
-// // TODO: get rid of this (is it used?)
-// // Get guesses from database - returns IQuiz[]
-// app.get('/api/quizzes/:game', async (request : Request, response : Response) => {
-//   const game = request.params.game;
-//   const isValid = ValidateGame(game);
-//   if (!isValid) {
-//     console.error(`Invalid game '${game}'`);
-//     response.status(400);
-//     return;
-//   }
-//   const data = GetAllQuizzes(pgClient, game);
-//   response.json(data);
-// });
 
 // Get guesses from database - returns IPlayerData[]
 app.get('/api/ranking/:game', async (request : Request, response : Response) => {
