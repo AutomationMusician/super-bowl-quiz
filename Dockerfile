@@ -11,7 +11,7 @@ WORKDIR /usr/src/superbowlquiz/server
 RUN npm install && \
     npm run build
 RUN npm ci --omit=dev && \
-    rm -rf *.ts test src tsconfig.json
+    rm -rf src tsconfig.json
 
 FROM node:16 as production
 COPY --from=client-builder /usr/src/superbowlquiz/client/dist /usr/src/superbowlquiz/client/dist
