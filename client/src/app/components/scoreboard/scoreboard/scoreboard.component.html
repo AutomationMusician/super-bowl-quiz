@@ -1,0 +1,34 @@
+<app-banner [bannerType]="bannerType" [bannerMessage]="bannerMessage"></app-banner>
+<table id="big">
+    <thead>
+        <tr>
+            <td id="navigation" colspan="3">
+                <app-nav-bar 
+                    [currentPage]="'scoreboard'"
+                    [game]="game"
+                ></app-nav-bar>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+              <h1>Scoreboard</h1>
+            </td>
+        </tr>
+        <tr>
+            <td class="rankCell"><strong>Rank</strong></td>
+            <td class="nameCell"><strong>Name</strong></td>
+            <td class="scoreCell"><strong>Score</strong></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr 
+            *ngFor="let playerData of playerDataList" 
+            [playerData]="playerData"
+            [game]="game"
+            [class]="this.getRankClass(playerData.rank)"
+            app-scoreboard-row
+        >
+        </tr>
+        
+    </tbody>
+</table>

@@ -1,0 +1,32 @@
+body {
+  margin: 0px auto;
+}
+
+table {
+  list-style: none;
+  font-size: 20px;
+  margin: 0px auto;
+  border-collapse: collapse;
+}
+
+tbody {
+  line-height: 2em;
+}
+
+h1 {
+  font-size: 40px;
+  margin: 10px auto;
+  text-align: center;
+}
+
+.gold {
+  background-color: gold;
+}
+
+.silver {
+  background-color: silver;
+}
+
+.bronze {
+  background-color: #cd7f32;
+}

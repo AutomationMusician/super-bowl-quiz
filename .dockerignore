@@ -1,7 +1,15 @@
-.*
-.env
-data
-configs
-node_modules
-database_setup
-docker-compose.yml
+/.*
+/data
+/configs
+/database_setup
+/docker-compose.yml
+/node_modules
+
+# client
+/client/.angular/cache
+/client/node_modules
+/client/dist
+
+# server
+/server/dist
+/server/node_modules

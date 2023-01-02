@@ -14,7 +14,7 @@ services:
     ports:
       - "${WEB_PORT}:${WEB_PORT}"
     volumes:
-      - "./configs:/opt/superbowlquiz/configs"
+      - "./configs:/usr/src/superbowlquiz/configs"
   admin-console:
     build: .
     image: superbowlquiz:latest

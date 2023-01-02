@@ -1,6 +1,14 @@
-.DS_Store
-.env
-.env_aws
-data/
-data.tar.gz
+# artifacts
+/data/
+/data.tar.gz
 node_modules/
+.DS_Store
+Thumbs.db
+
+# configs
+*.env
+/configs/*.json
+!/configs/*.example.json
+
+# server stuff
+/server/**/*.js
