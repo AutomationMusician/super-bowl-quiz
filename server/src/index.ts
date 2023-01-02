@@ -3,7 +3,7 @@ import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import { GetAllQuizzes, GetQuestions, GetState, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGame} from './helpers';
-import { IQuestion, ISubmission as ISubmission, IState, IQuiz, IScoredQuiz } from 'interfaces';
+import { IQuestion, ISubmission as ISubmission, IState, IQuiz, IScoredQuiz } from './types';
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();

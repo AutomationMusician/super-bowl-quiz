@@ -1,4 +1,4 @@
-import { GuessSelection, IQuestion } from 'server/interfaces';
+import { GuessSelection, IQuestion } from 'server/src/types';
 
 export class Question implements IQuestion {
     question: string;

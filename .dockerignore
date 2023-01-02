@@ -11,5 +11,5 @@
 /client/dist
 
 # server
-/server/*.js
+/server/dist
 /server/node_modules

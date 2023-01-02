@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Question } from 'src/app/model/question';
-import { GuessSelection } from 'server/interfaces'
+import { GuessSelection } from 'server/src/types'
 
 @Component({
   selector: '[app-question]',

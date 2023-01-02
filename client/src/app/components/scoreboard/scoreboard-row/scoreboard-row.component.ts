@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IPlayerData } from 'server/interfaces';
+import { IPlayerData } from 'server/src/types';
 
 @Component({
   selector: '[app-scoreboard-row]',

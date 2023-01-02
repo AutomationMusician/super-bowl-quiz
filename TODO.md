@@ -1,6 +1,5 @@
 TODOs:
 - Fix TODOs in the code
-- Separate JS from TS: https://www.youtube.com/watch?v=H91aqUHn8sE
 - Update Readme
 
 Backlog:

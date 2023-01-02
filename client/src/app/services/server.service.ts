@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IQuestion, ISubmission, IState, IScoredQuiz, IPlayerData } from 'server/interfaces';
+import { IQuestion, ISubmission, IState, IScoredQuiz, IPlayerData } from 'server/src/types';
 
 @Injectable({
   providedIn: 'root'

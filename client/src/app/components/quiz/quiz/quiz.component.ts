@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IGuessDict, IQuestion, IState, ISubmission } from 'server/interfaces';
+import { IGuessDict, IQuestion, IState, ISubmission } from 'server/src/types';
 import { Question } from 'src/app/model/question';
 import { ServerService } from 'src/app/services/server.service';
 import { NgForm } from '@angular/forms';

@@ -1,21 +1,21 @@
 FROM node:16 as client-builder
-COPY ./server /opt/superbowlquiz/server
-COPY ./client /opt/superbowlquiz/client
-WORKDIR /opt/superbowlquiz/client
+COPY ./server /usr/src/superbowlquiz/server
+COPY ./client /usr/src/superbowlquiz/client
+WORKDIR /usr/src/superbowlquiz/client
 RUN npm install && \
     npm run build
 
 FROM node:16 as server-builder
-COPY ./server /opt/superbowlquiz/server
-WORKDIR /opt/superbowlquiz/server
+COPY ./server /usr/src/superbowlquiz/server
+WORKDIR /usr/src/superbowlquiz/server
 RUN npm install && \
     npm run build
-RUN npm ci --production && \
-    rm -f *.ts test tsconfig.json
+RUN npm ci --omit=dev && \
+    rm -rf *.ts test src tsconfig.json
 
 FROM node:16 as production
-COPY --from=client-builder /opt/superbowlquiz/client/dist /opt/superbowlquiz/client/dist
-COPY --from=server-builder /opt/superbowlquiz/server /opt/superbowlquiz/server
+COPY --from=client-builder /usr/src/superbowlquiz/client/dist /usr/src/superbowlquiz/client/dist
+COPY --from=server-builder /usr/src/superbowlquiz/server /usr/src/superbowlquiz/server
 USER node
-WORKDIR /opt/superbowlquiz/server
+WORKDIR /usr/src/superbowlquiz/server
 ENTRYPOINT npm start

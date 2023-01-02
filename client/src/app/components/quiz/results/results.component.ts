@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IQuestion, IQuiz, IScoredQuiz } from 'server/interfaces';
+import { IQuestion, IQuiz, IScoredQuiz } from 'server/src/types';
 import { Question } from 'src/app/model/question';
 import { ServerService } from 'src/app/services/server.service';
 

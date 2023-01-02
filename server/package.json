@@ -4,11 +4,12 @@
   "description": "Super Bowl Quiz Express Server",
   "main": "src/index.ts",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node dist/index.js",
     "start:dev": "ts-node src/index.ts",
     "build": "tsc",
+    "build:watch": "tsc --watch",
     "dev": "nodemon src/index.ts",
-    "admin-console": "node src/admin-console.js",
+    "admin-console": "node dist/admin-console.js",
     "admin-console:dev": "ts-node src/admin-console.ts"
   },
   "keywords": [
@@ -16,8 +17,8 @@
     "node",
     "database"
   ],
-  "author": "Joshua Fishman",
-  "license": "MIT",
+  "author": "AutomationMusician",
+  "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

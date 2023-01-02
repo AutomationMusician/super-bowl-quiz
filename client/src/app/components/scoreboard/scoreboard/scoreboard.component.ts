@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPlayerData } from 'server/interfaces';
+import { IPlayerData } from 'server/src/types';
 import { ServerService } from 'src/app/services/server.service';
 import { BannerType } from '../../banner/banner.component';
 

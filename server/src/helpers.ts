@@ -1,6 +1,6 @@
 import { Client as PgClient, QueryResult } from 'pg';
 import { Response } from 'express';
-import { IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "interfaces";
+import { IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "./types";
 import * as fs from 'fs';
 import * as path from 'path';
 
