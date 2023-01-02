@@ -21,7 +21,7 @@ pgClient.connect();
 async function main() {
   let _continue;
   let quiz_id;
-  const main_menu = ["Exit", "List Quizzes", "Edit Name", "Edit Game", "Delete Quiz"];
+  const main_menu : string[] = ["Exit", "List Quizzes", "Edit Name", "Edit Game", "Delete Quiz"];
   do {
     _continue = true;
     const option = await choose_option(main_menu);
@@ -58,7 +58,7 @@ function prompt(prompt : string) : Promise<string> {
   return new Promise( resolve => rl.question( prompt, ans => { resolve(ans); } ) );
 }
 
-async function choose_option(options : any[]) {
+async function choose_option(options : string[]) {
   do {
     console.log("\nChoose one of the following options:");
     options.forEach((option, index) => {
