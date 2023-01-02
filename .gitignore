@@ -1,12 +1,14 @@
-.DS_Store
-Thumbs.db
-
-# repo specific stuff
-*.env
-/configs/
+# artifacts
 /data/
 /data.tar.gz
 node_modules/
+.DS_Store
+Thumbs.db
+
+# configs
+*.env
+/configs/*.json
+!/configs/*.example.json
 
 # server stuff
 /server/**/*.js
