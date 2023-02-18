@@ -102,6 +102,11 @@ export function RankAllPlayers(questions : IQuestion[], quizzes : IQuiz[]) : IPl
         playerDataList.push(playerData);
     }
 
+    if (GetState().open)
+    {
+        return playerDataList;
+    }
+
     // sort players by score
     playerDataList.sort((player1, player2) => {
         return player2.score - player1.score;
