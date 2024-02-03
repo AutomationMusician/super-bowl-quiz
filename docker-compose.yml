@@ -26,17 +26,17 @@ services:
       PGPORT: ${PGPORT}
       PGPASSWORD: ${PGPASSWORD}
   postgres:
-    image: postgres:latest
+    image: postgres:16
     user: postgres
     restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: ${PGPASSWORD}
     volumes:
-      - "./data:/var/lib/postgresql/data"
+      - "pgdata:/var/lib/postgresql/data"
     ports:
       - "${PGPORT}:5432"
   initialize_database:
-    image: postgres:latest
+    image: postgres:16
     user: postgres
     depends_on: 
       - postgres
@@ -49,3 +49,20 @@ services:
       PGPASSWORD: ${PGPASSWORD}
     volumes:
       - "./database_setup:/mnt"
+  pg_dump:
+    image: postgres:16
+    user: postgres
+    depends_on: 
+      - postgres
+    entrypoint: "/bin/bash -c 'mkdir -p /mnt/dump/ && pg_dump ${PGDATABASE} > /mnt/dump/${PGDATABASE}.sql'"
+    environment:
+      PGHOST: postgres
+      PGUSER: ${PGUSER}
+      PGDATABASE: ${PGDATABASE}
+      PGPORT: ${PGPORT}
+      PGPASSWORD: ${PGPASSWORD}
+    volumes:
+      - "./database_setup:/mnt"
+
+volumes:
+  pgdata:
