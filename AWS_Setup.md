@@ -18,3 +18,6 @@
     ```
 1. Install git: `sudo yum install git`
 1. Clone github repo: `git clone https://github.com/AutomationMusician/SuperBowlQuiz.git`
+1. Copy configs by running `publishing/push-configs.sh`
+1. Build on the VM using `docker-compose build`
+1. Run `./run_production.sh` on the VM
