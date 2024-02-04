@@ -172,7 +172,7 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
 app.get('/api/quiz-state', (request : Request, response : Response) => {
   const state = GetState();
   response.json(state as IState);
-})
+});
 
 app.get('/api/are-valid-games/:games', async (request : Request, response : Response) => {
   const games : string[] = request.params.games.toLowerCase().split("-");

@@ -143,7 +143,6 @@ async function edit_game(quiz_id : number) {
   let query =  "DELETE FROM QuizGameMapping \
                 WHERE quiz_id = $1";
   let params : any[] = [quiz_id];
-  console.log(query);
   await pgClient.query(query, params);
 
   if (games.length > 0)
@@ -155,7 +154,6 @@ async function edit_game(quiz_id : number) {
       params.push(games[i]);
     }
     query = `INSERT INTO QuizGameMapping (quiz_id, game) VALUES ${queryParamsPlaceholder.join(", ")}`;
-    console.log(query);
     await pgClient.query(query, params);
   }
 }
