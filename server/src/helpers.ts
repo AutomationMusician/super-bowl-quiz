@@ -27,7 +27,11 @@ export async function GetAllQuizzes(pgClient : PgClient, game : string) : Promis
     game = game.toLowerCase();
   
     // Get names
-    let query =  "SELECT quiz_id, name FROM quizzes WHERE game = $1";
+    let query = "SELECT Quiz.quiz_id, Quiz.name \
+                 FROM QuizGameMapping \
+                 INNER JOIN Quiz \
+                 ON Quiz.quiz_id = QuizGameMapping.quiz_id \
+                 WHERE QuizGameMapping.game = $1";
     let params = [game];
     let result = await pgClient.query(query, params);
     result.rows.forEach((row : any) => {
@@ -35,11 +39,13 @@ export async function GetAllQuizzes(pgClient : PgClient, game : string) : Promis
     });
   
     // get guesses
-    query =  "SELECT quizzes.quiz_id, question_id, guess_value \
-              FROM quizzes \
-              INNER JOIN guesses \
-              ON quizzes.quiz_id = guesses.quiz_id \
-              WHERE game = $1";
+    query =  "SELECT Quiz.quiz_id, question_id, guess_value \
+              FROM Quiz \
+              INNER JOIN Guess \
+              ON Quiz.quiz_id = Guess.quiz_id \
+              INNER JOIN QuizGameMapping \
+              ON  Quiz.quiz_id = QuizGameMapping.quiz_id \
+              WHERE QuizGameMapping.game = $1";
     params = [game];
     result = await pgClient.query(query, params);
     result.rows.forEach((row : any) => {

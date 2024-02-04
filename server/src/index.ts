@@ -52,10 +52,10 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
 
   // Insert into quiz table
-  let query =  "INSERT INTO quizzes(name, game) \
-                VALUES ($1, $2) \
+  let query =  "INSERT INTO Quiz(name) \
+                VALUES ($1) \
                 RETURNING quiz_id";
-  let params = [request.body.name, game.toLowerCase()];
+  let params = [request.body.name];
   let result: QueryResult<any> = await pgClient.query(query, params);
   if (result.rows.length != 1) {
     const errorMessage = `There was not exactly one result with quiz_id ${result.rows.length}`;
@@ -65,7 +65,13 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
   const quiz_id = result.rows[0].quiz_id;
 
-  // Insert into guesses table
+  // Insert into quiz table
+  query =  "INSERT INTO QuizGameMapping(quiz_id, game) \
+            VALUES ($1, $2)";
+  params = [quiz_id, game.toLowerCase()];
+  await pgClient.query(query, params);
+
+  // Insert into Guess table
   const values : string[] = [];
   params = [];
   let paramIndex = 1;
@@ -87,7 +93,7 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
 
   if (values.length > 0) {
-    const queryArray = ["INSERT INTO guesses(question_id, quiz_id, guess_value) VALUES"];
+    const queryArray = ["INSERT INTO Guess(question_id, quiz_id, guess_value) VALUES"];
     values.forEach((valueStr, index) => {
       queryArray.push(" \n");
       queryArray.push(valueStr);
@@ -128,7 +134,7 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
   const quiz_id = Number(request.params.id);
   // Get name
   let query =  "SELECT name \
-                FROM quizzes \
+                FROM Quiz \
                 WHERE quiz_id = $1";
   let params : any[] = [quiz_id];
   let result = await pgClient.query(query, params);
@@ -147,10 +153,10 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
 
   // get guesses
   query =  "SELECT question_id, guess_value \
-            FROM quizzes \
-            INNER JOIN guesses \
-            ON quizzes.quiz_id = guesses.quiz_id \
-            WHERE quizzes.quiz_id = $1";
+            FROM Quiz \
+            INNER JOIN Guess \
+            ON Quiz.quiz_id = Guess.quiz_id \
+            WHERE Quiz.quiz_id = $1";
   params = [quiz_id];
   result = await pgClient.query(query, params);
   result.rows.forEach((row : any) => {
