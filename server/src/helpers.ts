@@ -15,39 +15,54 @@ export function GetState() : IState {
 }
 
 export function ValidateGame(game : string) : boolean {
+    return ValidateGames([game]);
+}
+
+/**
+ * @param {string} games string array of games
+ * @return {boolean} if all games are valid
+ */
+export function ValidateGames(games : string[])
+{
     const jsonString : string = fs.readFileSync(path.join(__dirname, '../../configs/games.json'), { encoding: 'utf-8'});
     const validGames : string[] = JSON.parse(jsonString);
     for (let i=0; i<validGames.length; i++)
         validGames[i] = validGames[i].toLowerCase();
-    return validGames.includes(game.toLowerCase());
+    for (let i=0; i<games.length; i++)
+        if (!validGames.includes(games[i].toLowerCase()))
+            return false;
+    return true;
 }
 
-export async function GetAllQuizzes(pgClient : PgClient, game : string) : Promise<IQuiz[]> {
+export async function GetAllQuizzes(pgClient : PgClient, games : string[]) : Promise<IQuiz[]> {
     const quizzes : Map<number,IQuiz> = new Map<number,IQuiz>();
-    game = game.toLowerCase();
   
+    // generate params for placeholder
+    const paramsPlaceholderArray = [];
+    for (let i=1; i<=games.length; i++)
+        paramsPlaceholderArray.push(`$${i}`);
+    const paramsPlaceholder = paramsPlaceholderArray.join(", ");
+
     // Get names
-    let query = "SELECT Quiz.quiz_id, Quiz.name \
+    let query = `SELECT Quiz.quiz_id, Quiz.name \
                  FROM QuizGameMapping \
                  INNER JOIN Quiz \
                  ON Quiz.quiz_id = QuizGameMapping.quiz_id \
-                 WHERE QuizGameMapping.game = $1";
-    let params = [game];
-    let result = await pgClient.query(query, params);
+                 WHERE QuizGameMapping.game IN (${paramsPlaceholder})`;
+    let result = await pgClient.query(query, games);
     result.rows.forEach((row : any) => {
       quizzes.set(row.quiz_id, { id: row.quiz_id, name: row.name, guesses: {} });
     });
   
     // get guesses
-    query =  "SELECT Quiz.quiz_id, question_id, guess_value \
+    query =  `SELECT Quiz.quiz_id, question_id, guess_value \
               FROM Quiz \
               INNER JOIN Guess \
               ON Quiz.quiz_id = Guess.quiz_id \
               INNER JOIN QuizGameMapping \
               ON  Quiz.quiz_id = QuizGameMapping.quiz_id \
-              WHERE QuizGameMapping.game = $1";
-    params = [game];
-    result = await pgClient.query(query, params);
+              WHERE QuizGameMapping.game IN (${paramsPlaceholder})`;
+    result = await pgClient.query(query, games);
     result.rows.forEach((row : any) => {
       const quiz = quizzes.get(row.quiz_id);
       if (!quiz) {

@@ -2,6 +2,7 @@ import { Client } from 'pg';
 import * as readline from 'readline';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
+import { IQuizMetadataDict } from './types';
 dotenv.config({path: path.join(__dirname, '../../.env')});
 
 const rl = readline.createInterface({
@@ -80,19 +81,11 @@ rl.on("close", function() {
 });
 
 async function prompt_quiz_id() {
-  const quiz_id_set = new Set();
-  let query =  "SELECT * FROM quizzes";
-  let result = await pgClient.query(query);
-  console.log("\nHere is the list of quizzes:");
-  result.rows.forEach((row) => {
-    quiz_id_set.add(parseInt(row.quiz_id));
-    console.log(`${row.quiz_id}. name=\"${row.name}\", game=\"${row.game}\"`);
-  });
-
+  const { quiz_ids, quizzes } = await list_quizzes();
   while (true) {
     const quiz_id_str = await prompt("\nSelect quiz id or type 'x' to exit: ");
     const quiz_id = parseInt(quiz_id_str);
-    if (quiz_id_set.has(quiz_id)) {
+    if (quizzes[quiz_id]) {
       return quiz_id;
     } else if (quiz_id_str === "x") {
       return "x";
@@ -102,17 +95,42 @@ async function prompt_quiz_id() {
   }
 }
 
-async function list_quizzes() {
-  let query =  "SELECT * FROM quizzes";
-  const result = await pgClient.query(query);
-  result.rows.forEach(row => {
-    console.log(`${row.quiz_id}. name=\"${row.name}\", game=\"${row.game}\"`);
+async function list_quizzes() : Promise<{ 
+  quiz_ids : number[],
+  quizzes : IQuizMetadataDict
+}> {
+  let query =  "SELECT Quiz.quiz_id, name, game \
+                FROM Quiz \
+                INNER JOIN QuizGameMapping \
+                ON Quiz.quiz_id = QuizGameMapping.quiz_id";
+  let result = await pgClient.query(query);
+  const quiz_ids : number[] = [];
+  const quizzes : IQuizMetadataDict = {};
+  result.rows.forEach((row) => {
+    const quiz_id : number = parseInt(row.quiz_id);
+    if (!quizzes[quiz_id]) {
+      quiz_ids.push(quiz_id);
+      quizzes[quiz_id] = {
+        name: row.name,
+        games: [ row.game ]
+      }
+    }
+    else {
+      quizzes[quiz_id].games.push(row.game);
+    }
   });
+
+  console.log("\nHere is the list of quizzes:");
+  quiz_ids.forEach(quiz_id => {
+    console.log(`${quiz_id}. name=\"${quizzes[quiz_id].name}\", game=\"${quizzes[quiz_id].games}\"`);
+  })
+
+  return {quiz_ids, quizzes};
 }
 
 async function edit_name(quiz_id : number) {
   const name = await prompt("Input the name you want to use for this quiz: ");
-  let query =  "UPDATE quizzes \
+  let query =  "UPDATE Quiz \
                 SET name = $1 \
                 WHERE quiz_id = $2";
   let params = [name, quiz_id];
@@ -120,24 +138,43 @@ async function edit_name(quiz_id : number) {
 }
 
 async function edit_game(quiz_id : number) {
-  const game = await prompt("Input the game you want to use for this quiz: ");
-  let query =  "UPDATE quizzes \
-                SET game = $1 \
-                WHERE quiz_id = $2";
-  let params = [game, quiz_id];
+  const gamesString = await prompt("Input the games you want to use for this quiz (space-separated): ");
+  const games : string[] = gamesString.toLowerCase().split(" ");
+  let query =  "DELETE FROM QuizGameMapping \
+                WHERE quiz_id = $1";
+  let params : any[] = [quiz_id];
+  console.log(query);
   await pgClient.query(query, params);
-}
 
+  if (games.length > 0)
+  {
+    const queryParamsPlaceholder = [];
+    params = [quiz_id];
+    for (let i=0; i<games.length; i++) {
+      queryParamsPlaceholder.push(`($1, $${i + 2})`);
+      params.push(games[i]);
+    }
+    query = `INSERT INTO QuizGameMapping (quiz_id, game) VALUES ${queryParamsPlaceholder.join(", ")}`;
+    console.log(query);
+    await pgClient.query(query, params);
+  }
+}
 
 async function delete_entry(quiz_id: number) {
   // delete guess
-  let query =  "DELETE FROM guesses \
+  let query =  "DELETE FROM Guess \
                 WHERE quiz_id = $1";
   let params = [quiz_id];
   await pgClient.query(query, params);
 
+  // delete quiz game mappings
+  query =  "DELETE FROM QuizGameMapping \
+            WHERE quiz_id = $1";
+  params = [quiz_id];
+  await pgClient.query(query, params);
+
   // delete quizzes
-  query =  "DELETE FROM quizzes \
+  query =  "DELETE FROM Quiz \
             WHERE quiz_id = $1";
   params = [quiz_id];
   await pgClient.query(query, params);
