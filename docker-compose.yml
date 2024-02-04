@@ -2,7 +2,7 @@ version: "3.8"
 services:
   web:
     build: .
-    image: superbowlquiz:latest
+    image: automationmusician/superbowlquiz:latest
     restart: unless-stopped
     environment:
       WEB_PORT: ${WEB_PORT}
@@ -17,7 +17,7 @@ services:
       - "./configs:/usr/src/superbowlquiz/configs"
   admin-console:
     build: .
-    image: superbowlquiz:latest
+    image: automationmusician/superbowlquiz:latest
     entrypoint: "npm run admin-console"
     environment:
       PGHOST: postgres
