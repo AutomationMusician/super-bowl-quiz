@@ -6,7 +6,7 @@ LocalRoot=$SCRIPT_DIR/../
 
 copyFolder() {
     folder=$1
-    ssh SuperBowlQuiz "mkdir -p ${RemoteRoot}/${folder}"
+    mkdir -p ${LocalRoot}/${folder}
     scp -r SuperBowlQuiz:${RemoteRoot}/${folder}/* ${LocalRoot}/${folder}/
 }
 

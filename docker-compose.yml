@@ -51,7 +51,7 @@ services:
       - "./database_setup:/mnt"
   pg_dump:
     image: postgres:16
-    user: postgres
+    user: $USER
     depends_on: 
       - postgres
     entrypoint: "/bin/bash -c 'mkdir -p /mnt/dump/ && pg_dump ${PGDATABASE} > /mnt/dump/${PGDATABASE}.sql'"
