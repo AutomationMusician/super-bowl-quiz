@@ -2,6 +2,7 @@
 /data/
 /data.tar.gz
 node_modules/
+/database_setup/dump/
 .DS_Store
 Thumbs.db
 

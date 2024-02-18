@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { GetAllQuizzes, GetQuestions, GetState, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGame} from './helpers';
+import { GetAllQuizzes, GetQuestions, GetState, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGames} from './helpers';
 import { IQuestion, ISubmission as ISubmission, IState, IQuiz, IScoredQuiz } from './types';
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
@@ -33,7 +33,7 @@ app.get('/api/questions', async (request : Request, response : Response) => {
 app.post('/api/submission', async (request : Request, response : Response) => {
   const body : ISubmission = request.body;
   const game = body.game;
-  const isValid = ValidateGame(game);
+  const isValid = ValidateGames([game]); // TODO: make this validate a list of games and then insert it later
   if (!isValid) {
     const errorMessage = `Invalid game '${game}'`;
     console.error(errorMessage);
@@ -52,10 +52,10 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
 
   // Insert into quiz table
-  let query =  "INSERT INTO quizzes(name, game) \
-                VALUES ($1, $2) \
+  let query =  "INSERT INTO Quiz(name) \
+                VALUES ($1) \
                 RETURNING quiz_id";
-  let params = [request.body.name, game.toLowerCase()];
+  let params = [request.body.name];
   let result: QueryResult<any> = await pgClient.query(query, params);
   if (result.rows.length != 1) {
     const errorMessage = `There was not exactly one result with quiz_id ${result.rows.length}`;
@@ -65,7 +65,13 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
   const quiz_id = result.rows[0].quiz_id;
 
-  // Insert into guesses table
+  // Insert into quiz table
+  query =  "INSERT INTO QuizGameMapping(quiz_id, game) \
+            VALUES ($1, $2)";
+  params = [quiz_id, game.toLowerCase()];
+  await pgClient.query(query, params);
+
+  // Insert into Guess table
   const values : string[] = [];
   params = [];
   let paramIndex = 1;
@@ -87,7 +93,7 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
 
   if (values.length > 0) {
-    const queryArray = ["INSERT INTO guesses(question_id, quiz_id, guess_value) VALUES"];
+    const queryArray = ["INSERT INTO Guess(question_id, quiz_id, guess_value) VALUES"];
     values.forEach((valueStr, index) => {
       queryArray.push(" \n");
       queryArray.push(valueStr);
@@ -109,15 +115,15 @@ app.post('/api/submission', async (request : Request, response : Response) => {
 });
 
 // Get guesses from database - returns IPlayerData[]
-app.get('/api/ranking/:game', async (request : Request, response : Response) => {
-  const game = request.params.game;
-  const isValid = ValidateGame(game);
+app.get('/api/ranking/:games', async (request : Request, response : Response) => {
+  const games = request.params.games.toLowerCase().split("-");
+  const isValid = ValidateGames(games);
   if (!isValid) {
-    console.error(`Invalid game '${game}'`);
+    console.error(`Invalid games '${games}'`);
     response.status(400);
     return;
   }
-  const quizzes = await GetAllQuizzes(pgClient, game);
+  const quizzes = await GetAllQuizzes(pgClient, games);
   const questions = await GetQuestions();
   const rankedPlayerData = RankAllPlayers(questions, quizzes);
   response.json(rankedPlayerData);
@@ -128,7 +134,7 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
   const quiz_id = Number(request.params.id);
   // Get name
   let query =  "SELECT name \
-                FROM quizzes \
+                FROM Quiz \
                 WHERE quiz_id = $1";
   let params : any[] = [quiz_id];
   let result = await pgClient.query(query, params);
@@ -147,10 +153,10 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
 
   // get guesses
   query =  "SELECT question_id, guess_value \
-            FROM quizzes \
-            INNER JOIN guesses \
-            ON quizzes.quiz_id = guesses.quiz_id \
-            WHERE quizzes.quiz_id = $1";
+            FROM Quiz \
+            INNER JOIN Guess \
+            ON Quiz.quiz_id = Guess.quiz_id \
+            WHERE Quiz.quiz_id = $1";
   params = [quiz_id];
   result = await pgClient.query(query, params);
   result.rows.forEach((row : any) => {
@@ -166,18 +172,18 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
 app.get('/api/quiz-state', (request : Request, response : Response) => {
   const state = GetState();
   response.json(state as IState);
-})
+});
 
-app.get('/api/is-valid-game/:game', async (request : Request, response : Response) => {
-  const game : string = request.params.game;
-  const status = ValidateGame(game);
+app.get('/api/are-valid-games/:games', async (request : Request, response : Response) => {
+  const games : string[] = request.params.games.toLowerCase().split("-");
+  const status = ValidateGames(games);
   response.json({ status });
 });
 
-app.get('/:game', async (request : Request, response : Response) => {
-  const game : string = request.params.game;
-  if (ValidateGame(game)) {
-    response.redirect(`/client/quiz/${game}`)
+app.get('/:games', async (request : Request, response : Response) => {
+  const gamesString : string = request.params.games;
+  if (ValidateGames(gamesString.toLowerCase().split("-"))) {
+    response.redirect(`/client/quiz/${gamesString}`)
   }
   else {
     Send404Error(response);

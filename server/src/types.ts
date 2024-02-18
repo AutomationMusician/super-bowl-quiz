@@ -24,6 +24,19 @@ export interface IQuiz {
     guesses: IGuessDict; 
 }
 
+export interface IQuizMetadata {
+    id: number;
+    name: string;
+    games: string[]; 
+}
+
+export interface IQuizMetadataDict {
+    [id: number]: {
+        name: string;
+        games: string[]; 
+    };
+}
+
 export interface IScoredQuiz extends IQuiz {
     score: number;
 }
