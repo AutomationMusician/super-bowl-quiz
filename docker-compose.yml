@@ -63,6 +63,20 @@ services:
       PGPASSWORD: ${PGPASSWORD}
     volumes:
       - "./database_setup:/mnt"
+  pg_load:
+    image: postgres:16
+    user: $UID
+    depends_on: 
+      - postgres
+    entrypoint: "/mnt/reload_database.sh"
+    environment:
+      PGHOST: postgres
+      PGUSER: ${PGUSER}
+      PGDATABASE: ${PGDATABASE}
+      PGPORT: ${PGPORT}
+      PGPASSWORD: ${PGPASSWORD}
+    volumes:
+      - "./database_setup:/mnt"
 
 volumes:
   pgdata:
