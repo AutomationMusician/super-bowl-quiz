@@ -19,5 +19,7 @@ echo "Postgres has started"
 ### Initialize database ###
 script_dir=$(dirname "$0")
 set -e
-psql -h ${PGHOST} -U postgres -d postgres -c "DROP DATABASE IF EXISTS super_bowl_quiz; CREATE DATABASE super_bowl_quiz;"
-psql -h ${PGHOST} -U postgres -d super_bowl_quiz -f ${script_dir}/dump/super_bowl_quiz.sql
+psql -h ${PGHOST} -U postgres -d postgres -c "DROP DATABASE IF EXISTS super_bowl_quiz"
+psql -h ${PGHOST} -U postgres -d postgres -c "CREATE DATABASE super_bowl_quiz"
+psql -h ${PGHOST} -U postgres -d super_bowl_quiz -f ${script_dir}/create_user.sql
+psql -h ${PGHOST} -U postgres -d super_bowl_quiz -f ${script_dir}/../dump/super_bowl_quiz.sql

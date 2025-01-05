@@ -21,13 +21,13 @@ script_dir=$(dirname "$0")
 if psql -h ${PGHOST} -U postgres -lqt | cut -d \| -f 1 | grep -qw "super_bowl_quiz"
 then
     echo "super_bowl_quiz database already exists."
-    echo ${SUPER_BOWL_QUIZ_PGPASSWORD}
     PGPASSWORD="${SUPER_BOWL_QUIZ_PGPASSWORD}" psql -h ${PGHOST} -U super_bowl_quiz -d super_bowl_quiz -c "BEGIN;COMMIT;" \
         && echo "login successful" \
         || echo "login failed"; exit 1
 else
     set -e
-    echo "super_bowl_quiz database does not exist. Initializating the database"
-    psql -h ${PGHOST} -U postgres -d postgres -f ${script_dir}/initialize.sql
-    psql -h ${PGHOST} -U postgres -d postgres -c "ALTER USER super_bowl_quiz WITH PASSWORD '${SUPER_BOWL_QUIZ_PGPASSWORD}'"
+    echo "super_bowl_quiz database does not exist. Initializing the database"
+    psql -h ${PGHOST} -U postgres -d postgres -f ${script_dir}/create_db.sql
+    psql -h ${PGHOST} -U postgres -d super_bowl_quiz -f ${script_dir}/create_user.sql
+    psql -h ${PGHOST} -U postgres -d super_bowl_quiz -c "ALTER USER super_bowl_quiz WITH PASSWORD '${SUPER_BOWL_QUIZ_PGPASSWORD}'"
 fi
