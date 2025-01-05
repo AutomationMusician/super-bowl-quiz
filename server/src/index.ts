@@ -7,7 +7,7 @@ import { IQuestion, ISubmission as ISubmission, IState, IQuiz, IScoredQuiz } fro
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
-const PORT = Number(process.env.WEB_PORT);
+const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, '../../client/dist')));
 app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/index.html')));
