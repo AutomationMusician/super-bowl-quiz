@@ -9,8 +9,7 @@ dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
 const PORT = 3000;
 
-app.use(express.static(path.join(__dirname, '../../client/dist')));
-app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/index.html')));
+app.use('/super-bowl-quiz/', express.static(path.join(__dirname, '../../client/dist')));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
@@ -24,13 +23,13 @@ const pgClient = new PgClient({
 pgClient.connect();
 
 // Get questions from server - returns IQuestion[]
-app.get('/api/questions', async (request : Request, response : Response) => {
+app.get('/super-bowl-quiz/api/questions', async (request : Request, response : Response) => {
   const questions = GetQuestions();
   response.json(questions);
 });
 
 // Add quiz to the database - returns nothing
-app.post('/api/submission', async (request : Request, response : Response) => {
+app.post('/super-bowl-quiz/api/submission', async (request : Request, response : Response) => {
   const body : ISubmission = request.body;
   const game = body.game;
   const isValid = ValidateGames([game]); // TODO: make this validate a list of games and then insert it later
@@ -115,7 +114,7 @@ app.post('/api/submission', async (request : Request, response : Response) => {
 });
 
 // Get guesses from database - returns IPlayerData[]
-app.get('/api/ranking/:games', async (request : Request, response : Response) => {
+app.get('/super-bowl-quiz/api/ranking/:games', async (request : Request, response : Response) => {
   const games = request.params.games.toLowerCase().split("-");
   const isValid = ValidateGames(games);
   if (!isValid) {
@@ -130,7 +129,7 @@ app.get('/api/ranking/:games', async (request : Request, response : Response) =>
 });
 
 // returns IScoredQuiz
-app.get('/api/scored-quiz/:id', async (request : Request, response : Response) : Promise<void> => {
+app.get('/super-bowl-quiz/api/scored-quiz/:id', async (request : Request, response : Response) : Promise<void> => {
   const quiz_id = Number(request.params.id);
   // Get name
   let query =  "SELECT name \
@@ -169,27 +168,31 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
 });
 
 // Ask the server if the quiz is open
-app.get('/api/quiz-state', (request : Request, response : Response) => {
+app.get('/super-bowl-quiz/api/quiz-state', (request : Request, response : Response) => {
   const state = GetState();
   response.json(state as IState);
 });
 
-app.get('/api/are-valid-games/:games', async (request : Request, response : Response) => {
+app.get('/super-bowl-quiz/api/are-valid-games/:games', async (request : Request, response : Response) => {
   const games : string[] = request.params.games.toLowerCase().split("-");
   const status = ValidateGames(games);
   response.json({ status });
 });
 
-app.get('/:games', async (request : Request, response : Response) => {
+app.get('/super-bowl-quiz/:games', async (request : Request, response : Response) => {
   const gamesString : string = request.params.games;
   if (ValidateGames(gamesString.toLowerCase().split("-"))) {
-    response.redirect(`/client/quiz/${gamesString}`)
+    response.redirect(`/super-bowl-quiz/quiz/${gamesString}`)
   }
   else {
     Send404Error(response);
   }
 });
 
+// catch all redirect to angular index.html
+app.get('/super-bowl-quiz/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/index.html')));
+
+// catch all 404 error
 app.get('*', (request : Request, response : Response) => {
   Send404Error(response);
 });

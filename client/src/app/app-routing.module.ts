@@ -15,7 +15,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  providers: [{provide: APP_BASE_HREF, useValue: '/client'}],
+  providers: [{provide: APP_BASE_HREF, useValue: '/super-bowl-quiz'}],
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
