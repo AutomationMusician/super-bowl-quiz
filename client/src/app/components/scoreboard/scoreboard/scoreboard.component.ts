@@ -25,8 +25,9 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   ) { 
     this.activatedRouter.paramMap.subscribe(async params => {
       this.game = params.get('game') as string;
-      if (!(await this.server.isValidGame(this.game))) {
-        this.route.navigate(['/']);
+      console.log("'" + this.game + "'");
+      if (this.game !== "" && !(await this.server.isValidGame(this.game))) {
+        this.route.navigate(['/notfound']);
         return;
       }
       this.updatePlayerDataLoop();

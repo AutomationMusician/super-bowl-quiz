@@ -175,6 +175,7 @@ app.get('/super-bowl-quiz/api/quiz-state', (request : Request, response : Respon
 
 app.get('/super-bowl-quiz/api/are-valid-games/:games', async (request : Request, response : Response) => {
   const games : string[] = request.params.games.toLowerCase().split("-");
+  console.log(games);
   const status = ValidateGames(games);
   response.json({ status });
 });

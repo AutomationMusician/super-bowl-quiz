@@ -11,6 +11,7 @@ import { ScoreboardComponent } from './components/scoreboard/scoreboard/scoreboa
 import { ScoreboardRowComponent } from './components/scoreboard/scoreboard-row/scoreboard-row.component';
 import { ResultsComponent } from './components/quiz/results/results.component';
 import { BannerComponent } from './components/banner/banner.component';
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { BannerComponent } from './components/banner/banner.component';
     ScoreboardComponent,
     ScoreboardRowComponent,
     ResultsComponent,
-    BannerComponent
+    BannerComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
