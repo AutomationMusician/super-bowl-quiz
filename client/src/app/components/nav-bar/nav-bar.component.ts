@@ -9,7 +9,7 @@ export type NavBarPage = "quiz" | "scoreboard";
 })
 export class NavBarComponent implements OnInit {
   @Input() currentPage! : NavBarPage | undefined;
-  @Input() game! : string | undefined;
+  @Input() gameCodes! : string | undefined;
 
   constructor() { }
 

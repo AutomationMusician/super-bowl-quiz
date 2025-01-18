@@ -1,11 +1,11 @@
 <app-banner [bannerType]="bannerType" [bannerMessage]="bannerMessage"></app-banner>
-<table id="big">
+<table class="big">
     <thead>
         <tr>
             <td id="navigation" colspan="3">
                 <app-nav-bar 
                     [currentPage]="'scoreboard'"
-                    [game]="game"
+                    [gameCodes]="gameCodes"
                 ></app-nav-bar>
             </td>
         </tr>
@@ -24,7 +24,7 @@
         <tr 
             *ngFor="let playerData of playerDataList" 
             [playerData]="playerData"
-            [game]="game"
+            [gameCodes]="gameCodes"
             [class]="this.getRankClass(playerData.rank)"
             app-scoreboard-row
         >

@@ -8,8 +8,8 @@ export class ServerService {
 
   constructor() { }
 
-  async isValidGame(game : string) : Promise<boolean> {
-    const response : Response = await fetch(`/super-bowl-quiz/api/are-valid-games/${game}`);
+  async areValidGames(gameCodes : string) : Promise<boolean> {
+    const response : Response = await fetch(`/super-bowl-quiz/api/are-valid-games/${gameCodes}`);
     const jsonObject : any = await response.json();
     return jsonObject.status;
   }
@@ -35,8 +35,8 @@ export class ServerService {
     return response;
   }
 
-  async getPlayerDataList(game : string) : Promise<IPlayerData[]> {
-    const response = await fetch(`/super-bowl-quiz/api/ranking/${game}`);
+  async getPlayerDataList(gameCodes : string) : Promise<IPlayerData[]> {
+    const response = await fetch(`/super-bowl-quiz/api/ranking/${gameCodes}`);
     return await response.json();
   }
 

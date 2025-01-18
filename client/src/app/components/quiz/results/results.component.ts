@@ -12,7 +12,7 @@ const refreshIntervalMs : number = 10000;
   styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit, OnDestroy {
-  game : string | undefined;
+  gameCodes : string | undefined;
   id : number | undefined;
   name : string | undefined;
   score: number | undefined;
@@ -26,8 +26,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
   ) { 
     this.activatedRouter.paramMap.subscribe(async params => {
       this.id = Number(params.get('id'));
-      this.game = params.get('game') as string;
-      if (!(await this.server.isValidGame(this.game))) {
+      this.gameCodes = params.get('gameCodes') as string;
+      if (!(await this.server.areValidGames(this.gameCodes))) {
         this.route.navigate(['/']);
         return;
       }

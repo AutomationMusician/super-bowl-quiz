@@ -16,7 +16,7 @@ const bannerChangeDelayMs : number = 200;
 export class QuizComponent implements OnInit {
   questions: Question[] = [];
   questionsEnabled : boolean = false;
-  game : string | undefined;
+  gameCodes : string | undefined;
   bannerType : BannerType;
   bannerMessage : string | undefined;
 
@@ -28,8 +28,8 @@ export class QuizComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRouter.paramMap.subscribe(async params => {
-      this.game = params.get('game') as string;
-      if (!(await this.server.isValidGame(this.game))) {
+      this.gameCodes = params.get('game') as string;
+      if (!(await this.server.areValidGames(this.gameCodes))) {
         this.route.navigate(['/']);
         return;
       }
@@ -42,7 +42,7 @@ export class QuizComponent implements OnInit {
         iQuestions.forEach(q => this.questions.push(new Question(q)));
       } else {
         // use to close quiz
-        this.route.navigate(['/scoreboard', this.game]);
+        this.route.navigate(['/scoreboard', this.gameCodes]);
       }
     });
 
@@ -59,7 +59,7 @@ export class QuizComponent implements OnInit {
   async onFormSubmit(form: NgForm) : Promise<void> {
     this.bannerType = undefined;
     this.bannerMessage = undefined;
-    if (!this.game) {
+    if (!this.gameCodes) {
       setTimeout(() => {
         this.bannerType = 'failure';
         this.bannerMessage = 'The game id was not found, so the quiz could not be submitted.';
@@ -81,14 +81,14 @@ export class QuizComponent implements OnInit {
         guessDict[question.id] = question.selection
     });
     const submission : ISubmission = {
-      game: this.game,
+      games: this.gameCodes,
       name: name,
       guesses: guessDict
     }
     const submissionResponse = await this.server.submitQuiz(submission);
     if (submissionResponse.ok) {
       this.route.navigate(
-        ['/scoreboard', this.game],
+        ['/scoreboard', this.gameCodes],
         { queryParams: { status: 'success' } }
       );
     }

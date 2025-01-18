@@ -1,12 +1,12 @@
 <app-banner [bannerType]="bannerType" [bannerMessage]="bannerMessage"></app-banner>
 <form #form="ngForm" (ngSubmit)="onFormSubmit(form)" id="form">
-    <table id="big">
+    <table class="big">
         <thead>
             <tr>
                 <td id="navigation" colspan="3">
                     <app-nav-bar 
                         [currentPage]="'quiz'"
-                        [game]="game"
+                        [gameCodes]="gameCodes"
                     ></app-nav-bar>
                 </td>
             </tr>

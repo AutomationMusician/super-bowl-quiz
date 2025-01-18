@@ -12,7 +12,7 @@ const refreshIntervalMs : number = 10000;
   styleUrls: ['../scoreboard-row.css', './scoreboard.component.css'] // last css file has highest precedence
 })
 export class ScoreboardComponent implements OnInit, OnDestroy {
-  game : string | undefined;
+  gameCodes : string | undefined;
   bannerType : BannerType;
   bannerMessage : string | undefined;
   playerDataList : IPlayerData[] = [];
@@ -24,9 +24,9 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     private server: ServerService
   ) { 
     this.activatedRouter.paramMap.subscribe(async params => {
-      this.game = params.get('game') as string;
-      console.log("'" + this.game + "'");
-      if (this.game !== "" && !(await this.server.isValidGame(this.game))) {
+      this.gameCodes = params.get('gameCodes') as string;
+      console.log("'" + this.gameCodes + "'");
+      if (this.gameCodes !== "" && !(await this.server.areValidGames(this.gameCodes))) {
         this.route.navigate(['/notfound']);
         return;
       }
@@ -41,8 +41,8 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   }
 
   private updatePlayerDataLoop() : void {
-    if (this.game) {
-      this.server.getPlayerDataList(this.game)
+    if (this.gameCodes) {
+      this.server.getPlayerDataList(this.gameCodes)
         .then(playerDataList => this.playerDataList = playerDataList);
     }
     this.timeoutId = setTimeout(() => {
