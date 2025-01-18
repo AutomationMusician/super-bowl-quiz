@@ -1,0 +1,179 @@
+{
+    "open": true,
+    "gameCodes": {
+        "game1code": "Game 1 name",
+        "game2code": "Game 2 name",
+        "game3code": "Game 3 name",
+        "game4code": "Game 4 name",
+        "game5code": "Game 5 name"
+    },
+    "questions": [
+        {
+            "question": "How long will the national anthem last?",
+            "left": "1:30 and Under",
+            "right": "Over 1:30",
+            "answer": "right",
+            "id": "AQfsR9xHIQmyx1jR"
+        },
+        {
+            "question": "The coin will land on:",
+            "left": "Heads",
+            "right": "Tails",
+            "answer": "left",
+            "id": "PPrsFdARh5iciwad"
+        },
+        {
+            "question": "Who will win the coin toss?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "right",
+            "id": "YeLP8gETO2XGGGPO"
+        },
+        {
+            "question": "Which turnover will come first?",
+            "left": "Fumble",
+            "right": "Interception",
+            "answer": "left",
+            "id": "zDpCE8KInZIVd7JQ"
+        },
+        {
+            "question": "Which will be the first team to lose the ball (turnover) from a Fumble or Interception?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "left",
+            "id": "P5cOk5iSYpvEUZyh"
+        },
+        {
+            "question": "Which team will be first to be penalized?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "left",
+            "id": "SjTjIkJwMXCUUwA6"
+        },
+        {
+            "question": "Which team will score first?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "left",
+            "id": "GYRsM1wqjLlltJOe"
+        },
+        {
+            "question": "What will the first score will be?",
+            "left": "Touchdown",
+            "right": "Field Goal",
+            "answer": "right",
+            "id": "kz6jACTyC50nKTwk"
+        },
+        {
+            "question": "Will the first touchdown be on a passing play?",
+            "left": "Yes",
+            "right": "No",
+            "answer": "left",
+            "id": "Jf1NUDZOp5TViUqn"
+        },
+        {
+            "question": "Which team will have the last possession in 1st half?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "left",
+            "id": "FJYdHLpWGKwxdHpb"
+        },
+        {
+            "question": "Which team will throw the first challenge flag?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "id": "6jiT0SkKKnhSk2fF"
+        },
+        {
+            "question": "Which team will score last?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "right",
+            "id": "GhUTPjQHJq5tjqXu"
+        },
+        {
+            "question": "Will there be a score in the final 2 minutes of game?",
+            "left": "Yes",
+            "right": "No",
+            "answer": "left",
+            "id": "VwsEHJ3MjvuvYMnp"
+        },
+        {
+            "question": "Which team will have the last possession?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "right",
+            "id": "8ShgxcLifZLZsoEw"
+        },
+        {
+            "question": "Which team will throw more interceptions?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "right",
+            "id": "0g663CWNne8rt4jw"
+        },
+        {
+            "question": "How long will the game last, from kickoff to game end, with commercials and halftime shows?",
+            "left": "3 hours and 45 minutes or less",
+            "right": "Over 3 hours and 45 minutes",
+            "answer": "right",
+            "id": "a7SO2mCP8qf56kFi"
+        },
+        {
+            "question": "During which half of the game will the most points be scored?",
+            "left": "First",
+            "right": "Second",
+            "answer": "right",
+            "id": "vEayHpH7riRFMTZ8"
+        },
+        {
+            "question": "How many points will the 49ers score?",
+            "left": "21 and under",
+            "right": "Over 21",
+            "answer": "right",
+            "id": "6ucWiyzVVIGYFKka"
+        },
+        {
+            "question": "How many points will the Chiefs score?",
+            "left": "21 and under",
+            "right": "Over 21",
+            "answer": "right",
+            "id": "dlTgUPl1tOU7ComR"
+        },
+        {
+            "question": "How many points total will be scored by both teams?",
+            "left": "40 and under",
+            "right": "Over 40",
+            "answer": "right",
+            "id": "eoq48UygOKfpRonP"
+        },
+        {
+            "question": "What will be the difference of points between the teams at the end of the game?",
+            "left": "7 and under",
+            "right": "Over 7",
+            "answer": "left",
+            "id": "3f2Gc4dFBF7ALKkZ"
+        },
+        {
+            "question": "Will the total points scored by the 49ers be an even number or an odd number?",
+            "left": "Even",
+            "right": "Odd",
+            "answer": "right",
+            "id": "zQHpAGFpf4zPXruF"
+        },
+        {
+            "question": "Will the total points scored by the Chiefs be an even number or an odd number?",
+            "left": "Even",
+            "right": "Odd",
+            "answer": "right",
+            "id": "XLgSuRbUMo9xuWrD"
+        },
+        {
+            "question": "Who will win?",
+            "left": "49ers",
+            "right": "Chiefs",
+            "answer": "right",
+            "id": "q84XY70Fk55BZxrr"
+        }
+    ]
+}

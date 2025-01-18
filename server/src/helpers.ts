@@ -5,13 +5,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export function GetQuestions() : IQuestion[] {
-    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../configs/questions.json'), { encoding: 'utf-8'});
-    return JSON.parse(jsonString);
+    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../config/config.json'), { encoding: 'utf-8'});
+    return JSON.parse(jsonString).questions;
 }
 
-export function GetState() : IState {
-    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../configs/state.json'), { encoding: 'utf-8'});
-    return JSON.parse(jsonString);
+export function GetOpen() : boolean {
+    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../config/config.json'), { encoding: 'utf-8'});
+    return JSON.parse(jsonString).open;
 }
 
 export function ValidateGame(game : string) : boolean {
@@ -24,8 +24,8 @@ export function ValidateGame(game : string) : boolean {
  */
 export function ValidateGames(games : string[])
 {
-    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../configs/games.json'), { encoding: 'utf-8'});
-    const validGames : string[] = JSON.parse(jsonString);
+    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../config/config.json'), { encoding: 'utf-8'});
+    const validGames : string[] = Object.keys(JSON.parse(jsonString).gameCodes);
     for (let i=0; i<validGames.length; i++)
         validGames[i] = validGames[i].toLowerCase();
     for (let i=0; i<games.length; i++)
@@ -123,7 +123,7 @@ export function RankAllPlayers(questions : IQuestion[], quizzes : IQuiz[]) : IPl
         playerDataList.push(playerData);
     }
 
-    if (GetState().open)
+    if (GetOpen())
     {
         return playerDataList;
     }

@@ -8,8 +8,8 @@ Thumbs.db
 
 # configs
 *.env
-/configs/*.json
-!/configs/*.example.json
+/config/*.json
+!/config/*.example.json
 
 # server stuff
 /server/**/*.js

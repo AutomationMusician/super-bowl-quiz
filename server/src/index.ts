@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { GetAllQuizzes, GetQuestions, GetState, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGames} from './helpers';
-import { IQuestion, ISubmission as ISubmission, IState, IQuiz, IScoredQuiz } from './types';
+import { GetAllQuizzes, GetQuestions, GetOpen, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGames} from './helpers';
+import { IQuestion, ISubmission, IQuiz, IScoredQuiz, IState } from './types';
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
@@ -31,18 +31,17 @@ app.get('/super-bowl-quiz/api/questions', async (request : Request, response : R
 // Add quiz to the database - returns nothing
 app.post('/super-bowl-quiz/api/submission', async (request : Request, response : Response) => {
   const body : ISubmission = request.body;
-  const game = body.game;
-  const isValid = ValidateGames([game]); // TODO: make this validate a list of games and then insert it later
+  const games = body.games.toLowerCase().split("-");;
+  const isValid = ValidateGames(games); // TODO: make this validate a list of games and then insert it later
   if (!isValid) {
-    const errorMessage = `Invalid game '${game}'`;
+    const errorMessage = `One of the games is invalid '${JSON.stringify(games)}'`;
     console.error(errorMessage);
     response.status(400).send(errorMessage);
     return;
   }
 
   // Check if quiz is open
-  const state : IState = GetState();
-  const open = state.open;
+  const open = GetOpen();
   if (!open) {
     const errorMessage = "The submitted quiz with the name '" + body.name + "' was rejected because the quiz is closed.";
     console.error(errorMessage);
@@ -64,11 +63,13 @@ app.post('/super-bowl-quiz/api/submission', async (request : Request, response :
   }
   const quiz_id = result.rows[0].quiz_id;
 
-  // Insert into quiz table
-  query =  "INSERT INTO QuizGameMapping(quiz_id, game) \
-            VALUES ($1, $2)";
-  params = [quiz_id, game.toLowerCase()];
-  await pgClient.query(query, params);
+  // Insert into quiz game mapping table
+  games.forEach(async game => {
+    query =  "INSERT INTO QuizGameMapping(quiz_id, game) \
+              VALUES ($1, $2)";
+    params = [quiz_id, game.toLowerCase()];
+    await pgClient.query(query, params);
+  })
 
   // Insert into Guess table
   const values : string[] = [];
@@ -169,8 +170,8 @@ app.get('/super-bowl-quiz/api/scored-quiz/:id', async (request : Request, respon
 
 // Ask the server if the quiz is open
 app.get('/super-bowl-quiz/api/quiz-state', (request : Request, response : Response) => {
-  const state = GetState();
-  response.json(state as IState);
+  const open = GetOpen();
+  response.json({ open } as IState);
 });
 
 app.get('/super-bowl-quiz/api/are-valid-games/:games', async (request : Request, response : Response) => {
