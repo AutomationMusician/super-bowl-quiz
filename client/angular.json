@@ -68,10 +68,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "super-bowl-quiz-client:build:production"
+              "buildTarget": "super-bowl-quiz-client:build:production"
             },
             "development": {
-              "browserTarget": "super-bowl-quiz-client:build:development"
+              "buildTarget": "super-bowl-quiz-client:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "super-bowl-quiz-client:build"
+            "buildTarget": "super-bowl-quiz-client:build"
           }
         },
         "test": {
