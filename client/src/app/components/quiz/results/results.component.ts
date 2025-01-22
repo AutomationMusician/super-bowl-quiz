@@ -7,9 +7,10 @@ import { ServerService } from 'src/app/services/server.service';
 const refreshIntervalMs : number = 10000;
 
 @Component({
-  selector: 'app-results',
-  templateUrl: './results.component.html',
-  styleUrls: ['./results.component.css']
+    selector: 'app-results',
+    templateUrl: './results.component.html',
+    styleUrls: ['./results.component.css'],
+    standalone: false
 })
 export class ResultsComponent implements OnInit, OnDestroy {
   gameCodes : string | undefined;

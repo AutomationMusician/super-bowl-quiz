@@ -4,9 +4,10 @@ import { IState } from 'server/src/types';
 import { ServerService } from 'src/app/services/server.service';
 
 @Component({
-  selector: 'app-home-page',
-  templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.css']
+    selector: 'app-home-page',
+    templateUrl: './home-page.component.html',
+    styleUrls: ['./home-page.component.css'],
+    standalone: false
 })
 export class HomePageComponent implements OnInit {
   constructor(

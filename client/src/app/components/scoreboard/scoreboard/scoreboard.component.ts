@@ -7,9 +7,10 @@ import { BannerType } from '../../banner/banner.component';
 const refreshIntervalMs : number = 10000;
 
 @Component({
-  selector: 'app-scoreboard',
-  templateUrl: './scoreboard.component.html',
-  styleUrls: ['../scoreboard-row.css', './scoreboard.component.css'] // last css file has highest precedence
+    selector: 'app-scoreboard',
+    templateUrl: './scoreboard.component.html',
+    styleUrls: ['../scoreboard-row.css', './scoreboard.component.css'], // last css file has highest precedence
+    standalone: false
 })
 export class ScoreboardComponent implements OnInit, OnDestroy {
   gameCodes : string | undefined;

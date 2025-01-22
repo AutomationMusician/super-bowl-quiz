@@ -3,9 +3,10 @@ import { Question } from 'src/app/model/question';
 import { GuessSelection } from 'server/src/types'
 
 @Component({
-  selector: '[app-question]',
-  templateUrl: './question.component.html',
-  styleUrls: ['./question.component.css']
+    selector: '[app-question]',
+    templateUrl: './question.component.html',
+    styleUrls: ['./question.component.css'],
+    standalone: false
 })
 export class QuestionComponent implements OnInit {
   @Input() question!: Question;
