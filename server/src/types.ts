@@ -24,6 +24,10 @@ export interface IQuiz {
     guesses: IGuessDict; 
 }
 
+export interface IGameQuizListMap {
+    [game: string]: IQuiz[];
+}
+
 export interface IQuizMetadata {
     id: number;
     name: string;
@@ -51,4 +55,8 @@ export interface IPlayerData {
     name: string;
     score: number;
     rank: number | undefined;
+}
+
+export interface IGameRankingMap {
+    [game: string]: IPlayerData[];
 }

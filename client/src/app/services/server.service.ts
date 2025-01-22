@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IQuestion, ISubmission, IState, IScoredQuiz, IPlayerData } from 'server/src/types';
+import { IQuestion, ISubmission, IState, IScoredQuiz, IPlayerData, IGameRankingMap } from 'server/src/types';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +35,8 @@ export class ServerService {
     return response;
   }
 
-  async getPlayerDataList(gameCodes : string) : Promise<IPlayerData[]> {
-    const response = await fetch(`/super-bowl-quiz/api/ranking/${gameCodes}`);
+  async getGameRankingMap() : Promise<IGameRankingMap> {
+    const response = await fetch(`/super-bowl-quiz/api/ranking`);
     return await response.json();
   }
 

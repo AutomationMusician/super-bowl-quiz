@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPlayerData } from 'server/src/types';
+import { IGameRankingMap, IPlayerData } from 'server/src/types';
 import { ServerService } from 'src/app/services/server.service';
 import { BannerType } from '../../banner/banner.component';
 
@@ -15,23 +15,14 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   gameCodes : string | undefined;
   bannerType : BannerType;
   bannerMessage : string | undefined;
-  playerDataList : IPlayerData[] = [];
+  gameRankingMapEntries : [string, IPlayerData[]][] = [];
   private timeoutId : NodeJS.Timeout | undefined;
 
   constructor(
     private route: Router,
     private activatedRouter: ActivatedRoute,
     private server: ServerService
-  ) { 
-    this.activatedRouter.paramMap.subscribe(async params => {
-      this.gameCodes = params.get('gameCodes') as string;
-      console.log("'" + this.gameCodes + "'");
-      if (this.gameCodes !== "" && !(await this.server.areValidGames(this.gameCodes))) {
-        this.route.navigate(['/notfound']);
-        return;
-      }
-      this.updatePlayerDataLoop();
-    });
+  ) {
     this.activatedRouter.queryParams.subscribe(params => {
       this.bannerType = params['status'];
       if (this.bannerType === 'success') {
@@ -41,13 +32,6 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   }
 
   private updatePlayerDataLoop() : void {
-    if (this.gameCodes) {
-      this.server.getPlayerDataList(this.gameCodes)
-        .then(playerDataList => this.playerDataList = playerDataList);
-    }
-    this.timeoutId = setTimeout(() => {
-      this.updatePlayerDataLoop();
-    }, refreshIntervalMs);
   }
 
   public getRankClass(rank: number | undefined) : string {
@@ -61,7 +45,13 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       return '';
   }
 
-  ngOnInit() : void { }
+  ngOnInit() : void { 
+    this.server.getGameRankingMap()
+      .then(gameRankingMap => this.gameRankingMapEntries = Object.entries(gameRankingMap));
+    this.timeoutId = setTimeout(() => {
+      this.updatePlayerDataLoop();
+    }, refreshIntervalMs);
+  }
 
   ngOnDestroy() : void {
     clearTimeout(this.timeoutId);

@@ -1,6 +1,6 @@
 import { Client as PgClient, QueryResult } from 'pg';
 import { Response } from 'express';
-import { IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "./types";
+import { IGameQuizListMap, IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "./types";
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -34,49 +34,40 @@ export function ValidateGames(games : string[])
     return true;
 }
 
-export async function GetAllQuizzes(pgClient : PgClient, games : string[]) : Promise<IQuiz[]> {
+export async function GetAllQuizzesForEachGame(pgClient : PgClient) : Promise<IGameQuizListMap> {
     const quizzes : Map<number,IQuiz> = new Map<number,IQuiz>();
-  
-    // generate params for placeholder
-    const paramsPlaceholderArray = [];
-    for (let i=1; i<=games.length; i++)
-        paramsPlaceholderArray.push(`$${i}`);
-    const paramsPlaceholder = paramsPlaceholderArray.join(", ");
 
     // Get names
     let query = `SELECT Quiz.quiz_id, Quiz.name \
-                 FROM QuizGameMapping \
-                 INNER JOIN Quiz \
-                 ON Quiz.quiz_id = QuizGameMapping.quiz_id \
-                 WHERE QuizGameMapping.game IN (${paramsPlaceholder})`;
-    let result = await pgClient.query(query, games);
+                 FROM Quiz`;
+    let result = await pgClient.query(query);
     result.rows.forEach((row : any) => {
       quizzes.set(row.quiz_id, { id: row.quiz_id, name: row.name, guesses: {} });
     });
   
     // get guesses
-    query =  `SELECT Quiz.quiz_id, question_id, guess_value \
-              FROM Quiz \
-              INNER JOIN Guess \
-              ON Quiz.quiz_id = Guess.quiz_id \
-              INNER JOIN QuizGameMapping \
-              ON  Quiz.quiz_id = QuizGameMapping.quiz_id \
-              WHERE QuizGameMapping.game IN (${paramsPlaceholder})`;
-    result = await pgClient.query(query, games);
+    query =  `SELECT quiz_id, question_id, guess_value \
+              FROM Guess`;
+    result = await pgClient.query(query);
     result.rows.forEach((row : any) => {
-      const quiz = quizzes.get(row.quiz_id);
-      if (!quiz) {
-        throw new Error(`Quiz with id ${row.quiz_id} not found`);
-      }
+      const quiz = quizzes.get(row.quiz_id)!;
       quiz.guesses[row.question_id] = row.guess_value;
     });
+
+    // get guesses
+    const gameQuizMap : IGameQuizListMap = {};
+    query = `SELECT quiz_id, game \
+             FROM QuizGameMapping`;
+    result = await pgClient.query(query);
+    result.rows.forEach((row : any) => {
+        const quiz = quizzes.get(row.quiz_id)!;
+        if (!gameQuizMap[row.game]) {
+            gameQuizMap[row.game] = [];
+        }
+        gameQuizMap[row.game].push(quiz);
+    });
   
-    // convert quizzes object to an array
-    const data : IQuiz[] = [];
-    for (const [quiz_id, quiz] of quizzes) {
-      data.push(quiz);
-    }
-    return data;
+    return gameQuizMap;
 }
 
 export function ScoreQuiz(questions : IQuestion[], quiz : IQuiz) : number {

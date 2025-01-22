@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'notfound', component: PageNotFoundComponent },
   { path: 'quiz/:gameCodes', component: QuizComponent },
-  { path: 'scoreboard/:gameCodes', component: ScoreboardComponent },
+  { path: 'scoreboard', component: ScoreboardComponent },
   { path: 'results/:gameCodes/:id', component: ResultsComponent },
   { path: ':gameCodes', redirectTo: 'quiz/:gameCodes', pathMatch: "full" },
   { path: '**', redirectTo: 'notfound' }

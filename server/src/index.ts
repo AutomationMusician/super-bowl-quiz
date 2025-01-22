@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { GetAllQuizzes, GetQuestions, GetOpen, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGames} from './helpers';
-import { IQuestion, ISubmission, IQuiz, IScoredQuiz, IState } from './types';
+import { GetAllQuizzesForEachGame, GetQuestions, GetOpen, QuizToScoredQuiz, RankAllPlayers as RankQuizList, Send404Error, ValidateGames} from './helpers';
+import { IQuestion, ISubmission, IQuiz, IScoredQuiz, IState, IGameRankingMap } from './types';
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
@@ -115,18 +115,14 @@ app.post('/super-bowl-quiz/api/submission', async (request : Request, response :
 });
 
 // Get guesses from database - returns IPlayerData[]
-app.get('/super-bowl-quiz/api/ranking/:games', async (request : Request, response : Response) => {
-  const games = request.params.games.toLowerCase().split("-");
-  const isValid = ValidateGames(games);
-  if (!isValid) {
-    console.error(`Invalid games '${games}'`);
-    response.status(400);
-    return;
-  }
-  const quizzes = await GetAllQuizzes(pgClient, games);
+app.get('/super-bowl-quiz/api/ranking', async (request : Request, response : Response) => {
+  const gameQuizListMap = await GetAllQuizzesForEachGame(pgClient);
   const questions = await GetQuestions();
-  const rankedPlayerData = RankAllPlayers(questions, quizzes);
-  response.json(rankedPlayerData);
+  const gameRankingMap : IGameRankingMap = {};
+  for (const [game, quizList] of Object.entries(gameQuizListMap)) {
+    gameRankingMap[game] = RankQuizList(questions, quizList);
+  }
+  response.json(gameRankingMap);
 });
 
 // returns IScoredQuiz

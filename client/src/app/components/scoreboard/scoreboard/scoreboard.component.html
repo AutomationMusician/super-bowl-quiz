@@ -5,30 +5,31 @@
             <td id="navigation" colspan="3">
                 <app-nav-bar 
                     [currentPage]="'scoreboard'"
-                    [gameCodes]="gameCodes"
+                    [gameCodes]="undefined"
                 ></app-nav-bar>
             </td>
         </tr>
-        <tr>
-            <td colspan="3">
-              <h1>Scoreboard</h1>
-            </td>
-        </tr>
-        <tr>
-            <td class="rankCell"><strong>Rank</strong></td>
-            <td class="nameCell"><strong>Name</strong></td>
-            <td class="scoreCell"><strong>Score</strong></td>
-        </tr>
     </thead>
     <tbody>
-        <tr 
-            *ngFor="let playerData of playerDataList" 
-            [playerData]="playerData"
-            [gameCodes]="gameCodes"
-            [class]="this.getRankClass(playerData.rank)"
-            app-scoreboard-row
-        >
-        </tr>
-        
+        @for (entry of gameRankingMapEntries; track entry[0]) {
+            <tr>
+                <td colspan="3">
+                <h1>{{ entry[0] }} Scoreboard</h1>
+                </td>
+            </tr>
+            <tr>
+                <td class="rankCell"><strong>Rank</strong></td>
+                <td class="nameCell"><strong>Name</strong></td>
+                <td class="scoreCell"><strong>Score</strong></td>
+            </tr>
+            <tr 
+                *ngFor="let playerData of entry[1]" 
+                [playerData]="playerData"
+                [gameCodes]="gameCodes"
+                [class]="this.getRankClass(playerData.rank)"
+                app-scoreboard-row
+            >
+            </tr>
+        }
     </tbody>
 </table>
