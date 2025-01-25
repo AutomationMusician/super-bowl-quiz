@@ -13,6 +13,7 @@ import { ResultsComponent } from './components/quiz/results/results.component';
 import { BannerComponent } from './components/common/banner/banner.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { GameCodesComponent } from "./components/common/game-codes/game-codes.component";
+import { NameFieldComponent } from "./components/common/name-field/name-field.component";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { GameCodesComponent } from "./components/common/game-codes/game-codes.co
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    GameCodesComponent
+    GameCodesComponent,
+    NameFieldComponent
 ],
   providers: [],
   bootstrap: [RootComponent]

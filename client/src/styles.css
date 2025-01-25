@@ -24,7 +24,9 @@ table {
 }
 
 .quiz-metadata-row td {
-  padding: 20px 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 5px;
   margin: 0px;
 }
 

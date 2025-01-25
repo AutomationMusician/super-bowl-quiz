@@ -1,0 +1,20 @@
+<div>
+    <div class="quiz-metadata-text-input-label"><strong>Name:</strong></div>
+    <input 
+        type="text" 
+        [(ngModel)]="name"
+        #inputElement="ngModel"
+        required="true"
+        maxlength="32"
+        placeholder="Add name..."
+    />
+</div>
+<div *ngIf="inputElement.dirty && inputElement.invalid"
+    class="alert">
+    <div *ngIf="inputElement.hasError('required')">
+        Name may not be an empty string
+    </div>
+    <div *ngIf="inputElement.hasError('maxlength')">
+        Name must not be more than 32 characters long.
+    </div>
+</div>

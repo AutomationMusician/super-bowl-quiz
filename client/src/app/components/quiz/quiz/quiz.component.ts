@@ -28,7 +28,6 @@ export class QuizComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const quizState : IState = await this.server.getState();
-    console.log(quizState);
     const quizOpen : boolean = quizState.open;
     if (quizOpen) {
       const iQuestions : IQuestion[] = await this.server.getQuestions();

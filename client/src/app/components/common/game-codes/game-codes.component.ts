@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-game-codes',
