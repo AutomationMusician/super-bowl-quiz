@@ -9,7 +9,7 @@ export interface IQuestion {
 }
 
 export interface ISubmission {
-    games: string;
+    games: string[];
     name: string;
     guesses: IGuessDict;
 }

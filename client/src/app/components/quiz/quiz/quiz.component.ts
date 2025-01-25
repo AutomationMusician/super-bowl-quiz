@@ -17,7 +17,7 @@ const bannerChangeDelayMs : number = 200;
 export class QuizComponent implements OnInit {
   questions: Question[] = [];
   questionsEnabled : boolean = false;
-  gameCodes : string | undefined;
+  gameCodes : string[] = [];
   bannerType : BannerType;
   bannerMessage : string | undefined;
 

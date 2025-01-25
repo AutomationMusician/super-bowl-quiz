@@ -8,10 +8,10 @@ export class ServerService {
 
   constructor() { }
 
-  async areValidGames(gameCodes : string) : Promise<boolean> {
-    const response : Response = await fetch(`/super-bowl-quiz/api/are-valid-games/${gameCodes}`);
+  async getGameName(gameCode : string) : Promise<string | undefined> {
+    const response : Response = await fetch(`/super-bowl-quiz/api/is-valid-game/${gameCode}`);
     const jsonObject : any = await response.json();
-    return jsonObject.status;
+    return jsonObject.gameName;
   }
 
   async getState() : Promise<IState> {

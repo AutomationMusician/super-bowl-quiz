@@ -1,33 +1,37 @@
 <div class="game-codes-area">
     <div class="quiz-metadata-text-input-label"><strong>Games:</strong></div>
     <div class="game-codes-item" *ngFor="let game of games">
-        <span>{{game}}</span>
-        <span class="game-codes-delete-button" (click)="removeGame(game)"></span>
+        <span>{{game.gameName}}</span>
+        <span class="game-codes-delete-button" (click)="removeGame(game.gameCode)"></span>
     </div>
     <input 
         type="text" 
         [(ngModel)]="newGameCodeValue"
         #newGameCodeElement="ngModel"
         required="true"
-        minlength="3"
+        minlength="1"
         maxlength="32"
         pattern="^[a-zA-Z0-9_]+$" 
         placeholder="Enter Game Code..." 
-        (keydown.enter)="createNewLabel()"
+        (keydown.enter)="addNewGameCode()"
+        (input)="onNewGameCodeChange()"
     />
 </div>
-<div *ngIf="showErrors && newGameCodeElement.invalid"
+<div *ngIf="(showErrors && newGameCodeElement.invalid) || customError"
     class="alert">
     <div *ngIf="newGameCodeElement.hasError('required')">
-        Label may not be an empty string
+        Game code may not be an empty string.
     </div>
     <div *ngIf="newGameCodeElement.hasError('minlength')">
-        Label must be at least 3 characters long.
+        Game code must be at least 1 characters long.
     </div>
     <div *ngIf="newGameCodeElement.hasError('maxlength')">
-        Label must not be more than 32 characters long.
+        Game code must not be more than 32 characters long.
     </div>
     <div *ngIf="newGameCodeElement.hasError('pattern')">
-       Label must be contain only alphanumeric characters or underscores
+       Game Code must contain only alphanumeric characters or underscores
+    </div>
+    <div *ngIf="customError">
+       {{ customError }}
     </div>
 </div>

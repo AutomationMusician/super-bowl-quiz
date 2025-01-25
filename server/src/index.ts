@@ -34,7 +34,7 @@ app.post('/super-bowl-quiz/api/submission', async (request : Request, response :
 
   const config = GetConfig();
 
-  const games = body.games.toLowerCase().split("-");
+  const games = body.games;
   const isValid = ValidateGames(games, config); // TODO: make this validate a list of games and then insert it later
   if (!isValid) {
     const errorMessage = `One of the games is invalid '${JSON.stringify(games)}'`;
@@ -172,23 +172,10 @@ app.get('/super-bowl-quiz/api/quiz-state', (request : Request, response : Respon
   response.json({ open: config.open } as IState);
 });
 
-app.get('/super-bowl-quiz/api/are-valid-games/:games', async (request : Request, response : Response) => {
-  const games : string[] = request.params.games.toLowerCase().split("-");
+app.get('/super-bowl-quiz/api/is-valid-game/:gameCode', async (request : Request, response : Response) => {
+  const gameCode : string = request.params.gameCode.toLowerCase();
   const config = GetConfig();
-  const status = ValidateGames(games, config);
-  response.json({ status });
-});
-
-app.get('/super-bowl-quiz/:games', async (request : Request, response : Response) => {
-  const gamesString : string = request.params.games;
-  const games : string[] = gamesString.toLowerCase().split("-");
-  const config = GetConfig();
-  if (ValidateGames(games, config)) {
-    response.redirect(`/super-bowl-quiz/quiz/${gamesString}`)
-  }
-  else {
-    Send404Error(response);
-  }
+  response.json({ gameName: config.games[gameCode] });
 });
 
 // catch all redirect to angular index.html
