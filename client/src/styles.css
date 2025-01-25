@@ -13,7 +13,7 @@
   font-size: 20px;
 }
 
-#name {
+input[type="text"] {
   font-size: 16px;
   margin-left: 5px;
 }
@@ -23,9 +23,14 @@ table {
   margin: 0px auto;
 }
 
-#nameAndScore td {
+.quiz-metadata-row td {
   padding: 20px 5px;
   margin: 0px;
+}
+
+.quiz-metadata-text-input-label {
+	padding: 4px 0px;
+	margin: 4px 0px;
 }
 
 td:first-child {
@@ -54,4 +59,10 @@ td:first-child {
 
 .quiz-body tr {
   border: 1px solid black;
+}
+
+.quiz-metadata-text-input-label, .game-codes-item {
+	display: inline;
+	justify-content: flex-start;
+	align-items: center;
 }

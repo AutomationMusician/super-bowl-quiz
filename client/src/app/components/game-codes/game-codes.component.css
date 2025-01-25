@@ -1,0 +1,15 @@
+.game-codes-item {
+	border: 1px solid black;
+	border-radius: 4px;
+	padding: 4px;
+	margin: 4px;
+}
+.game-codes-delete-button::before {
+	cursor: pointer;
+	margin-left: 4px;
+	content: '❌';
+}
+.game-codes-area {
+	display: flex;
+	flex-wrap: wrap;
+}

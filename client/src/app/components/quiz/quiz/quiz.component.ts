@@ -23,30 +23,20 @@ export class QuizComponent implements OnInit {
 
   constructor(
     private route: Router,
-    private activatedRouter: ActivatedRoute,
     private server: ServerService
     ) {}
 
-  ngOnInit(): void {
-    this.activatedRouter.paramMap.subscribe(async params => {
-      this.gameCodes = params.get('game') as string;
-      if (!(await this.server.areValidGames(this.gameCodes))) {
-        this.route.navigate(['/']);
-        return;
-      }
-      
-      const quizState : IState = await this.server.getState();
-      const quizOpen : boolean = quizState.open;
-      if (quizOpen) {
-        const iQuestions : IQuestion[] = await this.server.getQuestions();
-        this.questions = [];
-        iQuestions.forEach(q => this.questions.push(new Question(q)));
-      } else {
-        // use to close quiz
-        this.route.navigate(['/scoreboard']);
-      }
-    });
-
+  async ngOnInit(): Promise<void> {
+    const quizState : IState = await this.server.getState();
+    const quizOpen : boolean = quizState.open;
+    if (quizOpen) {
+      const iQuestions : IQuestion[] = await this.server.getQuestions();
+      this.questions = [];
+      iQuestions.forEach(q => this.questions.push(new Question(q)));
+    } else {
+      // use to close quiz
+      this.route.navigate(['/scoreboard']);
+    }
   }
 
   enableQuestions() : void {

@@ -2,6 +2,6 @@ td.rankCell, td.scoreCell {
   width: 20%;
 }
 
-.nameCell {
+.quiz-metadata-text-input-cell {
   width: 60%;
 }

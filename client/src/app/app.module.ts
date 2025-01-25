@@ -12,6 +12,7 @@ import { ScoreboardRowComponent } from './components/scoreboard/scoreboard-row/s
 import { ResultsComponent } from './components/quiz/results/results.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { GameCodesComponent } from "./components/game-codes/game-codes.component";
 
 @NgModule({
   declarations: [
@@ -30,8 +31,9 @@ import { HomePageComponent } from './components/home-page/home-page.component';
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
-  ],
+    AppRoutingModule,
+    GameCodesComponent
+],
   providers: [],
   bootstrap: [RootComponent]
 })
