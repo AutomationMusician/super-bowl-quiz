@@ -25,7 +25,7 @@ export interface IQuiz {
 }
 
 export interface IGameQuizListMap {
-    [game: string]: IQuiz[];
+    [gameCode: string]: IQuiz[];
 }
 
 export interface IQuizMetadata {
@@ -59,4 +59,12 @@ export interface IPlayerData {
 
 export interface IGameRankingMap {
     [game: string]: IPlayerData[];
+}
+
+export interface IConfig {
+    open: boolean;
+    questions: IQuestion[],
+    games: {
+        [gameCode : string]: string;
+    }
 }

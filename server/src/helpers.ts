@@ -1,35 +1,25 @@
 import { Client as PgClient, QueryResult } from 'pg';
 import { Response } from 'express';
-import { IGameQuizListMap, IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "./types";
+import { IConfig, IGameQuizListMap, IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "./types";
 import * as fs from 'fs';
 import * as path from 'path';
 
-export function GetQuestions() : IQuestion[] {
+export function GetConfig() : IConfig {
     const jsonString : string = fs.readFileSync(path.join(__dirname, '../../config/config.json'), { encoding: 'utf-8'});
-    return JSON.parse(jsonString).questions;
-}
-
-export function GetOpen() : boolean {
-    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../config/config.json'), { encoding: 'utf-8'});
-    return JSON.parse(jsonString).open;
-}
-
-export function ValidateGame(game : string) : boolean {
-    return ValidateGames([game]);
+    return JSON.parse(jsonString);
 }
 
 /**
  * @param {string} games string array of games
  * @return {boolean} if all games are valid
  */
-export function ValidateGames(games : string[])
+export function ValidateGames(gameCodes : string[], config : IConfig)
 {
-    const jsonString : string = fs.readFileSync(path.join(__dirname, '../../config/config.json'), { encoding: 'utf-8'});
-    const validGames : string[] = Object.keys(JSON.parse(jsonString).gameCodes);
+    const validGames : string[] = Object.keys(config.games);
     for (let i=0; i<validGames.length; i++)
         validGames[i] = validGames[i].toLowerCase();
-    for (let i=0; i<games.length; i++)
-        if (!validGames.includes(games[i].toLowerCase()))
+    for (let i=0; i<gameCodes.length; i++)
+        if (!validGames.includes(gameCodes[i].toLowerCase()))
             return false;
     return true;
 }
@@ -101,20 +91,20 @@ export function QuizToScoredQuiz(questions : IQuestion[], quiz : IQuiz) : IScore
     return scoredQuiz;
 }
 
-export function RankAllPlayers(questions : IQuestion[], quizzes : IQuiz[]) : IPlayerData[] {
+export function RankAllPlayers(config : IConfig, quizzes : IQuiz[]) : IPlayerData[] {
     const playerDataList : IPlayerData[] = [];
     for (let quiz of quizzes) {
 
         const playerData : IPlayerData = {
             id: quiz.id,
             name: quiz.name,
-            score: ScoreQuiz(questions, quiz),
+            score: ScoreQuiz(config.questions, quiz),
             rank: undefined
         };
         playerDataList.push(playerData);
     }
 
-    if (GetOpen())
+    if (config.open)
     {
         return playerDataList;
     }

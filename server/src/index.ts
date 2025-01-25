@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { GetAllQuizzesForEachGame, GetQuestions, GetOpen, QuizToScoredQuiz, RankAllPlayers as RankQuizList, Send404Error, ValidateGames} from './helpers';
+import { GetAllQuizzesForEachGame, GetConfig, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGames} from './helpers';
 import { IQuestion, ISubmission, IQuiz, IScoredQuiz, IState, IGameRankingMap } from './types';
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
@@ -24,15 +24,18 @@ pgClient.connect();
 
 // Get questions from server - returns IQuestion[]
 app.get('/super-bowl-quiz/api/questions', async (request : Request, response : Response) => {
-  const questions = GetQuestions();
+  const questions = GetConfig().questions;
   response.json(questions);
 });
 
 // Add quiz to the database - returns nothing
 app.post('/super-bowl-quiz/api/submission', async (request : Request, response : Response) => {
   const body : ISubmission = request.body;
-  const games = body.games.toLowerCase().split("-");;
-  const isValid = ValidateGames(games); // TODO: make this validate a list of games and then insert it later
+
+  const config = GetConfig();
+
+  const games = body.games.toLowerCase().split("-");
+  const isValid = ValidateGames(games, config); // TODO: make this validate a list of games and then insert it later
   if (!isValid) {
     const errorMessage = `One of the games is invalid '${JSON.stringify(games)}'`;
     console.error(errorMessage);
@@ -41,8 +44,7 @@ app.post('/super-bowl-quiz/api/submission', async (request : Request, response :
   }
 
   // Check if quiz is open
-  const open = GetOpen();
-  if (!open) {
+  if (!config.open) {
     const errorMessage = "The submitted quiz with the name '" + body.name + "' was rejected because the quiz is closed.";
     console.error(errorMessage);
     response.status(400).send(errorMessage);
@@ -75,7 +77,7 @@ app.post('/super-bowl-quiz/api/submission', async (request : Request, response :
   const values : string[] = [];
   params = [];
   let paramIndex = 1;
-  const questions = GetQuestions();
+  const questions = config.questions;
   for (let question of questions) {
     if (body.guesses[question.id]) {
       params.push(question.id);
@@ -117,10 +119,11 @@ app.post('/super-bowl-quiz/api/submission', async (request : Request, response :
 // Get guesses from database - returns IPlayerData[]
 app.get('/super-bowl-quiz/api/ranking', async (request : Request, response : Response) => {
   const gameQuizListMap = await GetAllQuizzesForEachGame(pgClient);
-  const questions = await GetQuestions();
+  console.log(gameQuizListMap);
+  const config = await GetConfig();
   const gameRankingMap : IGameRankingMap = {};
-  for (const [game, quizList] of Object.entries(gameQuizListMap)) {
-    gameRankingMap[game] = RankQuizList(questions, quizList);
+  for (const [gameCode, quizList] of Object.entries(gameQuizListMap)) {
+    gameRankingMap[config.games[gameCode]] = RankAllPlayers(config, quizList);
   }
   response.json(gameRankingMap);
 });
@@ -159,27 +162,29 @@ app.get('/super-bowl-quiz/api/scored-quiz/:id', async (request : Request, respon
     quiz.guesses[row.question_id] = row.guess_value;
   });
   
-  const questions : IQuestion[] = GetQuestions();
+  const questions : IQuestion[] = GetConfig().questions;
   const scoredQuiz : IScoredQuiz = QuizToScoredQuiz(questions, quiz);
   response.json(scoredQuiz);
 });
 
 // Ask the server if the quiz is open
 app.get('/super-bowl-quiz/api/quiz-state', (request : Request, response : Response) => {
-  const open = GetOpen();
-  response.json({ open } as IState);
+  const config = GetConfig();
+  response.json({ open: config.open } as IState);
 });
 
 app.get('/super-bowl-quiz/api/are-valid-games/:games', async (request : Request, response : Response) => {
   const games : string[] = request.params.games.toLowerCase().split("-");
-  console.log(games);
-  const status = ValidateGames(games);
+  const config = GetConfig();
+  const status = ValidateGames(games, config);
   response.json({ status });
 });
 
 app.get('/super-bowl-quiz/:games', async (request : Request, response : Response) => {
   const gamesString : string = request.params.games;
-  if (ValidateGames(gamesString.toLowerCase().split("-"))) {
+  const games : string[] = gamesString.toLowerCase().split("-");
+  const config = GetConfig();
+  if (ValidateGames(games, config)) {
     response.redirect(`/super-bowl-quiz/quiz/${gamesString}`)
   }
   else {
