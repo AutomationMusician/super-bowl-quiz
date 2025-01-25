@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'notfound', component: PageNotFoundComponent },
   { path: 'quiz/:gameCodes', component: QuizComponent },
   { path: 'scoreboard', component: ScoreboardComponent },
-  { path: 'results/:gameCodes/:id', component: ResultsComponent },
+  { path: 'results/:id', component: ResultsComponent },
   { path: ':gameCodes', redirectTo: 'quiz/:gameCodes', pathMatch: "full" },
   { path: '**', redirectTo: 'notfound' }
 ];

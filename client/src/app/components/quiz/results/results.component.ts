@@ -27,11 +27,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   ) { 
     this.activatedRouter.paramMap.subscribe(async params => {
       this.id = Number(params.get('id'));
-      this.gameCodes = params.get('gameCodes') as string;
-      if (!(await this.server.areValidGames(this.gameCodes))) {
-        this.route.navigate(['/']);
-        return;
-      }
       this.updateQuestionsLoop();
     });
   }

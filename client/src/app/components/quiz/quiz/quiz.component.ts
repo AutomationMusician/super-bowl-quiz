@@ -43,7 +43,7 @@ export class QuizComponent implements OnInit {
         iQuestions.forEach(q => this.questions.push(new Question(q)));
       } else {
         // use to close quiz
-        this.route.navigate(['/scoreboard', this.gameCodes]);
+        this.route.navigate(['/scoreboard']);
       }
     });
 
@@ -89,7 +89,7 @@ export class QuizComponent implements OnInit {
     const submissionResponse = await this.server.submitQuiz(submission);
     if (submissionResponse.ok) {
       this.route.navigate(
-        ['/scoreboard', this.gameCodes],
+        ['/scoreboard'],
         { queryParams: { status: 'success' } }
       );
     }

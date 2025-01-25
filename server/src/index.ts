@@ -119,7 +119,6 @@ app.post('/super-bowl-quiz/api/submission', async (request : Request, response :
 // Get guesses from database - returns IPlayerData[]
 app.get('/super-bowl-quiz/api/ranking', async (request : Request, response : Response) => {
   const gameQuizListMap = await GetAllQuizzesForEachGame(pgClient);
-  console.log(gameQuizListMap);
   const config = await GetConfig();
   const gameRankingMap : IGameRankingMap = {};
   for (const [gameCode, quizList] of Object.entries(gameQuizListMap)) {

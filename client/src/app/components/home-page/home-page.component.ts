@@ -19,7 +19,7 @@ export class HomePageComponent implements OnInit {
     const quizState : IState = await this.server.getState();
     const quizOpen : boolean = quizState.open;
     if (!quizOpen) {
-      this.router.navigate(['scoreboard', 'all']);
+      this.router.navigate(['scoreboard']);
     }
   }
 }
