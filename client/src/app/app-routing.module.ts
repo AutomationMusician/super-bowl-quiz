@@ -10,10 +10,9 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'notfound', component: PageNotFoundComponent },
-  { path: 'quiz/:gameCodes', component: QuizComponent },
+  { path: 'quiz', component: QuizComponent },
   { path: 'scoreboard', component: ScoreboardComponent },
   { path: 'results/:id', component: ResultsComponent },
-  { path: ':gameCodes', redirectTo: 'quiz/:gameCodes', pathMatch: "full" },
   { path: '**', redirectTo: 'notfound' }
 ];
 

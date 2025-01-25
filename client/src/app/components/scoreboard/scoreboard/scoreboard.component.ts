@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IGameRankingMap, IPlayerData } from 'server/src/types';
 import { ServerService } from 'src/app/services/server.service';
-import { BannerType } from '../../banner/banner.component';
+import { BannerType } from '../../common/banner/banner.component';
 
 const refreshIntervalMs : number = 10000;
 

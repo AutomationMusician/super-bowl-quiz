@@ -4,7 +4,7 @@ import { IGuessDict, IQuestion, IState, ISubmission } from 'server/src/types';
 import { Question } from 'src/app/model/question';
 import { ServerService } from 'src/app/services/server.service';
 import { NgForm } from '@angular/forms';
-import { BannerType } from '../../banner/banner.component';
+import { BannerType } from '../../common/banner/banner.component';
 
 const bannerChangeDelayMs : number = 200;
 
@@ -28,6 +28,7 @@ export class QuizComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const quizState : IState = await this.server.getState();
+    console.log(quizState);
     const quizOpen : boolean = quizState.open;
     if (quizOpen) {
       const iQuestions : IQuestion[] = await this.server.getQuestions();

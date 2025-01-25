@@ -10,14 +10,16 @@
                 </td>
             </tr>
             <tr class="quiz-metadata-row" >
-                <td colspan="3">
+                <td class="quiz-metadata-text-input-cell" colspan="3">
                     <app-game-codes></app-game-codes>
                 </td>
             </tr>
             <tr class="quiz-metadata-row">
                 <td class="quiz-metadata-text-input-cell">
-                    <label for="name" class="quiz-metadata-text-input-label"><strong>Name:</strong></label>
-                    <input type="text" name="name" id="name" placeholder="Add Name Here..." (change)="enableQuestions()" ngModel/>
+                    <div>
+                        <label for="name" class="quiz-metadata-text-input-label"><strong>Name:</strong></label>
+                        <input type="text" name="name" id="name" placeholder="Add Name Here..." (change)="enableQuestions()" ngModel/>
+                    </div>
                 </td>
                 <td id="scoreLabel" colspan="2"></td>
             </tr>
