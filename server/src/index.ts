@@ -121,14 +121,16 @@ app.get('/super-bowl-quiz/api/ranking', async (request : Request, response : Res
   const gameQuizListMap = await GetAllQuizzesForEachGame(pgClient);
   const config = await GetConfig();
   const gameRankingMap : IGameRankingMap = {};
-  for (const [gameCode, quizList] of Object.entries(gameQuizListMap)) {
-    gameRankingMap[config.games[gameCode]] = RankAllPlayers(config, quizList);
+  for (const [gameName, quizList] of Object.entries(gameQuizListMap)) {
+    gameRankingMap[gameName] = RankAllPlayers(config, quizList);
   }
   response.json(gameRankingMap);
 });
 
 // returns IScoredQuiz
 app.get('/super-bowl-quiz/api/scored-quiz/:id', async (request : Request, response : Response) : Promise<void> => {
+  const config = GetConfig();
+
   const quiz_id = Number(request.params.id);
   // Get name
   let query =  "SELECT name \
@@ -146,8 +148,20 @@ app.get('/super-bowl-quiz/api/scored-quiz/:id', async (request : Request, respon
   const quiz : IQuiz = { 
     name: result.rows[0].name,
     id: quiz_id,
+    games: [],
     guesses: {}
   };
+
+  // get game
+  query =  "SELECT game \
+            FROM QuizGameMapping \
+            WHERE quiz_id = $1";
+  params = [quiz_id];
+  result = await pgClient.query(query, params);
+  result.rows.map((row : any) => {
+    const gameName = config.games[row.game];
+    quiz.games.push(gameName);
+  });
 
   // get guesses
   query =  "SELECT question_id, guess_value \

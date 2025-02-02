@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { IQuestion, IQuiz, IScoredQuiz } from 'server/src/types';
+import { IQuestion, IScoredQuiz } from 'server/src/types';
 import { Question } from 'src/app/model/question';
 import { ServerService } from 'src/app/services/server.service';
 
@@ -19,6 +19,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   score: number | undefined;
   questions: Question[] = [];
   public readonly nameSubject = new Subject<string>();
+  public readonly gamesSubject = new Subject<string[]>();
   private timeoutId : NodeJS.Timeout | undefined;
 
   constructor(
@@ -40,6 +41,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
           const scoredQuiz : IScoredQuiz = promiseArray[1];
 
           this.nameSubject.next(scoredQuiz.name);
+          this.gamesSubject.next(scoredQuiz.games);
           this.score = scoredQuiz.score;
           this.questions = [];
           iQuestions.forEach(q => {

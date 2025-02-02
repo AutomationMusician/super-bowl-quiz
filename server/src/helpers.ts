@@ -1,6 +1,6 @@
 import { Client as PgClient, QueryResult } from 'pg';
 import { Response } from 'express';
-import { IConfig, IGameQuizListMap, IPlayerData, IQuestion, IQuiz, IScoredQuiz, IState } from "./types";
+import { IConfig, IGameQuizListMap, IPlayerData, IQuestion, IQuiz, IScoredQuiz } from "./types";
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -25,6 +25,7 @@ export function ValidateGames(gameCodes : string[], config : IConfig)
 }
 
 export async function GetAllQuizzesForEachGame(pgClient : PgClient) : Promise<IGameQuizListMap> {
+    const config = GetConfig();
     const quizzes : Map<number,IQuiz> = new Map<number,IQuiz>();
 
     // Get names
@@ -32,7 +33,7 @@ export async function GetAllQuizzesForEachGame(pgClient : PgClient) : Promise<IG
                  FROM Quiz`;
     let result = await pgClient.query(query);
     result.rows.forEach((row : any) => {
-      quizzes.set(row.quiz_id, { id: row.quiz_id, name: row.name, guesses: {} });
+      quizzes.set(row.quiz_id, { id: row.quiz_id, name: row.name, games: [], guesses: {} });
     });
   
     // get guesses
@@ -51,10 +52,12 @@ export async function GetAllQuizzesForEachGame(pgClient : PgClient) : Promise<IG
     result = await pgClient.query(query);
     result.rows.forEach((row : any) => {
         const quiz = quizzes.get(row.quiz_id)!;
-        if (!gameQuizMap[row.game]) {
-            gameQuizMap[row.game] = [];
+        const gameName = config.games[row.game];
+        quiz.games.push(gameName);
+        if (!gameQuizMap[gameName]) {
+            gameQuizMap[gameName] = [];
         }
-        gameQuizMap[row.game].push(quiz);
+        gameQuizMap[gameName].push(quiz);
     });
   
     return gameQuizMap;
@@ -85,6 +88,7 @@ export function QuizToScoredQuiz(questions : IQuestion[], quiz : IQuiz) : IScore
     const scoredQuiz : IScoredQuiz = {
         id: quiz.id,
         name: quiz.name,
+        games: quiz.games,
         guesses: quiz.guesses,
         score: ScoreQuiz(questions, quiz)
     };

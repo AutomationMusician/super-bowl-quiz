@@ -33,6 +33,11 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   }
 
   private updatePlayerDataLoop() : void {
+    this.server.getGameRankingMap()
+      .then(gameRankingMap => this.gameRankingMapEntries = Object.entries(gameRankingMap));
+    this.timeoutId = setTimeout(() => {
+      this.updatePlayerDataLoop();
+    }, refreshIntervalMs);
   }
 
   public getRankClass(rank: number | undefined) : string {
@@ -47,11 +52,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() : void { 
-    this.server.getGameRankingMap()
-      .then(gameRankingMap => this.gameRankingMapEntries = Object.entries(gameRankingMap));
-    this.timeoutId = setTimeout(() => {
-      this.updatePlayerDataLoop();
-    }, refreshIntervalMs);
+    this.updatePlayerDataLoop();
   }
 
   ngOnDestroy() : void {

@@ -29,7 +29,6 @@ export class NameFieldComponent {
     this.setSubscription?.unsubscribe();
   }
 
-
   onInput() {
     if (this.inputElement.valid) {
       this.nameUpdatedEvent.emit(this.inputElement.value);

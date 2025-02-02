@@ -20,6 +20,7 @@ export interface IState {
 
 export interface IQuiz {
     id: number;
+    games: string[];
     name: string;
     guesses: IGuessDict; 
 }

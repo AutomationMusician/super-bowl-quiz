@@ -7,6 +7,13 @@
                 ></app-nav-bar>
             </td>
         </tr>
+        <tr class="quiz-metadata-row" >
+            <td class="quiz-metadata-text-input-cell" colspan="3">
+                <app-games-identifier
+                    [set]="gamesSubject.asObservable()"
+                ></app-games-identifier>
+            </td>
+        </tr>
         <tr class="quiz-metadata-row">
             <td class="quiz-metadata-text-input-cell">
                 <app-name-field
