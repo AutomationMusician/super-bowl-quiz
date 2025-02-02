@@ -1,13 +1,17 @@
-Hi family,
-I just started up a server that is running this year's Super Bowl Quiz! If you haven't done this before, know that every year I set up a Super Bowl quiz for everyone to make predictions about what will happen at the Super Bowl. As the game goes on, the results of the predictions are revealed and eventually winners emerge with the largest number of correct predictions.
+Hi all,
+This year's Super Bowl Quiz is up and running! If you haven't done this before, know that every year, I set up a Super Bowl quiz for everyone to make predictions about what will happen at the Super Bowl. As the game goes on, the predictions' results are revealed, and eventually, winners emerge with the largest number of correct predictions.
 
 The quiz will close approximately 5 minutes before the national anthem of the Super Bowl, so make sure you take it before then (feel free to take it as soon as you get this email). Once the game starts, feel free to watch the scoreboard to see your rank throughout the game.
 
-Here is the link: ___________
+This year, I implemented a new system of game codes that allow me to group players into groups of people they already know. For example, I have separate games for each side of my family, coworkers, my dad's coworkers, and my other friends. If you are in multiple of those groups, you may have gotten separate emails/messages with separate game codes. Please apply all of the game codes you were provided when you take the quiz.
 
-Please only take one quiz per person. I don't currently have a method for stopping people from taking the quiz more than once, but I worked really hard on this and would appreciate it if you could respect that rule. You may forward this to anyone else who is interested, but make sure they respect the rules too. If you are interested in setting up a whole new game for a separate group of people (for example, for a group a work), let me know and I should be able to spin up a new game with a new link pretty quickly.
+The game code for the "_____________" game is "_______________".
 
-Note that this link starts with "http" instead of "https". To get an https link, you need to pay money to get your business reviewed so that internet users will know that it's not a scam site. I don't have the time or money to go through this process so I'm just using http, but know that you should normally not click on any links using http because they are likely to be scams. Note that this is not secure, so don't provide any personal information beyond your name.
+Here is the link: joshuafishman.duckdns.org/super-bowl-quiz/
 
-See you soon,
+Please only take one quiz per person. I don't currently have a method for stopping people from taking the quiz more than once, but I worked hard on this and would appreciate it if you could respect that rule. You may forward this to anyone else who is interested, but make sure they respect the rules too. 
+
+Making it this year has been fun because it is running on my Raspberry Pi (a small computer the size of a credit card and about a half-inch thick) from my apartment. If you are interested, feel free to check out the rest of my website also running from home: joshuafishman.duckdns.org
+
+Good Luck,
 Josh

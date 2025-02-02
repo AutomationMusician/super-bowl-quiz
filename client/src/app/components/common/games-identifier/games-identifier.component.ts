@@ -54,7 +54,7 @@ export class GamesIdentifierComponent {
     }
 
     // check that game code wasn't used
-    const gameCode = this.newGameCodeValue;
+    const gameCode = this.newGameCodeValue.toLowerCase();
     if (this.games.some(game => game.gameCode === gameCode)) {
       this.customError = `Game Code '${gameCode}' is already applied to this quiz.`;
       return;
