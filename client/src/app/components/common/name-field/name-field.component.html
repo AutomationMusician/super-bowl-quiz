@@ -8,6 +8,7 @@
         required="true"
         maxlength="32"
         placeholder="Add name..."
+        [disabled]="disabled"
     />
 </div>
 <div *ngIf="inputElement.dirty && inputElement.invalid"

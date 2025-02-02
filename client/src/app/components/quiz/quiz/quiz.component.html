@@ -20,6 +20,7 @@
                 <td class="quiz-metadata-text-input-cell">
                     <app-name-field
                         (nameUpdatedEvent)="updateName($event)"
+                        [disabled]="false"
                     ></app-name-field>
                 </td>
                 <td id="scoreLabel" colspan="2"></td>

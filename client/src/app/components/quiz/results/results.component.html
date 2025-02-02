@@ -9,8 +9,9 @@
         </tr>
         <tr class="quiz-metadata-row">
             <td class="quiz-metadata-text-input-cell">
-                <label for="name" class="quiz-metadata-text-input-label"><strong>Name:</strong></label>
-                <input type="text" name="name" id="name" value="{{name}}" disabled/>
+                <app-name-field
+                    [set]="nameSubject.asObservable()"
+                ></app-name-field>
             </td>
             <td id="scoreLabel" colspan="2">{{score}} %</td>
         </tr>
