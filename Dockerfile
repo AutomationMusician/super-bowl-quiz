@@ -2,7 +2,7 @@ FROM node:20-alpine AS client-builder
 COPY ./server /usr/src/superbowlquiz/server
 COPY ./client /usr/src/superbowlquiz/client
 WORKDIR /usr/src/superbowlquiz/client
-RUN npm install && \
+RUN npm ci && \
     npm run build
 
 FROM node:20-alpine AS server-builder

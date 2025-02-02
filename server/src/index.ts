@@ -9,7 +9,7 @@ dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
 const PORT = 3000;
 
-app.use('/super-bowl-quiz/', express.static(path.join(__dirname, '../../client/dist')));
+app.use('/super-bowl-quiz/', express.static(path.join(__dirname, '../../client/dist/browser')));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
@@ -193,7 +193,7 @@ app.get('/super-bowl-quiz/api/is-valid-game/:gameCode', async (request : Request
 });
 
 // catch all redirect to angular index.html
-app.get('/super-bowl-quiz/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/index.html')));
+app.get('/super-bowl-quiz/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/browser/index.html')));
 
 // catch all 404 error
 app.get('*', (request : Request, response : Response) => {
