@@ -3,7 +3,7 @@
 ### Wait for postgres to be ready ###
 timeout_limit=30
 timeout_counter=0
-until pg_isready -h ${PGHOST} -p ${PGPORT}
+until pg_isready -h ${PGHOST}
 do
     timeout_counter=$((timeout_counter+1))
     echo "Waiting for Postgres: ${timeout_counter}/${timeout_limit}"
@@ -19,6 +19,7 @@ echo "Postgres has started"
 ### Initialize database ###
 script_dir=$(dirname "$0")
 set -e
-psql -h ${PGHOST} -p ${PGPORT} -U postgres -d postgres -c "DROP DATABASE IF EXISTS ${PGDATABASE}"
-psql -h ${PGHOST} -p ${PGPORT} -U postgres -d postgres -c "CREATE DATABASE ${PGDATABASE}"
-psql -h ${PGHOST} -p ${PGPORT} -U postgres -d ${PGDATABASE} -f ${script_dir}/dump/${PGDATABASE}.sql
+psql -h ${PGHOST} -U postgres -d postgres -c "DROP DATABASE IF EXISTS super_bowl_quiz"
+psql -h ${PGHOST} -U postgres -d postgres -c "CREATE DATABASE super_bowl_quiz"
+psql -h ${PGHOST} -U postgres -d super_bowl_quiz -f ${script_dir}/../dump/super_bowl_quiz.sql
+psql -h ${PGHOST} -U postgres -d super_bowl_quiz -f ${script_dir}/create_user.sql

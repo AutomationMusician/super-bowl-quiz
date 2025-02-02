@@ -1,0 +1,18 @@
+.quiz-metadata-text-input-label, .game-codes-item {
+	display: inline;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.game-codes-item {
+	border: 1px solid black;
+	border-radius: 4px;
+	padding: 4px;
+	margin: 4px;
+}
+
+.game-codes-delete-button::before {
+	cursor: pointer;
+	margin-left: 4px;
+	content: '❌';
+}

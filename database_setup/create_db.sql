@@ -1,3 +1,7 @@
+CREATE DATABASE super_bowl_quiz;
+
+\c super_bowl_quiz
+
 CREATE TABLE Quiz (
   quiz_id INT GENERATED ALWAYS AS IDENTITY,
   name VARCHAR(255) NOT NULL,

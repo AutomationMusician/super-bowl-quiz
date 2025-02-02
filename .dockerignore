@@ -1,6 +1,6 @@
 /.*
 /data
-/configs
+/config
 /database_setup
 /docker-compose.yml
 /node_modules

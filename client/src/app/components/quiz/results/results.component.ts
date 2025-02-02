@@ -1,22 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IQuestion, IQuiz, IScoredQuiz } from 'server/src/types';
+import { Subject } from 'rxjs';
+import { IQuestion, IScoredQuiz } from 'server/src/types';
 import { Question } from 'src/app/model/question';
 import { ServerService } from 'src/app/services/server.service';
 
 const refreshIntervalMs : number = 10000;
 
 @Component({
-  selector: 'app-results',
-  templateUrl: './results.component.html',
-  styleUrls: ['./results.component.css']
+    selector: 'app-results',
+    templateUrl: './results.component.html',
+    styleUrls: ['./results.component.css'],
+    standalone: false
 })
 export class ResultsComponent implements OnInit, OnDestroy {
-  game : string | undefined;
+  gameCodes : string | undefined;
   id : number | undefined;
-  name : string | undefined;
   score: number | undefined;
   questions: Question[] = [];
+  public readonly nameSubject = new Subject<string>();
+  public readonly gamesSubject = new Subject<string[]>();
   private timeoutId : NodeJS.Timeout | undefined;
 
   constructor(
@@ -26,11 +29,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
   ) { 
     this.activatedRouter.paramMap.subscribe(async params => {
       this.id = Number(params.get('id'));
-      this.game = params.get('game') as string;
-      if (!(await this.server.isValidGame(this.game))) {
-        this.route.navigate(['/']);
-        return;
-      }
       this.updateQuestionsLoop();
     });
   }
@@ -42,7 +40,8 @@ export class ResultsComponent implements OnInit, OnDestroy {
           const iQuestions : IQuestion[] = promiseArray[0];
           const scoredQuiz : IScoredQuiz = promiseArray[1];
 
-          this.name = scoredQuiz.name;
+          this.nameSubject.next(scoredQuiz.name);
+          this.gamesSubject.next(scoredQuiz.games);
           this.score = scoredQuiz.score;
           this.questions = [];
           iQuestions.forEach(q => {

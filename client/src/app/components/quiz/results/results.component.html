@@ -1,17 +1,24 @@
-<table id="big">
+<table class="big">
     <thead>
         <tr>
             <td id="navigation" colspan="3">
                 <app-nav-bar 
                     [currentPage]="undefined"
-                    [game]="game"
                 ></app-nav-bar>
             </td>
         </tr>
-        <tr id="nameAndScore">
-            <td id="nameCell">
-                <label for="name"><strong>Name:</strong></label>
-                <input type="text" name="name" id="name" value="{{name}}" disabled/>
+        <tr class="quiz-metadata-row" >
+            <td class="quiz-metadata-text-input-cell" colspan="3">
+                <app-games-identifier
+                    [set]="gamesSubject.asObservable()"
+                ></app-games-identifier>
+            </td>
+        </tr>
+        <tr class="quiz-metadata-row">
+            <td class="quiz-metadata-text-input-cell">
+                <app-name-field
+                    [set]="nameSubject.asObservable()"
+                ></app-name-field>
             </td>
             <td id="scoreLabel" colspan="2">{{score}} %</td>
         </tr>

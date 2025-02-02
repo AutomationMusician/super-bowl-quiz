@@ -1,36 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPlayerData } from 'server/src/types';
+import { IGameRankingMap, IPlayerData } from 'server/src/types';
 import { ServerService } from 'src/app/services/server.service';
-import { BannerType } from '../../banner/banner.component';
+import { BannerType } from '../../common/banner/banner.component';
 
 const refreshIntervalMs : number = 10000;
 
 @Component({
-  selector: 'app-scoreboard',
-  templateUrl: './scoreboard.component.html',
-  styleUrls: ['../scoreboard-row.css', './scoreboard.component.css'] // last css file has highest precedence
+    selector: 'app-scoreboard',
+    templateUrl: './scoreboard.component.html',
+    styleUrls: ['../scoreboard-row.css', './scoreboard.component.css'], // last css file has highest precedence
+    standalone: false
 })
 export class ScoreboardComponent implements OnInit, OnDestroy {
-  game : string | undefined;
+  gameCodes : string | undefined;
   bannerType : BannerType;
   bannerMessage : string | undefined;
-  playerDataList : IPlayerData[] = [];
+  gameRankingMapEntries : [string, IPlayerData[]][] = [];
   private timeoutId : NodeJS.Timeout | undefined;
 
   constructor(
     private route: Router,
     private activatedRouter: ActivatedRoute,
     private server: ServerService
-  ) { 
-    this.activatedRouter.paramMap.subscribe(async params => {
-      this.game = params.get('game') as string;
-      if (!(await this.server.isValidGame(this.game))) {
-        this.route.navigate(['/']);
-        return;
-      }
-      this.updatePlayerDataLoop();
-    });
+  ) {
     this.activatedRouter.queryParams.subscribe(params => {
       this.bannerType = params['status'];
       if (this.bannerType === 'success') {
@@ -40,10 +33,8 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   }
 
   private updatePlayerDataLoop() : void {
-    if (this.game) {
-      this.server.getPlayerDataList(this.game)
-        .then(playerDataList => this.playerDataList = playerDataList);
-    }
+    this.server.getGameRankingMap()
+      .then(gameRankingMap => this.gameRankingMapEntries = Object.entries(gameRankingMap));
     this.timeoutId = setTimeout(() => {
       this.updatePlayerDataLoop();
     }, refreshIntervalMs);
@@ -60,7 +51,9 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       return '';
   }
 
-  ngOnInit() : void { }
+  ngOnInit() : void { 
+    this.updatePlayerDataLoop();
+  }
 
   ngOnDestroy() : void {
     clearTimeout(this.timeoutId);

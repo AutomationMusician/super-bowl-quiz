@@ -2,15 +2,14 @@ import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { GetAllQuizzes, GetQuestions, GetState, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGames} from './helpers';
-import { IQuestion, ISubmission as ISubmission, IState, IQuiz, IScoredQuiz } from './types';
+import { GetAllQuizzesForEachGame, GetConfig, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGames} from './helpers';
+import { IQuestion, ISubmission, IQuiz, IScoredQuiz, IState, IGameRankingMap } from './types';
 
 dotenv.config({path: path.join(__dirname, '../../.env')});
 const app = express();
-const PORT = Number(process.env.WEB_PORT);
+const PORT = 3000;
 
-app.use(express.static(path.join(__dirname, '../../client/dist')));
-app.get('/client/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/index.html')));
+app.use('/super-bowl-quiz/', express.static(path.join(__dirname, '../../client/dist/browser')));
 app.use(express.json());
 app.use(express.urlencoded( { extended: true } ));
 
@@ -24,27 +23,28 @@ const pgClient = new PgClient({
 pgClient.connect();
 
 // Get questions from server - returns IQuestion[]
-app.get('/api/questions', async (request : Request, response : Response) => {
-  const questions = GetQuestions();
+app.get('/super-bowl-quiz/api/questions', async (request : Request, response : Response) => {
+  const questions = GetConfig().questions;
   response.json(questions);
 });
 
 // Add quiz to the database - returns nothing
-app.post('/api/submission', async (request : Request, response : Response) => {
+app.post('/super-bowl-quiz/api/submission', async (request : Request, response : Response) => {
   const body : ISubmission = request.body;
-  const game = body.game;
-  const isValid = ValidateGames([game]); // TODO: make this validate a list of games and then insert it later
+
+  const config = GetConfig();
+
+  const games = body.games;
+  const isValid = ValidateGames(games, config); // TODO: make this validate a list of games and then insert it later
   if (!isValid) {
-    const errorMessage = `Invalid game '${game}'`;
+    const errorMessage = `One of the games is invalid '${JSON.stringify(games)}'`;
     console.error(errorMessage);
     response.status(400).send(errorMessage);
     return;
   }
 
   // Check if quiz is open
-  const state : IState = GetState();
-  const open = state.open;
-  if (!open) {
+  if (!config.open) {
     const errorMessage = "The submitted quiz with the name '" + body.name + "' was rejected because the quiz is closed.";
     console.error(errorMessage);
     response.status(400).send(errorMessage);
@@ -65,17 +65,19 @@ app.post('/api/submission', async (request : Request, response : Response) => {
   }
   const quiz_id = result.rows[0].quiz_id;
 
-  // Insert into quiz table
-  query =  "INSERT INTO QuizGameMapping(quiz_id, game) \
-            VALUES ($1, $2)";
-  params = [quiz_id, game.toLowerCase()];
-  await pgClient.query(query, params);
+  // Insert into quiz game mapping table
+  games.forEach(async game => {
+    query =  "INSERT INTO QuizGameMapping(quiz_id, game) \
+              VALUES ($1, $2)";
+    params = [quiz_id, game.toLowerCase()];
+    await pgClient.query(query, params);
+  })
 
   // Insert into Guess table
   const values : string[] = [];
   params = [];
   let paramIndex = 1;
-  const questions = GetQuestions();
+  const questions = config.questions;
   for (let question of questions) {
     if (body.guesses[question.id]) {
       params.push(question.id);
@@ -115,22 +117,20 @@ app.post('/api/submission', async (request : Request, response : Response) => {
 });
 
 // Get guesses from database - returns IPlayerData[]
-app.get('/api/ranking/:games', async (request : Request, response : Response) => {
-  const games = request.params.games.toLowerCase().split("-");
-  const isValid = ValidateGames(games);
-  if (!isValid) {
-    console.error(`Invalid games '${games}'`);
-    response.status(400);
-    return;
+app.get('/super-bowl-quiz/api/ranking', async (request : Request, response : Response) => {
+  const gameQuizListMap = await GetAllQuizzesForEachGame(pgClient);
+  const config = await GetConfig();
+  const gameRankingMap : IGameRankingMap = {};
+  for (const [gameName, quizList] of Object.entries(gameQuizListMap)) {
+    gameRankingMap[gameName] = RankAllPlayers(config, quizList);
   }
-  const quizzes = await GetAllQuizzes(pgClient, games);
-  const questions = await GetQuestions();
-  const rankedPlayerData = RankAllPlayers(questions, quizzes);
-  response.json(rankedPlayerData);
+  response.json(gameRankingMap);
 });
 
 // returns IScoredQuiz
-app.get('/api/scored-quiz/:id', async (request : Request, response : Response) : Promise<void> => {
+app.get('/super-bowl-quiz/api/scored-quiz/:id', async (request : Request, response : Response) : Promise<void> => {
+  const config = GetConfig();
+
   const quiz_id = Number(request.params.id);
   // Get name
   let query =  "SELECT name \
@@ -148,8 +148,20 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
   const quiz : IQuiz = { 
     name: result.rows[0].name,
     id: quiz_id,
+    games: [],
     guesses: {}
   };
+
+  // get game
+  query =  "SELECT game \
+            FROM QuizGameMapping \
+            WHERE quiz_id = $1";
+  params = [quiz_id];
+  result = await pgClient.query(query, params);
+  result.rows.map((row : any) => {
+    const gameName = config.games[row.game];
+    quiz.games.push(gameName);
+  });
 
   // get guesses
   query =  "SELECT question_id, guess_value \
@@ -163,33 +175,27 @@ app.get('/api/scored-quiz/:id', async (request : Request, response : Response) :
     quiz.guesses[row.question_id] = row.guess_value;
   });
   
-  const questions : IQuestion[] = GetQuestions();
+  const questions : IQuestion[] = GetConfig().questions;
   const scoredQuiz : IScoredQuiz = QuizToScoredQuiz(questions, quiz);
   response.json(scoredQuiz);
 });
 
 // Ask the server if the quiz is open
-app.get('/api/quiz-state', (request : Request, response : Response) => {
-  const state = GetState();
-  response.json(state as IState);
+app.get('/super-bowl-quiz/api/quiz-state', (request : Request, response : Response) => {
+  const config = GetConfig();
+  response.json({ open: config.open } as IState);
 });
 
-app.get('/api/are-valid-games/:games', async (request : Request, response : Response) => {
-  const games : string[] = request.params.games.toLowerCase().split("-");
-  const status = ValidateGames(games);
-  response.json({ status });
+app.get('/super-bowl-quiz/api/is-valid-game/:gameCode', async (request : Request, response : Response) => {
+  const gameCode : string = request.params.gameCode.toLowerCase();
+  const config = GetConfig();
+  response.json({ gameName: config.games[gameCode] });
 });
 
-app.get('/:games', async (request : Request, response : Response) => {
-  const gamesString : string = request.params.games;
-  if (ValidateGames(gamesString.toLowerCase().split("-"))) {
-    response.redirect(`/client/quiz/${gamesString}`)
-  }
-  else {
-    Send404Error(response);
-  }
-});
+// catch all redirect to angular index.html
+app.get('/super-bowl-quiz/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/browser/index.html')));
 
+// catch all 404 error
 app.get('*', (request : Request, response : Response) => {
   Send404Error(response);
 });

@@ -1,0 +1,34 @@
+<div class="game-codes-area">
+    <div class="quiz-metadata-text-input-label"><strong>Games:</strong></div>
+    <div class="game-codes-item" *ngFor="let game of games">
+        <span>{{game.gameName}}</span>
+        <span *ngIf="!disabled" class="game-codes-delete-button" (click)="removeGame(game.gameCode)"></span>
+    </div>
+    <input 
+        *ngIf="!disabled"
+        type="text" 
+        [(ngModel)]="newGameCodeValue"
+        #newGameCodeElement="ngModel"
+        required="true"
+        minlength="1"
+        maxlength="32"
+        placeholder="Enter Game Code..." 
+        (keydown.enter)="addNewGameCode()"
+        (input)="onNewGameCodeChange()"
+    />
+</div>
+<div *ngIf="(showErrors && newGameCodeElement.invalid) || customError"
+    class="alert">
+    <div *ngIf="newGameCodeElement.hasError('required')">
+        Game code may not be an empty string.
+    </div>
+    <div *ngIf="newGameCodeElement.hasError('minlength')">
+        Game code must be at least 1 characters long.
+    </div>
+    <div *ngIf="newGameCodeElement.hasError('maxlength')">
+        Game code must not be more than 32 characters long.
+    </div>
+    <div *ngIf="customError !== undefined">
+       {{ customError }}
+    </div>
+</div>

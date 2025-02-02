@@ -9,7 +9,7 @@ export interface IQuestion {
 }
 
 export interface ISubmission {
-    game: string;
+    games: string[];
     name: string;
     guesses: IGuessDict;
 }
@@ -20,8 +20,13 @@ export interface IState {
 
 export interface IQuiz {
     id: number;
+    games: string[];
     name: string;
     guesses: IGuessDict; 
+}
+
+export interface IGameQuizListMap {
+    [gameCode: string]: IQuiz[];
 }
 
 export interface IQuizMetadata {
@@ -51,4 +56,16 @@ export interface IPlayerData {
     name: string;
     score: number;
     rank: number | undefined;
+}
+
+export interface IGameRankingMap {
+    [game: string]: IPlayerData[];
+}
+
+export interface IConfig {
+    open: boolean;
+    questions: IQuestion[],
+    games: {
+        [gameCode : string]: string;
+    }
 }

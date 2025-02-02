@@ -1,19 +1,28 @@
 <app-banner [bannerType]="bannerType" [bannerMessage]="bannerMessage"></app-banner>
 <form #form="ngForm" (ngSubmit)="onFormSubmit(form)" id="form">
-    <table id="big">
+    <table class="big">
         <thead>
             <tr>
                 <td id="navigation" colspan="3">
                     <app-nav-bar 
                         [currentPage]="'quiz'"
-                        [game]="game"
                     ></app-nav-bar>
                 </td>
             </tr>
-            <tr id="nameAndScore">
-                <td id="nameCell">
-                    <label for="name"><strong>Name:</strong></label>
-                    <input type="text" name="name" id="name" (change)="enableQuestions()" ngModel/>
+            <tr class="quiz-metadata-row" >
+                <td class="quiz-metadata-text-input-cell" colspan="3">
+                    <app-games-identifier
+                        (gameCodesUpdatedEvent)="updateGameCodes($event)"
+                        [disabled]="false"
+                    ></app-games-identifier>
+                </td>
+            </tr>
+            <tr class="quiz-metadata-row">
+                <td class="quiz-metadata-text-input-cell">
+                    <app-name-field
+                        (nameUpdatedEvent)="updateName($event)"
+                        [disabled]="false"
+                    ></app-name-field>
                 </td>
                 <td id="scoreLabel" colspan="2"></td>
             </tr>
