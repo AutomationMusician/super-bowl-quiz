@@ -2,17 +2,16 @@
     <div class="quiz-metadata-text-input-label"><strong>Games:</strong></div>
     <div class="game-codes-item" *ngFor="let game of games">
         <span>{{game.gameName}}</span>
-        <span *ngIf=="!disabled" class="game-codes-delete-button" (click)="removeGame(game.gameCode)"></span>
+        <span *ngIf="!disabled" class="game-codes-delete-button" (click)="removeGame(game.gameCode)"></span>
     </div>
     <input 
-        *ngIf=="!disabled"
+        *ngIf="!disabled"
         type="text" 
         [(ngModel)]="newGameCodeValue"
         #newGameCodeElement="ngModel"
         required="true"
         minlength="1"
         maxlength="32"
-        pattern="^[a-zA-Z0-9_]+$" 
         placeholder="Enter Game Code..." 
         (keydown.enter)="addNewGameCode()"
         (input)="onNewGameCodeChange()"
@@ -29,10 +28,7 @@
     <div *ngIf="newGameCodeElement.hasError('maxlength')">
         Game code must not be more than 32 characters long.
     </div>
-    <div *ngIf="newGameCodeElement.hasError('pattern')">
-       Game Code must contain only alphanumeric characters or underscores
-    </div>
-    <div *ngIf="customError">
+    <div *ngIf="customError !== undefined">
        {{ customError }}
     </div>
 </div>

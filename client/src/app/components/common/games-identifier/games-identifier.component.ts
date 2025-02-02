@@ -22,7 +22,7 @@ export class GamesIdentifierComponent {
   public customError : string | undefined;
   public showErrors : boolean = false; // only show errors when you attempt to create an invalid label
 
-  @ViewChild('newGameCodeElement', { static: true }) public newGameCodeElement!: NgModel;
+  @ViewChild('newGameCodeElement') public newGameCodeElement!: NgModel;
 
   @Input() public set: Observable<string[]> | undefined;
   @Input() public disabled: boolean = true;
