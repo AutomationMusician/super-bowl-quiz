@@ -13,4 +13,15 @@ import { FormsModule, NgModel } from '@angular/forms';
 })
 export class NameFieldComponent {
   public name : string = '';
+
+  @ViewChild('inputElement', { static: true }) public inputElement!: NgModel;
+  @Output() public nameUpdatedEvent = new EventEmitter<string | undefined>();
+
+  onInput() {
+    if (this.inputElement.valid) {
+      this.nameUpdatedEvent.emit(this.inputElement.value);
+    } else {
+      this.nameUpdatedEvent.emit(undefined);
+    }
+  }
 }

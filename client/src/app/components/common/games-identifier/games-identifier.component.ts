@@ -4,16 +4,17 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { ServerService } from 'src/app/services/server.service';
 
 @Component({
-  selector: 'app-game-codes',
+  selector: 'app-games-identifier',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule
   ],
-  templateUrl: './game-codes.component.html',
-  styleUrl: './game-codes.component.css'
+  templateUrl: './games-identifier.component.html',
+  styleUrl: './games-identifier.component.css'
 })
-export class GameCodesComponent {
+export class GamesIdentifierComponent {
+  
   public games : { gameCode: string, gameName: string }[] = [];
   public newGameCodeValue : string = '';
   public customError : string | undefined;
@@ -21,7 +22,7 @@ export class GameCodesComponent {
 
   @ViewChild('newGameCodeElement', { static: true }) public newGameCodeElement!: NgModel;
 
-  // @Output() public gamesUpdatedEvent = new EventEmitter<string[]>();
+  @Output() public gameCodesUpdatedEvent = new EventEmitter<string[]>();
 
   constructor(private server: ServerService) {}
 
@@ -49,7 +50,7 @@ export class GameCodesComponent {
 
     // add game to list
     this.games.push({ gameCode, gameName });
-    // this.gamesUpdatedEvent.emit([...this.games]);
+    this.gameCodesUpdatedEvent.emit(this.games.map(game => game.gameCode));
     this.newGameCodeElement.reset();
     this.showErrors = false;
   }
@@ -59,7 +60,7 @@ export class GameCodesComponent {
     if (index !== -1) {
       this.games.splice(index, 1);
     }
-    // this.gamesUpdatedEvent.emit([...this.games]);
+    this.gameCodesUpdatedEvent.emit(this.games.map(game => game.gameCode));
   }
 
   public onNewGameCodeChange(): void {

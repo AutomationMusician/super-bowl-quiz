@@ -18,7 +18,9 @@ export class HomePageComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const quizState : IState = await this.server.getState();
     const quizOpen : boolean = quizState.open;
-    if (!quizOpen) {
+    if (quizOpen) {
+      this.router.navigate(['quiz']);
+    } else {      
       this.router.navigate(['scoreboard']);
     }
   }

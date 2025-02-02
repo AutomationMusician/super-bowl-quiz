@@ -11,16 +11,16 @@
             </tr>
             <tr class="quiz-metadata-row" >
                 <td class="quiz-metadata-text-input-cell" colspan="3">
-                    <app-game-codes></app-game-codes>
+                    <app-games-identifier
+                        (gameCodesUpdatedEvent)="updateGameCodes($event)"
+                    ></app-games-identifier>
                 </td>
             </tr>
             <tr class="quiz-metadata-row">
                 <td class="quiz-metadata-text-input-cell">
-                    <app-name-field></app-name-field>
-                    <!-- <div>
-                        <label for="name" class="quiz-metadata-text-input-label"><strong>Name:</strong></label>
-                        <input type="text" name="name" id="name" placeholder="Add Name Here..." (change)="enableQuestions()" ngModel/>
-                    </div> -->
+                    <app-name-field
+                        (nameUpdatedEvent)="updateName($event)"
+                    ></app-name-field>
                 </td>
                 <td id="scoreLabel" colspan="2"></td>
             </tr>

@@ -12,7 +12,7 @@ import { ScoreboardRowComponent } from './components/scoreboard/scoreboard-row/s
 import { ResultsComponent } from './components/quiz/results/results.component';
 import { BannerComponent } from './components/common/banner/banner.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
-import { GameCodesComponent } from "./components/common/game-codes/game-codes.component";
+import { GamesIdentifierComponent } from "./components/common/games-identifier/games-identifier.component";
 import { NameFieldComponent } from "./components/common/name-field/name-field.component";
 
 @NgModule({
@@ -33,7 +33,7 @@ import { NameFieldComponent } from "./components/common/name-field/name-field.co
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    GameCodesComponent,
+    GamesIdentifierComponent,
     NameFieldComponent
 ],
   providers: [],

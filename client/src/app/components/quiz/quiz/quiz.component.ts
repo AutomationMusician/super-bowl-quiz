@@ -15,9 +15,11 @@ const bannerChangeDelayMs : number = 200;
     standalone: false
 })
 export class QuizComponent implements OnInit {
+  private gameCodes : string[] = [];
+  private name : string | undefined = undefined;
+
   questions: Question[] = [];
   questionsEnabled : boolean = false;
-  gameCodes : string[] = [];
   bannerType : BannerType;
   bannerMessage : string | undefined;
 
@@ -39,12 +41,22 @@ export class QuizComponent implements OnInit {
     }
   }
 
-  enableQuestions() : void {
-    this.questionsEnabled = true;
+  updateGameCodes(gameCodes: string[]) {
+    this.gameCodes = gameCodes;
+    this.enableQuestionsIfReady();
+  }
+
+  updateName(name: string | undefined) {
+    this.name = name;
+    this.enableQuestionsIfReady();
+  }
+
+  enableQuestionsIfReady() : void {
+    this.questionsEnabled = this.gameCodes.length > 0 && this.name !== undefined;
   }
 
   isQuizComplete() : boolean {
-    return this.questions.every(question => question.selection !== undefined);
+    return this.questionsEnabled && this.questions.every(question => question.selection !== undefined);
   }
 
   async onFormSubmit(form: NgForm) : Promise<void> {
@@ -58,14 +70,13 @@ export class QuizComponent implements OnInit {
       return;
     }
     console.log(form.value.name);
-    if (!form.value.name) {
+    if (!this.name) {
       setTimeout(() => {
         this.bannerType = 'failure';
         this.bannerMessage = 'The quiz name was not found, so the quiz could not be submitted.';
       }, bannerChangeDelayMs);
       return;
     }
-    const name : string = form.value.name;
     const guessDict : IGuessDict = {};
     this.questions.forEach(question => {
       if (question.selection)
@@ -73,7 +84,7 @@ export class QuizComponent implements OnInit {
     });
     const submission : ISubmission = {
       games: this.gameCodes,
-      name: name,
+      name: this.name,
       guesses: guessDict
     }
     const submissionResponse = await this.server.submitQuiz(submission);

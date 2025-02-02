@@ -4,6 +4,7 @@
         type="text" 
         [(ngModel)]="name"
         #inputElement="ngModel"
+        (input)="onInput()"
         required="true"
         maxlength="32"
         placeholder="Add name..."
