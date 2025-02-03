@@ -14,7 +14,7 @@ tbody {
 }
 
 h1 {
-  font-size: 40px;
+  font-size: 30px;
   margin: 10px auto;
   text-align: center;
 }
@@ -29,4 +29,12 @@ h1 {
 
 .bronze {
   background-color: #cd7f32;
+}
+
+.game-title-row {
+  border-top: 1px solid #888;
+}
+
+tbody:last-child {
+  border-bottom: 1px solid #888;
 }
