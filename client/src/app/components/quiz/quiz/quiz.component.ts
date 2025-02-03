@@ -69,7 +69,6 @@ export class QuizComponent implements OnInit {
       }, bannerChangeDelayMs);
       return;
     }
-    console.log(form.value.name);
     if (!this.name) {
       setTimeout(() => {
         this.bannerType = 'failure';

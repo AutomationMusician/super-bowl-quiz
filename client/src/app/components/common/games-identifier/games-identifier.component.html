@@ -9,24 +9,15 @@
         type="text" 
         [(ngModel)]="newGameCodeValue"
         #newGameCodeElement="ngModel"
-        required="true"
-        minlength="1"
         maxlength="32"
-        placeholder="Enter Game Code..." 
-        (keydown.enter)="addNewGameCode()"
-        (input)="onNewGameCodeChange()"
+        required="true"
+        placeholder="Enter Game Code..."
+        (input)="addNewGameCode()"
     />
 </div>
-<div *ngIf="(showErrors && newGameCodeElement.invalid) || customError"
-    class="alert">
-    <div *ngIf="newGameCodeElement.hasError('required')">
-        Game code may not be an empty string.
-    </div>
-    <div *ngIf="newGameCodeElement.hasError('minlength')">
-        Game code must be at least 1 characters long.
-    </div>
-    <div *ngIf="newGameCodeElement.hasError('maxlength')">
-        Game code must not be more than 32 characters long.
+<div class="alert">
+    <div *ngIf="games.length === 0">
+        At least one game code is required.
     </div>
     <div *ngIf="customError !== undefined">
        {{ customError }}

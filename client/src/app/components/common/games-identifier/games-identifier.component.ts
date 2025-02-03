@@ -20,7 +20,6 @@ export class GamesIdentifierComponent {
   public games : { gameCode: string, gameName: string }[] = [];
   public newGameCodeValue : string = '';
   public customError : string | undefined;
-  public showErrors : boolean = false; // only show errors when you attempt to create an invalid label
 
   @ViewChild('newGameCodeElement') public newGameCodeElement!: NgModel;
 
@@ -49,7 +48,6 @@ export class GamesIdentifierComponent {
     // input doesn't match parser lexer
     if (this.newGameCodeElement.invalid) {
       this.customError = undefined; // reset to default value
-      this.showErrors = true;
       return;
     }
 
@@ -71,7 +69,7 @@ export class GamesIdentifierComponent {
     this.games.push({ gameCode, gameName });
     this.gameCodesUpdatedEvent.emit(this.games.map(game => game.gameCode));
     this.newGameCodeElement.reset();
-    this.showErrors = false;
+    this.customError = undefined;
   }
 
   public removeGame(gameCode: string): void {
@@ -80,9 +78,5 @@ export class GamesIdentifierComponent {
       this.games.splice(index, 1);
     }
     this.gameCodesUpdatedEvent.emit(this.games.map(game => game.gameCode));
-  }
-
-  public onNewGameCodeChange(): void {
-    this.customError = undefined;
   }
 }

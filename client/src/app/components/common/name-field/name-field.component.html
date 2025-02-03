@@ -6,15 +6,19 @@
         #inputElement="ngModel"
         (input)="onInput()"
         required="true"
+        minlength="4"
         maxlength="32"
         placeholder="Add name..."
         [disabled]="disabled"
     />
 </div>
-<div *ngIf="inputElement.dirty && inputElement.invalid"
+<div *ngIf="inputElement.invalid"
     class="alert">
     <div *ngIf="inputElement.hasError('required')">
-        Name may not be an empty string
+        Name may not be an empty string.
+    </div>
+    <div *ngIf="inputElement.hasError('minlength')">
+        Name is too short.
     </div>
     <div *ngIf="inputElement.hasError('maxlength')">
         Name must not be more than 32 characters long.
