@@ -17,7 +17,7 @@ import { ServerService } from 'src/app/services/server.service';
 export class GamesIdentifierComponent {
   private setSubscription: Subscription | undefined;
   
-  public games : { gameCode: string, gameName: string }[] = [];
+  public games : { gameCode: string | undefined, gameName: string }[] = [];
   public newGameCodeValue : string = '';
   public customError : string | undefined;
 
@@ -33,7 +33,7 @@ export class GamesIdentifierComponent {
     this.setSubscription = this.set?.subscribe((gameNames) => {
       this.games = gameNames.map((gameName) => {
         return { 
-          gameCode: "null", 
+          gameCode: undefined, 
           gameName: gameName
         };
       });
@@ -52,7 +52,7 @@ export class GamesIdentifierComponent {
     }
 
     // check that game code wasn't used
-    const gameCode = this.newGameCodeValue.toLowerCase();
+    const gameCode = this.newGameCodeValue.toLowerCase().trim();
     if (this.games.some(game => game.gameCode === gameCode)) {
       this.customError = `Game Code '${gameCode}' is already applied to this quiz.`;
       return;
@@ -67,16 +67,16 @@ export class GamesIdentifierComponent {
 
     // add game to list
     this.games.push({ gameCode, gameName });
-    this.gameCodesUpdatedEvent.emit(this.games.map(game => game.gameCode));
+    this.gameCodesUpdatedEvent.emit(this.games.map(game => game.gameCode).filter(gameCode => gameCode !== undefined));
     this.newGameCodeElement.reset();
     this.customError = undefined;
   }
 
-  public removeGame(gameCode: string): void {
+  public removeGame(gameCode: string | undefined): void {
     const index = this.games.findIndex(game => game.gameCode === gameCode);
     if (index !== -1) {
       this.games.splice(index, 1);
     }
-    this.gameCodesUpdatedEvent.emit(this.games.map(game => game.gameCode));
+    this.gameCodesUpdatedEvent.emit(this.games.map(game => game.gameCode).filter(gameCode => gameCode !== undefined));
   }
 }

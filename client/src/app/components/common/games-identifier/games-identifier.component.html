@@ -1,7 +1,7 @@
 <div class="game-codes-area">
     <div class="quiz-metadata-text-input-label"><strong>Games:</strong></div>
     <div class="game-codes-item" *ngFor="let game of games">
-        <span>{{game.gameName}}</span>
+        <span>{{game.gameName}}<span *ngIf="game.gameCode !== undefined"> (code: "{{game.gameCode}}")</span></span>
         <span *ngIf="!disabled" class="game-codes-delete-button" (click)="removeGame(game.gameCode)"></span>
     </div>
     <input 
