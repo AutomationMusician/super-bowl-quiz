@@ -16,3 +16,7 @@
 	margin-left: 4px;
 	content: '❌';
 }
+
+.alert {
+	color: red;
+}
