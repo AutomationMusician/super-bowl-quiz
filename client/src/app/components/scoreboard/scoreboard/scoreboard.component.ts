@@ -17,7 +17,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   bannerType : BannerType;
   bannerMessage : string | undefined;
   gameRankingMapEntries : [string, IPlayerData[]][] = [];
-  private timeoutId : NodeJS.Timeout | undefined;
+  private timeoutId : ReturnType<typeof setTimeout> | undefined;
 
   constructor(
     private route: Router,

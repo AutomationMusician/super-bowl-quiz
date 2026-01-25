@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Client as PgClient, QueryResult } from 'pg';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import * as path from 'path';
 import { GetAllQuizzesForEachGame, GetConfig, QuizToScoredQuiz, RankAllPlayers, Send404Error, ValidateGames} from './helpers';
 import { IQuestion, ISubmission, IQuiz, IScoredQuiz, IState, IGameRankingMap } from './types';
@@ -187,16 +187,22 @@ app.get('/super-bowl-quiz/api/quiz-state', (request : Request, response : Respon
 });
 
 app.get('/super-bowl-quiz/api/is-valid-game/:gameCode', async (request : Request, response : Response) => {
+  if (Array.isArray(request.params.gameCode)) {
+    const errorMessage = "Game code must be one string but was: " + request.params.gameCode;
+    console.error(errorMessage);
+    response.status(400).send(errorMessage);
+    return;
+  }
   const gameCode : string = request.params.gameCode.toLowerCase();
   const config = GetConfig();
   response.json({ gameName: config.games[gameCode] });
 });
 
 // catch all redirect to angular index.html
-app.get('/super-bowl-quiz/*', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/browser/index.html')));
+app.use('/super-bowl-quiz/', (request: Request, response : Response) => response.sendFile(path.join(__dirname, '../../client/dist/browser/index.html')));
 
 // catch all 404 error
-app.get('*', (request : Request, response : Response) => {
+app.use('/', (request : Request, response : Response) => {
   Send404Error(response);
 });
 

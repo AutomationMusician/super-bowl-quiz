@@ -20,7 +20,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
   questions: Question[] = [];
   public readonly nameSubject = new Subject<string>();
   public readonly gamesSubject = new Subject<string[]>();
-  private timeoutId : NodeJS.Timeout | undefined;
+  private timeoutId : ReturnType<typeof setTimeout> | undefined;
 
   constructor(
     private route: Router,

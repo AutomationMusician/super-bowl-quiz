@@ -1,6 +1,7 @@
-<div 
-    *ngIf="bannerType !== undefined"
+@if (bannerType !== undefined) {
+  <div
     [class]="bannerType"
->
+    >
     {{bannerMessage}}
-</div>
+  </div>
+}
