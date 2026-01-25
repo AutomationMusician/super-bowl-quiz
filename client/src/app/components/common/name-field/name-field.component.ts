@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -6,9 +6,8 @@ import { Observable, Subscription } from 'rxjs';
 @Component({
   selector: 'app-name-field',
   imports: [
-      CommonModule,
-      FormsModule
-  ],
+    FormsModule
+],
   templateUrl: './name-field.component.html',
   styleUrl: './name-field.component.css'
 })

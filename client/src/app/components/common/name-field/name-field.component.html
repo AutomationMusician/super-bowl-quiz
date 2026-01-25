@@ -1,26 +1,34 @@
 <div>
-    <div class="quiz-metadata-text-input-label"><strong>Name:</strong></div>
-    <input 
-        type="text" 
-        [(ngModel)]="name"
-        #inputElement="ngModel"
-        (input)="onInput()"
-        required="true"
-        minlength="3"
-        maxlength="32"
-        placeholder="Add name..."
-        [disabled]="disabled"
+  <div class="quiz-metadata-text-input-label"><strong>Name:</strong></div>
+  <input
+    type="text"
+    [(ngModel)]="name"
+    #inputElement="ngModel"
+    (input)="onInput()"
+    required="true"
+    minlength="3"
+    maxlength="32"
+    placeholder="Add name..."
+    [disabled]="disabled"
     />
 </div>
-<div *ngIf="inputElement.invalid"
+@if (inputElement.invalid) {
+  <div
     class="alert">
-    <div *ngIf="inputElement.hasError('required')">
+    @if (inputElement.hasError('required')) {
+      <div>
         Name may not be an empty string.
-    </div>
-    <div *ngIf="inputElement.hasError('minlength')">
+      </div>
+    }
+    @if (inputElement.hasError('minlength')) {
+      <div>
         Name is too short.
-    </div>
-    <div *ngIf="inputElement.hasError('maxlength')">
+      </div>
+    }
+    @if (inputElement.hasError('maxlength')) {
+      <div>
         Name must not be more than 32 characters long.
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}

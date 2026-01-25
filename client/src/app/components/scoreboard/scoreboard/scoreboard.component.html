@@ -1,33 +1,34 @@
 <app-banner [bannerType]="bannerType" [bannerMessage]="bannerMessage"></app-banner>
 <table class="big">
-    <thead>
-        <tr>
-            <td id="navigation" colspan="3">
-                <app-nav-bar 
-                    [currentPage]="'scoreboard'"
-                ></app-nav-bar>
-            </td>
+  <thead>
+    <tr>
+      <td id="navigation" colspan="3">
+        <app-nav-bar
+          [currentPage]="'scoreboard'"
+        ></app-nav-bar>
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    @for (entry of gameRankingMapEntries; track entry[0]) {
+      <tr class="game-title-row">
+        <td colspan="3">
+          <h1>{{ entry[0] }}</h1>
+        </td>
+      </tr>
+      <tr>
+        <td class="rankCell"><strong>Rank</strong></td>
+        <td class="quiz-metadata-text-input-cell"><strong>Name</strong></td>
+        <td class="scoreCell"><strong>Score</strong></td>
+      </tr>
+      @for (playerData of entry[1]; track playerData) {
+        <tr
+          [playerData]="playerData"
+          [class]="this.getRankClass(playerData.rank)"
+          app-scoreboard-row
+          >
         </tr>
-    </thead>
-    <tbody>
-        @for (entry of gameRankingMapEntries; track entry[0]) {
-            <tr class="game-title-row">
-                <td colspan="3">
-                    <h1>{{ entry[0] }}</h1>
-                </td>
-            </tr>
-            <tr>
-                <td class="rankCell"><strong>Rank</strong></td>
-                <td class="quiz-metadata-text-input-cell"><strong>Name</strong></td>
-                <td class="scoreCell"><strong>Score</strong></td>
-            </tr>
-            <tr 
-                *ngFor="let playerData of entry[1]" 
-                [playerData]="playerData"
-                [class]="this.getRankClass(playerData.rank)"
-                app-scoreboard-row
-            >
-            </tr>
-        }
-    </tbody>
+      }
+    }
+  </tbody>
 </table>

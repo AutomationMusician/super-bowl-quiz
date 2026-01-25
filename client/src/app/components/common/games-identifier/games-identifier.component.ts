@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -8,9 +8,8 @@ import { ServerService } from 'src/app/services/server.service';
   selector: 'app-games-identifier',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule
-  ],
+],
   templateUrl: './games-identifier.component.html',
   styleUrl: './games-identifier.component.css'
 })
