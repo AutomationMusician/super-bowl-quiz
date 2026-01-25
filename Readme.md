@@ -10,7 +10,7 @@ In theory, this application can be used to run a prediction competition unrelate
 
 ### Development
 
-1. Run the `postgres` (with port 5432 exposed) and `super_bowl_quiz_initialize_database` docker compose services in [website-orchestrator](https://github.com/AutomationMusician/website-orchestrator)
+1. Run the `postgres` (with port 5432 exposed) and `super-bowl-quiz-initialize-database` docker compose services in [website-orchestrator](https://github.com/AutomationMusician/website-orchestrator)
 1. Run the server by `cd`ing into the server directory and running `npm run dev`
 1. Run the client by `cd`ing into the client directory and running `npm run start`
 1. Navigate to `localhost:4200/super-bowl-quiz/`
